@@ -5,11 +5,11 @@ title: Managing Users
 This document is a temporary description for Cloud Foundry operators and dev / ops professionals interested in managing users in a new Cloud Foundry installation. This process is unrefined, and will improve with direct cf user management in the near future.
 
 You may refer to [the UAA admin guide](https://github.com/cloudfoundry/uaa/blob/master/docs/Sysadmin-Guide.rst), [other UAA documentation](https://github.com/cloudfoundry/uaa/tree/master/docs) for additional details,
-or to the [UAA introduction](../architecture/uaa.html.html)
+or to the [UAA introduction](/concepts/architecture/uaa.html)
 
 ## <a id='creating-admin-users'></a> Creating Admin Users ##
 
-1. Refer to your deployment manifest for the uaa:admin:client_secret. Refer to this [manifest](../deploying-cf/vsphere/cloud-foundry-example-manifest.html) as an example.
+1. Refer to your deployment manifest for the uaa:admin:client_secret. Refer to this [manifest](/deploying/vsphere/cloud-foundry-example-manifest.html) as an example.
 
 2. Install the UAA CLI, `uaac`:
 <pre class="terminal">
@@ -40,7 +40,7 @@ $ uaac member add cloud_controller.admin [admin-username]
 
 ## <a id='creating-users'></a> Creating Users ##
 
-1. Use the credentials of an admin user created using uaac as above, or refer to your deployment manifest for the email and password of an admin user. The user will be under the `uaa: scim` section. Refer to the bottom of this [manifest](../deploying-cf/vsphere/cloud-foundry-example-manifest.html) as an example.
+1. Use the credentials of an admin user created using uaac as above, or refer to your deployment manifest for the email and password of an admin user. The user will be under the `uaa: scim` section. Refer to the bottom of this [manifest](/deploying/vsphere/cloud-foundry-example-manifest.html) as an example.
 
 2. Create a new user:
 <pre class="terminal">
@@ -52,7 +52,7 @@ $ cf create-user [user-email-address]
 
 ## <a id='changing-passwords'></a> Changing Passwords ##
 
-1. Use the credentials of an admin user created using uaac as above, or refer to your deployment manifest for the email and password of an admin user. The user will be under the `uaa: scim` section. Refer to the bottom of this [manifest](../deploying-cf/vsphere/cloud-foundry-example-manifest.html) as an example.
+1. Use the credentials of an admin user created using uaac as above, or refer to your deployment manifest for the email and password of an admin user. The user will be under the `uaa: scim` section. Refer to the bottom of this [manifest](/deploying/vsphere/cloud-foundry-example-manifest.html) as an example.
 
 2. Change a user password:
 <pre class="terminal">
