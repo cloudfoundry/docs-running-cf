@@ -1,0 +1,224 @@
+---
+title: Creating and Modifying Quota Plans
+---
+
+_This page assumes you are using cf v6._
+
+Quota plans are named sets of memory, service, and instance usage quotas. For example, one quota plan might allow up to 10 services, 10 routes, and 2 GB of RAM, while another might offer 100 services, 100 routes, and 10 GB of RAM. Quota plans have user-friendly names, but are identified by unique GUIDs.
+
+Quota plans are not directly associated with user accounts. Instead, every organization has a list of available quota plans, and the account admin assigns a specific quota plan from the list to the organization. Everyone in the organization shares the quotas described by the plan. There is no limit to the number of defined quota plans an account organization can have, but only one plan can be assigned at a time.
+
+# <a id='attributes'></a>Quota Plan Attributes #
+
+
+<style type="text/css">
+.table {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
+.table th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:center;}
+.table tr {background-color:#d4e3e5;}
+.table td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
+.table tr:hover {background-color:#ffffff;}
+</style>
+
+
+<table border="1" class="table" >
+<tr>
+  <th><strong>Name</strong></th>
+  <th><strong>Description</strong></th>
+  <th><strong>Valid Values</strong></th>
+  <th><strong>Example Value</strong></th>
+</tr>
+<tr>
+  <td>name</td><td>The name you use to identify the plan</td><td>A sequence of letters, digits, and underscore characters. Quota plan names within an account must be unique.</td><td>sliver_quota</td>
+</tr>
+<tr>
+  <td>memory_limit</td><td>Maximum memory usage (in MB) allowed</td><td>integer</td><td>2048</td>
+</tr>
+<tr>
+  <td>non_basic_services_allowed</td><td>Indicates whether you can provision paid services</td><td>true/false</td><td>true</td>
+</tr>
+<tr>
+  <td>total_routes</td><td>Maximum routes allowed</td><td>integer</td><td>500</td>
+</tr>
+<tr>
+  <td>total_services</td><td>Maximum services allowed</td><td>integer</td><td>25</td>
+</tr>
+<tr>
+  <td>trial_db_allowed</td><td>Legacy Field. Value can be ignored.</td><td>true/false</td><td>true</td>
+</tr>
+</table>
+
+# <a id='default'></a>Default Quota Plan #
+
+Cloud Foundry installs with one `default` quota plan with the following limits:
+
+* Memory Limit: 10240 MB
+
+* Total Routes: 1000
+
+* Total Services: 100
+
+* Non-basic Services Allowed: True
+
+* Trial DB Allowed: True
+
+# <a id='new'></a>Creating a New Quota Plan #
+
+You can create a new quota plan in one of two ways:
+
+* Directly modify the CF deployment manifest before deploying.
+* Use `cf curl` after deploying.
+
+## <a id='manifest'></a> Modifying the Manifest ##
+
+1. From a terminal, run `bosh edit deployment` to open the deployment manifest YAML file in your default text editor.
+1. Search for "quota_definitions".
+1. Add a new quota definition with limits that you specify. Use the default quota definition as a formatting template.
+
+    The following example shows the `quota_definitions` portion of the `cf.yml` manifest after adding the “silver_quota” plan:
+
+    ```
+    quota_definitions:
+      default:
+        memory_limit: 10240
+        non_basic_services_allowed: true
+        total_routes: 1000
+        total_services: 100
+        trial_db_allowed: true
+      silver_quota:
+        memory_limit: 2048
+        non_basic_services_allowed: true
+        total_routes: 500
+        total_services: 25
+        trial_db_allowed: true
+    ```
+
+1. Save and close the deployment manifest.
+
+## <a id='curl'></a>Using cf curl ##
+
+From a terminal, run the following command. Replace the placeholder attributes with the values you want for this quota plan:
+
+ ```
+cf curl /v2/quota_definitions -X 'POST' -d ‘ { "name": "NAME", "non_basic_services_allowed": NBS_ALLOWED, "total_services": SERVICES, "total_routes":
+ROUTES, "memory_limit": MEMORY, "trial_db_allowed": DB_ALLOWED } ’
+ ```
+
+Example:
+
+ ```
+cf curl /v2/quota_definitions -X 'POST' -d ‘ { "name": "small", "non_basic_services_allowed": false, "total_services": 10, "total_routes": 10, "memory_limit": 2048, "trial_db_allowed": false } ’
+ ```
+
+# <a id='modify'></a> Modifying a Quota Plan #
+
+You can modify an existing quota plan in one of two ways:
+
+* Directly modify the CF deployment manifest before deploying.
+* Use `cf curl` after deploying.
+
+## <a id='modify'></a> Modifying the Manifest ##
+
+1. From a terminal, run `bosh edit deployment` to open the deployment manifest YAML file in your default text editor.
+1. Search for "quota_definitions".
+1. Modify the value of the attribute you want to change.
+1. Save and close the deployment manifest.
+
+## <a id='curl-after'></a> Using cf curl ##
+
+1. Run `cf curl /v2/quota_definitions -X 'GET'` to find the GUIDs of all quota definitions available to your organization. Note the GUID of the quota plan you want to assign to your organization.
+
+    The `cf curl /v2/quota_definitions -X 'GET'` command returns a JSON response listing every quota plan available to your organization.
+    Data about each plan shows in two sections: “metadata” and “entity.” The “metadata” section shows the quota plan GUID, while the “entity” section lists the name of the plan and the quota limits.
+
+    **Note**: Because “metadata” is listed before “entity” for each quota plan, the GUID of a plan appears six lines above the name.
+
+    In the following example, the GUID of the “default” plan is `bbbb-0000-faaf-1234-aa12-98765bababab` and the GUID of the “silver_quota” plan is `cccc-4567-b4b4-5432-33412ad1123e`.
+
+	```
+	 $ cf curl /v2/quota_definitions -X 'GET'
+
+	    {
+	      "total_results": 2,
+	      "total_pages": 1,
+	      "prev_url": null,
+	      "next_url": null,
+	      "resources": [
+	      {
+	        "metadata": {
+	          "guid": "bbbb-0000-faaf-1234-aa12-98765bababab",
+	          "url": "/v2/quota_definitions/bbbb-0000-faaf-1234-aa12-98765bababab",
+	          "created_at": "2013-11-19T18:53:48+00:00",
+	          "updated_at": "2013-11-19T19:34:57+00:00"
+	        },
+	        "entity": {
+	          "name": "default",
+	          "non_basic_services_allowed": false,
+	          "total_services": 100,
+	          "total_routes": 1000,
+	          "memory_limit": 10240,
+	          "trial_db_allowed": false
+	        }
+	      },
+	      {
+	      "metadata": {
+	        "guid": "cccc-4567-b4b4-5432-33412ad1123e",
+	        "url": "/v2/quota_definitions/cccc-4567-b4b4-5432-33412ad1123e",
+	        "created_at": "2013-11-19T18:53:48+00:00",
+	        "updated_at": "2013-11-19T19:34:57+00:00"
+	      },
+	      "entity": {
+	        "name": "silver_quota",
+	        "non_basic_services_allowed": true,
+	        "total_services": 25,
+	        "total_routes": 500,
+	        "memory_limit": 2048,
+	        "trial_db_allowed": true
+	      }
+	    }
+	  ]}
+	```
+
+2. From a terminal, replace `QUOTA_PLAN_GUID`, `ATTRIBUTE`, and `VALUE` with the values you want for this quota plan and run the following command:
+
+    `cf curl /v2/quota_definitions/QUOTA_PLAN_GUID -X ‘PUT’ -d "{\"ATTRIBUTE\":VALUE}"`
+
+	The following example increases the memory limit for the “silver_quota” plan to 40 GB.
+
+	```
+	$ cf curl /v2/quota_definitions/cccc-4567-b4b4-5432-33412ad1123e -X ‘PUT’ -d "{\"memory_limit\":40960}"
+
+	{
+	        "metadata": {
+	          "guid": "bbbb-0000-faaf-1234-aa12-98765bababab",
+	          "url": "/v2/quota_definitions/bbbb-0000-faaf-1234-aa12-98765bababab",
+	          "created_at": "2013-11-19T18:53:48+00:00",
+	          "updated_at": "2013-11-19T19:34:57+00:00"
+	        },
+	        "entity": {
+	          "name": "default",
+	          "non_basic_services_allowed": false,
+	          "total_services": 100,
+	          "total_routes": 1000,
+	          "memory_limit": 10240,
+	          "trial_db_allowed": false
+	        }
+	      },
+	      {
+	      "metadata": {
+	        "guid": "cccc-4567-b4b4-5432-33412ad1123e",
+	        "url": "/v2/quota_definitions/cccc-4567-b4b4-5432-33412ad1123e",
+	        "created_at": "2013-11-19T18:53:48+00:00",
+	        "updated_at": "2013-11-19T19:34:57+00:00"
+	      },
+	      "entity": {
+	        "name": "silver_quota",
+	        "non_basic_services_allowed": true,
+	        "total_services": 25,
+	        "total_routes": 500,
+	        "memory_limit": 40960,
+	        "trial_db_allowed": true
+	      }
+	    }
+	  }
+	```
+
