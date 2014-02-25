@@ -4,9 +4,9 @@ title: Creating and Modifying Quota Plans
 
 _This page assumes you are using cf v6._
 
-Quota plans are named sets of memory, service, and instance usage quotas. For example, one quota plan might allow up to 10 services, 10 routes, and 2 GB of RAM, while another might offer 100 services, 100 routes, and 10 GB of RAM. Quota plans have user-friendly names, but are identified by unique GUIDs.
+Quota plans are named sets of memory, service, and instance usage quotas. For example, one quota plan might allow up to 10 services, 10 routes, and 2 GB of RAM, while another might offer 100 services, 100 routes, and 10 GB of RAM. Quota plans have user-friendly names, but are referenced in Cloud Foundry internal systems by unique GUIDs.
 
-Quota plans are not directly associated with user accounts. Instead, every organization has a list of available quota plans, and the account admin assigns a specific quota plan from the list to the organization. Everyone in the organization shares the quotas described by the plan. There is no limit to the number of defined quota plans an account organization can have, but only one plan can be assigned at a time.
+Quota plans are not directly associated with user accounts. Instead, every organization has a list of available quota plans, and the account admin assigns a specific quota plan from the list to the organization. Everyone in the organization shares the quotas described by the plan. There is no limit to the number of defined quota plans an account can have, but only one plan can be assigned at a time.
 
 # <a id='attributes'></a>Quota Plan Attributes #
 
@@ -96,6 +96,8 @@ You can create a new quota plan in one of two ways:
 
 ## <a id='curl'></a>Using cf curl ##
 
+**Note**: cf commands to replace `cf curl` are coming soon. Refer to the [Pivotal Tracker epic](https://www.pivotaltracker.com/epic/show/1053180) for more information.
+
 From a terminal, run the following command. Replace the placeholder attributes with the values you want for this quota plan:
 
  ```
@@ -124,6 +126,8 @@ You can modify an existing quota plan in one of two ways:
 1. Save and close the deployment manifest.
 
 ## <a id='curl-after'></a> Using cf curl ##
+
+**Note**: cf commands to replace `cf curl` are coming soon. Refer to the [Pivotal Tracker epic](https://www.pivotaltracker.com/epic/show/1053180) for more information.
 
 1. Run `cf curl /v2/quota_definitions -X 'GET'` to find the GUIDs of all quota definitions available to your organization. Note the GUID of the quota plan you want to assign to your organization.
 
