@@ -6,7 +6,7 @@ title: Troubleshooting Wardenized Services
 
 This document shows how to debug a Wardenized service in a development or production environment.
 
-## <a id=""></a>Debugging
+## <a id="debug"></a>Debugging
 
 This section includes the following topics, with corresponding examples:
 
