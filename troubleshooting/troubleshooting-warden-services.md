@@ -53,7 +53,7 @@ root     15849  0.0  0.0   7688   844 pts/1    S+   07:10   0:00 grep --color=au
 
 ### <a id="check-log"></a>Checking the log and config of Warden
 
-The config file of Warden is normally found at `/var/vcap/jobs/foo_node_ng/config/warden.yml`:
+The config file of Warden is normally found at `/var/vcap/jobs/SERVICE-NODE/config/warden.yml`:
 
 <pre class="terminal">
 $ cat /var/vcap/jobs/redis_node_ng/config/warden.yml
@@ -73,7 +73,7 @@ container_rlimits:
 quota:
   disk_quota_enabled: false
 logging:
-file: /var/vcap/sys/log/warden/warden.log  
+file: /var/vcap/sys/log/warden/warden.log
 syslog: vcap.services.redis.warden
 level: debug
 network:
@@ -138,7 +138,7 @@ There are other ways to check whether the process is running. For example, given
 <pre class="terminal">
 $ ps auxf
 ...
-root      5291  0.0  0.0  14564   496 ?        S    06:43   0:00 wshd: 16io51f6jri                                                        
+root      5291  0.0  0.0  14564   496 ?        S    06:43   0:00 wshd: 16io51f6jri
 10000     5351  0.0  0.0  17708  1220 ?        Ss   06:43   0:00  \_ /bin/bash
 10000     5353  0.1  0.0  36220  1772 ?        Sl   06:43   0:12      \_ /var/vcap/packages/redis26/bin/redis-server /var/vcap/store/redis/instances/9407af2c-0628-484b-a5f8-5c8634421a35/redis.conf
 ...
@@ -161,14 +161,14 @@ $ cat /var/vcap/store/containers/16io51f6jri/run/wshd.pid
 
 ### <a id="service-data"></a>Service instance logs, data and localdb
 
-The data of the service sits in `/var/vcap/store/#{service_name}/instances/#{uuid}`:
+The data of the service sits in `/var/vcap/store/SERVICE-NAME/instances/UUID`:
 
 <pre class="terminal">
 $ ls /var/vcap/store/redis/instances/
 2b4e0275-7da1-4da7-88c1-7c907b6b1b8c  5e8bbae6-2c3d-429e-bec7-a5b695d2c4f4
 </pre>
 
-The instance data directory normally contains the service PID, data directory and the instance specific config file. The log file of the instance sits in `/var/vcap/sys/service-log/#{service_name}/#{uuid}`:
+The instance data directory normally contains the service PID, data directory and the instance specific config file. The log file of the instance sits in `/var/vcap/sys/service-log/SERVICE-NAME/UUID`:
 
 <pre class="terminal">
 $ ls /var/vcap/sys/service-log/redis/
@@ -177,7 +177,7 @@ $ ls /var/vcap/sys/service-log/redis/
 
 Besides the service log, this directory also contains the `warden_service_ctl.log` and `warden_service_ctl.err.log`. `warden_service_ctl` is a script that controls the start, stop and status of the service instance.
 
-The local sqlite database also includes valuable information for debugging issues with a service instance. The local sqlite database sits in `/var/vcap/store/#{service_name}/#{service_node.db}`. You can use the pre-installed `sqlite3` binary to look into the sqlite database:
+The local sqlite database also includes valuable information for debugging issues with a service instance. The local sqlite database sits in `/var/vcap/store/SERVICE-NAME/SERVICE-NODE`. You can use the pre-installed `sqlite3` binary to look into the sqlite database:
 
 <pre class="terminal">
 $ /var/vcap/packages/sqlite/bin/sqlite3 /var/vcap/store/redis/redis_node.db
@@ -204,7 +204,7 @@ sqlite> select * from vcap_services_redis_node_provisioned_services;
 2b4e0275-7da1-4da7-88c1-7c907b6b1b8c|5001|cd189a0e-144c-44fa-8e36-281c38e52e5c|1|0|20|16j9dohgvkt|10.254.0.6|2.6
 </pre>
 
-Some useful operations are listed above to show the table name, schema and values with the table that is used by the service node. The start, stop, and check_status operations on the instance are all done by the `warden_service_ctl` script. On the node, it sits in `/var/vcap/store/#{service_name}_common/bin`:
+Some useful operations are listed above to show the table name, schema and values with the table that is used by the service node. The start, stop, and check\_status operations on the instance are all done by the `warden_service_ctl` script. On the node, it sits in `/var/vcap/store/SERVICE-NAME_common/bin`:
 
 <pre class="terminal">
 $ ls /var/vcap/store/redis_common/bin/
