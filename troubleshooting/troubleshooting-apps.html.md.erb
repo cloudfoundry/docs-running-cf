@@ -2,25 +2,6 @@
 title: Troubleshooting Applications
 ---
 
-##<a id='monitor-nats'></a>Monitoring NATS Message Bus Traffic ##
-
-To help troubleshoot an issue with an application, you can monitor NATS message bus traffic related to the application.
-To do this:
-
-1. Run `cf target` to target the space containing the application.
-
-1. Run `CF_TRACE=true cf app APPLICATION-NAME | grep guid` to show the GUID of the application.
-
-    <pre class="terminal">
-    $ CF_TRACE=true cf app my-new-app | grep guid
-
-    "guid": "0a709d5b-0d9b-400b-900a-81594583b634",
-    </pre>
-
-1. Run `bosh ssh` to open a secure shell into a NATS node.
-
-1. Run `nats-sub -s "nats://${NATS_USERNAME}:${NATS_PASSWORD}@${NATS_HOST}:${NATS_PORT}" ">" | grep APPLICATION-GUID` to subscribe to NATS and show messages related to the application.
-
 ##<a id='htop'></a>Tracking Down an Application by CPU Usage ##
 
 Applications do not always functions as designed.
@@ -29,23 +10,28 @@ increase in CPU, disk utilization, or memory utilization across the VMs in your
 deployment, use the following steps to determine if a specific application is at
 fault.
 
-1. Run `bosh ssh` to open a secure shell into the DEA node that is experiencing the unexpected high resource usage.
+1. Run `bosh ssh` to open a secure shell into the DEA node that is experiencing
+the unexpected high resource usage.
 
 1. Install the [htop](http://hisham.hm/htop/) interactive process viewer.
 In a terminal window, run `htop` to launch the application.
 
     <%= image_tag("../images/htop/htop-open.png") %>
 
-1. Press the `F6` key and use the arrow keys to sort the htop output by the "TIME+" column.
-Processes using excessive resources display a TIME+ value significantly greater than other processes.
+1. Press the `F6` key and use the arrow keys to sort the htop output by the
+"TIME+" column.
+Processes using excessive resources display a TIME+ value significantly greater
+than other processes.
 Note the names of each of these processes.
 
     <%= image_tag("../images/htop/htop-name.png") %>
 
 1. Press the `F5` key to view all the processes as a tree.
 
-
-1. Press the `/` key to search by the name of the processes. Locate the names of any processes found to be using excessive resources. Note the `wshd` command above each of these processes. Each of these `wshd` commands is a Warden handle for an application.
+1. Press the `/` key to search by the name of the processes.
+Locate the names of any processes found to be using excessive resources.
+Note the `wshd` command above each of these processes.
+Each of these `wshd` commands is a **Warden handle** for an application.
 
     In this example, the `wshd` command is `17vg99ooo1n`:
 
@@ -66,6 +52,73 @@ and name.
 
     <%= image_tag("../images/htop/htop-log-name.png") %>
 
+##<a id='access-warden'></a>Accessing a Warden Container ##
+
+Cloud Foundry runs each application in an isolated environment called a **Warden container**.
+When troubleshooting an issue with an application, you might want direct access
+to the Warden container running the application.
+
+To access a Warden container:
+
+1. Run `bosh ssh` to open a secure shell into the DEA node containing the
+application you want to troubleshoot.
+
+1. Use the process described in [Tracking Down an Application by CPU Usage](#htop) to find the Warden handle for the application.
+
+1. On the DEA node, use the following command to open an interactive shell in
+the Warden container running your application:
+
+`/var/vcap/packages/warden/warden/src/wsh/wsh --socket /var/vcap/data/warden/depot/WARDEN-HANDLE/run/wshd.sock --user vcap`
+
+<pre class="terminal">
+$ /var/vcap/packages/warden/warden/src/wsh/wsh --socket /var/vcap/data/warden/depot/17vg99ooo1n/run/wshd.sock --user vcap
+
+password for vcap: ********
+Logged into vcap@17vg99ooo1n
+$
+</pre>
+
+##<a id='keep-container'></a>Preserving a Warden Container ##
+
+By default, a Warden container exists only as long as the application it runs
+exists.
+If an application consistently crashes while starting, you might not be able to
+access the Warden container running the application without changing this
+default behavior.
+
+To keep a Warden container from being deleted even when the application it runs
+has stopped, set the `container_grace_time` parameter in the [Warden linux.yml](https://github.com/cloudfoundry/warden/blob/master/warden/config/linux.yml) file to `~`.
+
+```
+---
+server:
+  container_klass: Warden::Container::Linux
+
+  container_grace_time: ~
+
+  unix_domain_permissions: 0777
+  . . .
+```
+
+##<a id='monitor-nats'></a>Monitoring NATS Message Bus Traffic ##
+
+To help troubleshoot an issue with an application, you can monitor NATS message bus traffic related to the application.
+To do this:
+
+1. Run `cf target` to target the space containing the application.
+
+1. Run `CF_TRACE=true cf app APPLICATION-NAME | grep guid` to show the GUID of the application.
+
+    <pre class="terminal">
+    $ CF_TRACE=true cf app my-new-app | grep guid
+
+    "guid": "0a709d5b-0d9b-400b-900a-81594583b634",
+    </pre>
+
+1. Run `bosh ssh` to open a secure shell into a NATS node.
+
+1. Run `nats-sub -s "nats://${NATS_USERNAME}:${NATS_PASSWORD}@${NATS_HOST}:${NATS_PORT}" ">" | grep APPLICATION-GUID` to subscribe to NATS and show messages related to the application.
+
 ##<a id='hm9000'></a>Viewing the HM9000 Data Store ##
 
 The HM9000 data store contains information about every VM and application in a
@@ -78,4 +131,3 @@ Use the following processes to view the contents of the HM9000 data store.
 1. Run `bosh ssh hm9000_z1/0` to open a secure shell into the HM9000 VM.
 1. Run `/var/vcap/packages/hm9000/hm9000 dump --config=/var/vcap/jobs/hm9000/config.json > /tmp/hm9000ds`.
 This command outputs the data store into a text file, `/tmp/hm9000ds`.
-
