@@ -91,14 +91,14 @@ You can create a new quota plan in one of two ways:
 In a terminal window, run the following command. Replace the placeholder attributes with the values you want for this quota plan:
 
  ```
-cf curl /v2/quota_definitions -X 'POST' -d ‘ { "name": "NAME", "non_basic_services_allowed": NBS_ALLOWED, "total_services": SERVICES, "total_routes":
-ROUTES, "memory_limit": MEMORY, "trial_db_allowed": DB_ALLOWED } ’
+cf curl /v2/quota_definitions -X 'POST' -d ' { "name": "NAME", "non_basic_services_allowed": NBS_ALLOWED, "total_services": SERVICES, "total_routes":
+ROUTES, "memory_limit": MEMORY, "trial_db_allowed": DB_ALLOWED } '
  ```
 
 Example:
 
  ```
-cf curl /v2/quota_definitions -X 'POST' -d ‘ { "name": "small", "non_basic_services_allowed": false, "total_services": 10, "total_routes": 10, "memory_limit": 2048, "trial_db_allowed": false } ’
+cf curl /v2/quota_definitions -X 'POST' -d ' { "name": "small", "non_basic_services_allowed": false, "total_services": 10, "total_routes": 10, "memory_limit": 2048, "trial_db_allowed": false } '
  ```
 
 # <a id='modify'></a> Modifying a Quota Plan #
@@ -174,12 +174,12 @@ You can modify an existing quota plan in one of two ways:
 
 2. Replace `QUOTA_PLAN_GUID`, `ATTRIBUTE`, and `VALUE` with the values you want for this quota plan and run the following command in a terminal window:
 
-    `cf curl /v2/quota_definitions/QUOTA_PLAN_GUID -X ‘PUT’ -d "{\"ATTRIBUTE\":VALUE}"`
+    `cf curl /v2/quota_definitions/QUOTA_PLAN_GUID -X 'PUT' -d "{\"ATTRIBUTE\":VALUE}"`
 
 	The following example increases the memory limit for the “silver_quota” plan to 40 GB.
 
 	```
-	$ cf curl /v2/quota_definitions/cccc-4567-b4b4-5432-33412ad1123e -X ‘PUT’ -d "{\"memory_limit\":40960}"
+	$ cf curl /v2/quota_definitions/cccc-4567-b4b4-5432-33412ad1123e -X 'PUT' -d "{\"memory_limit\":40960}"
 
 	{
 	        "metadata": {
