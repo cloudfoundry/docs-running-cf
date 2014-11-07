@@ -2,18 +2,18 @@
 title: Cloud Foundry Logging
 ---
 
-This section contains information useful for debugging Cloud Foundry system components.
+This section contains information for debugging Cloud Foundry system components.
 
 ##Component Logging
 
-The Cloud Foundry components share a common interface for configuring their logs. For more information, see the
+The Cloud Foundry components share a common interface for configuring logs. For more information, see the
 READMEs for the [DEA](http://github.com/cloudfoundry/dea_ng#logs), the [Cloud
 Controller](http://github.com/cloudfoundry/cloud_controller_ng#logs), or for
 [Steno](http://github.com/cloudfoundry/steno), the logging library that these components use.
 
 In `cf-release`, the components are all configured in a similar way:
 
-* All of the job's log files are located in the directory `/var/vcap/sys/log`, on the machine where the job is running.
+* All of the job's log files are located in the directory `/var/vcap/sys/log` of the machine on which the job is running.
 * The job's main logs are written to a file named `<job-name>.log`.
 * Any output written directly to the job's stdout and stderr is written to `<job-name>.stdout.log` and `<job-name>.stderr.log`, respectively.
 
@@ -22,15 +22,15 @@ In `cf-release`, the components are all configured in a similar way:
 For the Cloud Controller, database migration logs are written to `db_migrate.stdout.log` and `db_migrate.stderr.log`
 in the same directory.
 
-## Log forwarding
+## Log Forwarding
 
-Each BOSH job in cf-release includes a job named `metron_agent`. Metron itself acts as a forwarding agent for the Doppler (formerly Loggregator) messaging system, but it also includes a [template](https://github.com/cloudfoundry/loggregator/blob/develop/bosh/jobs/metron_agent/templates/syslog_forwarder.conf.erb) for configuring the `rsyslogd` daemon to forward logs to a remote machine. The [relevant manifest properties](https://github.com/cloudfoundry/loggregator/blob/develop/bosh/jobs/metron_agent/spec#L13-L19) are:
+Each BOSH job in `cf-release` includes a job named `metron_agent`. Metron itself acts as a forwarding agent for the Doppler (formerly Loggregator) messaging system, but it also includes a [template](https://github.com/cloudfoundry/loggregator/blob/develop/bosh/jobs/metron_agent/templates/syslog_forwarder.conf.erb) for configuring the `rsyslogd` daemon to forward logs to a remote machine. The [relevant manifest properties](https://github.com/cloudfoundry/loggregator/blob/develop/bosh/jobs/metron_agent/spec#L13-L19) are:
 
 * `syslog_daemon_config.address`: the IP address (or DNS name) of a remote system that should receive component logs from this VM
 * `syslog_daemon_config.port`: the port on which the log recipient is listening
 * `syslog_daemon_config.transport`: the protocol over which logs should be sent (one of `tcp`, `udp` or `relp`); defaults to `tcp`
 
-For example to use UDP as the syslog transport, the manifest be similar to
+For example, to use UDP as the syslog transport, the manifest is similar to the following:
 ```yaml
 properties:
   syslog_daemon_config:
@@ -39,4 +39,4 @@ properties:
     transport: udp
 ```
 
-Cloud Foundry no longer provides a component in cf-release for aggregating syslog messages from CF components.
+Cloud Foundry no longer provides a component in `cf-release` for aggregating syslog messages from CF components.
