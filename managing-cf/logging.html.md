@@ -30,4 +30,13 @@ Each BOSH job in cf-release includes a job named `metron_agent`. Metron itself a
 * `syslog_daemon_config.port`: the port on which the log recipient is listening
 * `syslog_daemon_config.transport`: the protocol over which logs should be sent (one of `tcp`, `udp` or `relp`); defaults to `tcp`
 
+For example to use UDP as the syslog transport, the manifest be similar to
+```yaml
+properties:
+  syslog_daemon_config:
+    address: address.of.your.syslog.receiver
+    port: 54321
+    transport: udp
+```
+
 Cloud Foundry no longer provides a component in cf-release for aggregating syslog messages from CF components.
