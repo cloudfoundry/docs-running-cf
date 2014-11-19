@@ -56,7 +56,7 @@ Cloud Foundry installs with one `default` quota plan with the following limits:
 You can create a new quota plan in one of two ways:
 
 * Directly modify the CF deployment manifest before deploying.
-* Use `cf curl` after deploying.
+* Use `cf create-quota` after deploying.
 
 ## <a id='manifest'></a> Modifying the Manifest ##
 
@@ -84,21 +84,18 @@ You can create a new quota plan in one of two ways:
 
 1. Save and close the deployment manifest.
 
-## <a id='curl'></a>Using cf curl ##
-
-**Note**: cf commands to replace `cf curl` are coming soon. Refer to the [Pivotal Tracker epic](https://www.pivotaltracker.com/epic/show/1053180) for more information.
+## <a id='create-quota'></a>Using cf create-quota ##
 
 In a terminal window, run the following command. Replace the placeholder attributes with the values you want for this quota plan:
 
  ```
-cf curl /v2/quota_definitions -X 'POST' -d ' { "name": "NAME", "non_basic_services_allowed": NBS_ALLOWED, "total_services": SERVICES, "total_routes":
-ROUTES, "memory_limit": MEMORY, "trial_db_allowed": DB_ALLOWED } '
+$ cf create-quota  QUOTA [-m MEMORY] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans]
  ```
 
 Example:
 
  ```
-cf curl /v2/quota_definitions -X 'POST' -d ' { "name": "small", "non_basic_services_allowed": false, "total_services": 10, "total_routes": 10, "memory_limit": 2048, "trial_db_allowed": false } '
+$ cf create-quota small -m 2048 -r 10 -s 10 --allow-paid-service-plans
  ```
 
 # <a id='modify'></a> Modifying a Quota Plan #
@@ -106,7 +103,7 @@ cf curl /v2/quota_definitions -X 'POST' -d ' { "name": "small", "non_basic_servi
 You can modify an existing quota plan in one of two ways:
 
 * Directly modify the CF deployment manifest before deploying.
-* Use `cf curl` after deploying.
+* Use the `cf` CLI after deploying.
 
 ## <a id='modify'></a> Modifying the Manifest ##
 
@@ -115,103 +112,31 @@ You can modify an existing quota plan in one of two ways:
 1. Modify the value of the attribute you want to change.
 1. Save and close the deployment manifest.
 
-## <a id='curl-after'></a> Using cf curl ##
+## <a id='update-quota'></a> Using cf update-quota ##
 
-**Note**: cf commands to replace `cf curl` are coming soon. Refer to the [Pivotal Tracker epic](https://www.pivotaltracker.com/epic/show/1053180) for more information.
+1. Run `cf quotas` to find the names of all quota definitions available to your organization. Note the name of the quota plan you want to modify.
 
-1. Run `cf curl /v2/quota_definitions -X 'GET'` to find the GUIDs of all quota definitions available to your organization. Note the GUID of the quota plan you want to assign to your organization.
+```
+$ cf quotas
+Getting quotas as admin@example.com...
+OK
 
-    The `cf curl /v2/quota_definitions -X 'GET'` command returns a JSON response listing every quota plan available to your organization.
-    Data about each plan shows in two sections: “metadata” and “entity.” The “metadata” section shows the quota plan GUID, while the “entity” section lists the name of the plan and the quota limits.
+name           total memory limit   instance memory limit   routes   service instances   paid service plans
+free           0                    0                       1000     0                   disallowed
+paid           10G                  0                       1000     -1                  allowed
+small          2G                   0                         10     10                  allowed
+trial          2G                   0                       1000     10                  disallowed
+```
 
-    **Note**: Because “metadata” is listed before “entity” for each quota plan, the GUID of a plan appears six lines above the name.
+1. Run `cf update-quota` with the name of the quota you want to modify. Use the appropriate flags to specify the attributes that you want to change.
 
-    In the following example, the GUID of the “default” plan is `bbbb-0000-faaf-1234-aa12-98765bababab` and the GUID of the “silver_quota” plan is `cccc-4567-b4b4-5432-33412ad1123e`.
+```
+cf update-quota QUOTA [-m MEMORY] [-n NEW_NAME] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans | --disallow-paid-service-plans]
+```
 
-	```
-	 $ cf curl /v2/quota_definitions -X 'GET'
+Example:
 
-	    {
-	      "total_results": 2,
-	      "total_pages": 1,
-	      "prev_url": null,
-	      "next_url": null,
-	      "resources": [
-	      {
-	        "metadata": {
-	          "guid": "bbbb-0000-faaf-1234-aa12-98765bababab",
-	          "url": "/v2/quota_definitions/bbbb-0000-faaf-1234-aa12-98765bababab",
-	          "created_at": "2013-11-19T18:53:48+00:00",
-	          "updated_at": "2013-11-19T19:34:57+00:00"
-	        },
-	        "entity": {
-	          "name": "default",
-	          "non_basic_services_allowed": false,
-	          "total_services": 100,
-	          "total_routes": 1000,
-	          "memory_limit": 10240,
-	          "trial_db_allowed": false
-	        }
-	      },
-	      {
-	      "metadata": {
-	        "guid": "cccc-4567-b4b4-5432-33412ad1123e",
-	        "url": "/v2/quota_definitions/cccc-4567-b4b4-5432-33412ad1123e",
-	        "created_at": "2013-11-19T18:53:48+00:00",
-	        "updated_at": "2013-11-19T19:34:57+00:00"
-	      },
-	      "entity": {
-	        "name": "silver_quota",
-	        "non_basic_services_allowed": true,
-	        "total_services": 25,
-	        "total_routes": 500,
-	        "memory_limit": 2048,
-	        "trial_db_allowed": true
-	      }
-	    }
-	  ]}
-	```
-
-2. Replace `QUOTA_PLAN_GUID`, `ATTRIBUTE`, and `VALUE` with the values you want for this quota plan and run the following command in a terminal window:
-
-    `cf curl /v2/quota_definitions/QUOTA_PLAN_GUID -X 'PUT' -d "{\"ATTRIBUTE\":VALUE}"`
-
-	The following example increases the memory limit for the “silver_quota” plan to 40 GB.
-
-	```
-	$ cf curl /v2/quota_definitions/cccc-4567-b4b4-5432-33412ad1123e -X 'PUT' -d "{\"memory_limit\":40960}"
-
-	{
-	        "metadata": {
-	          "guid": "bbbb-0000-faaf-1234-aa12-98765bababab",
-	          "url": "/v2/quota_definitions/bbbb-0000-faaf-1234-aa12-98765bababab",
-	          "created_at": "2013-11-19T18:53:48+00:00",
-	          "updated_at": "2013-11-19T19:34:57+00:00"
-	        },
-	        "entity": {
-	          "name": "default",
-	          "non_basic_services_allowed": false,
-	          "total_services": 100,
-	          "total_routes": 1000,
-	          "memory_limit": 10240,
-	          "trial_db_allowed": false
-	        }
-	      },
-	      {
-	      "metadata": {
-	        "guid": "cccc-4567-b4b4-5432-33412ad1123e",
-	        "url": "/v2/quota_definitions/cccc-4567-b4b4-5432-33412ad1123e",
-	        "created_at": "2013-11-19T18:53:48+00:00",
-	        "updated_at": "2013-11-19T19:34:57+00:00"
-	      },
-	      "entity": {
-	        "name": "silver_quota",
-	        "non_basic_services_allowed": true,
-	        "total_services": 25,
-	        "total_routes": 500,
-	        "memory_limit": 40960,
-	        "trial_db_allowed": true
-	      }
-	    }
-	  }
-	```
+ ```
+$ cf update-quota small -m 4096 -n medium -r 20 -s 20 --allow-paid-service-plans
+ ```
+<p class="note"><strong>Note</strong>: If you wish to create or modify quotas for individual spaces rather than across an entire organization, you can use the <code>space-quota</code> command. It is almost identical to the <code>quota</code> command. For example: to create a quota for a space, you would use <code>create-space-quota</code>. To modify that quota, you would use the <code>update-quota</code> command. Be advised that there is a limit to the total amount of memory a space can have (e.g. 1024M, 1G, 10G).
