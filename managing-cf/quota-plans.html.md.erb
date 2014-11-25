@@ -103,7 +103,7 @@ $ cf create-quota small -m 2048 -r 10 -s 10 --allow-paid-service-plans
 You can modify an existing quota plan in one of two ways:
 
 * Directly modify the CF deployment manifest before deploying.
-* Use the `cf update-quota` CLI after deploying.
+* Use `cf update-quota` after deploying.
 
 ## <a id='modify'></a> Modifying the Manifest ##
 
@@ -128,6 +128,7 @@ small          2G                   0                         10     10         
 trial          2G                   0                       1000     10                  disallowed
 ```
 
+
 1. Run `cf update-quota` with the name of the quota you want to modify. Use the appropriate flags to specify the attributes that you want to change.
 
 ```
@@ -139,4 +140,4 @@ Example:
  ```
 $ cf update-quota small -m 4096 -n medium -r 20 -s 20 --allow-paid-service-plans
  ```
-<p class="note"><strong>Note</strong>: If you wish to create or modify quotas for individual spaces rather than across an entire organization, you can use the <code>space-quota</code> command. It is almost identical to the <code>quota</code> command. For example: to create a quota for a space, you would use <code>create-space-quota</code>. To modify that quota, you would use the <code>update-quota</code> command. Be advised that there is a limit to the total amount of memory a space can have (e.g. 1024M, 1G, 10G).
+<p class="note"><strong>Note</strong>: If you wish to create or modify quotas for individual spaces rather than across an entire organization, you can use the <code>space-quota</code> command. It is almost identical to the <code>quota</code> command. For example: to create a quota for a space, you would use <code>create-space-quota</code>. To modify that quota, use the <code>update-quota</code> command. The org manager sets and manages the space quotas.
