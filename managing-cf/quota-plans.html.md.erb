@@ -116,18 +116,17 @@ You can modify an existing quota plan in one of two ways:
 
 1. Run `cf quotas` to find the names of all quota definitions available to your organization. Note the name of the quota plan you want to modify.
 
-```
-$ cf quotas
-Getting quotas as admin@example.com...
-OK
+    ```
+    $ cf quotas
+    Getting quotas as admin@example.com...
+    OK
 
-name           total memory limit   instance memory limit   routes   service instances   paid service plans
-free           0                    0                       1000     0                   disallowed
-paid           10G                  0                       1000     -1                  allowed
-small          2G                   0                         10     10                  allowed
-trial          2G                   0                       1000     10                  disallowed
-```
-
+    name           total memory limit   instance memory limit   routes       service instances   paid service plans
+    free           0                    0                       1000     0                   disallowed
+    paid           10G                  0                       1000     -1                  allowed
+    small          2G                   0                         10     10                  allowed
+    trial          2G                   0                       1000     10                  disallowed
+    ```
 
 1. Run `cf update-quota` with the name of the quota you want to modify. Use the appropriate flags to specify the attributes that you want to change.
 
