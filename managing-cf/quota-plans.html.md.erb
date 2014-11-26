@@ -86,7 +86,7 @@ You can create a new quota plan in one of two ways:
 
 ## <a id='create-quota'></a>Using cf create-quota ##
 
-In a terminal window, run the following command. Replace the placeholder attributes with the values you want for this quota plan:
+In a terminal window, run the following command. Replace the placeholder attributes with the values for this quota plan:
 
  ```
 $ cf create-quota  QUOTA [-m MEMORY] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans]
@@ -109,12 +109,12 @@ You can modify an existing quota plan in one of two ways:
 
 1. In a terminal window, run `bosh edit deployment` to open the deployment manifest YAML file in your default text editor.
 1. Search for "quota_definitions".
-1. Modify the value of the attribute you want to change.
+1. Modify the value of the attribute.
 1. Save and close the deployment manifest.
 
 ## <a id='update-quota'></a> Using cf update-quota ##
 
-1. Run `cf quotas` to find the names of all quota definitions available to your organization. Note the name of the quota plan you want to modify.
+1. Run `cf quotas` to find the names of all quota definitions available to your organization. Note the name of the quota plan to be modified.
 
     ```
     $ cf quotas
@@ -128,7 +128,7 @@ You can modify an existing quota plan in one of two ways:
     trial          2G                   0                       1000     10                  disallowed
     ```
 
-1. Run `cf update-quota` with the name of the quota you want to modify. Use the appropriate flags to specify the attributes that you want to change.
+1. Run `cf update-quota` with the name of the quota. Use the appropriate flags to specify the attributes.
 
 ```
 cf update-quota QUOTA [-m MEMORY] [-n NEW_NAME] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans | --disallow-paid-service-plans]
@@ -139,4 +139,4 @@ Example:
  ```
 $ cf update-quota small -m 4096 -n medium -r 20 -s 20 --allow-paid-service-plans
  ```
-<p class="note"><strong>Note</strong>: To create or modify quotas for individual spaces rather than across an entire organization, you can use the <code>space-quota</code> command. It is almost identical to the <code>quota</code> command. For example: to create a quota for a space, you would use <code>create-space-quota</code>. To modify that quota, use the <code>update-quota</code> command. The org manager sets and manages the space quotas.
+<p class="note"><strong>Note</strong>: To create or modify quotas for individual spaces rather than across an entire organization, you can use the <code>space-quota</code> command. It is almost identical to the <code>quota</code> command. For example: to create a quota for a space, use <code>create-space-quota</code>. To modify that quota, use the <code>update-quota</code> command. The org manager sets and manages the space quotas.
