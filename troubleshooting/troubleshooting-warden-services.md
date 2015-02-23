@@ -102,6 +102,46 @@ $ bundle exec steno-prettify /var/vcap/sys/log/warden/warden.log
 
 You can also redirect the prettified log to a file to make it easier for navigation.
 
+You way find the following script handy to set up an alias to run steno-prettify from any current directory:
+
+<pre class="terminal">
+#!/bin/bash
+
+STENO_DIR=$(find /var/vcap/data/packages/ -name steno | grep vendor | head -n 1)
+if [ $? -ne 0 ]; then
+    echo "did not find steno in packages"
+else
+    export BUNDLE_GEMFILE=$(echo $STENO_DIR | sed s#/vendor/.*#/Gemfile# )
+    if [ -f $BUNDLE_GEMFILE ]; then
+        alias  steno-prettify="bundle exec steno-prettify"
+        echo "ready to use steno-prettify alias, try steno-prettify on one of the following files:"
+        find /var/vcap/sys/log/ -name "*.log" | egrep  -v "err|out|ctl" | xargs ls -al
+    else
+        echo "could not find Gemfile into ${STENO_DIR}:" `ls -al ${BUNDLE_GEMFILE}`
+    fi
+fi
+</pre>
+
+Save it to a file and source it, or add it to vcap bash profile:
+<pre class="terminal">
+# vi ~/setUpSteno.bash
+[...]
+# source ~/setUpSteno.bash
+ready to use steno-prettify alias, try steno-prettify on one of the following files:
+-rw-r--r-- 1 root root    2130 Feb 20 11:47 /var/vcap/sys/log/daylimit/daylimit.log
+-rw-r--r-- 1 root root       0 Feb 20 10:45 /var/vcap/sys/log/rabbit_node/rabbit_logrotate_cron.log
+-rw-r--r-- 1 root root 4179849 Feb 23 13:57 /var/vcap/sys/log/rabbit_node/rabbit_node.log
+-rw-r--r-- 1 root root 9443178 Feb 23 13:41 /var/vcap/sys/log/rabbit/warden/warden.log
+
+# steno-prettify /var/vcap/sys/log/rabbit/warden/warden.stdout.log
+2015-02-20 10:41:29.678178 Warden::Server pid=3364  tid=6bfe fid=0ff4 warden/server.rb/run!:271 server={"unix_domain_path"=>"/tmp/warden.sock", "unix_domain_permissions"=>511, "container_klass"=>"Warden::Container::Linux", "container_grace_time"=>nil, "job_output_limit"=>10485760, "quota"=>{"disk_quota_enabled"=>false}, "allow_nested_warden"=>false, "container_rootfs_path"=>"/var/vcap/packages/rootfs_lucid64", "container_depot_path"=>"/var/vcap/data/rabbit/containers"},logging={"level"=>"debug", "file"=>"/var/vcap/sys/log/rabbit/warden/warden.log"},network={"pool_network"=>"10.254.0.0/18", "deny_networks"=>[], "allow_networks"=>[], "mtu"=>1500},port={"pool_start_port"=>61001, "pool_size"=>4000},user={"pool_start_uid"=>10000, "pool_size"=>4096}    INFO -- Configuration
+[...]
+
+# tail -f /var/vcap/sys/log/rabbit/warden/warden.stdout.log | steno-prettify
+...
+</pre>
+
+
 ### <a id="looking"></a>Looking into a Warden container
 
 You can use the Warden client to talk to existing Warden containers and perform operations. The Warden client normally sits in `/path_to_warden_packages/bin/warden`:
@@ -133,11 +173,67 @@ hello world
 
 The `help` option will give you more information on how to run a command or script within a Warden container.
 
+<pre class="terminal">
+$ ./bin/warden
+warden> help
+
+        copy_in       Copy files/directories into the container.
+        copy_out      Copy files/directories out of the container.
+        create        Create a container, optionally pass options.
+        destroy       Shutdown a container.
+        echo          Echo a message.
+        info          Show metadata for a container.
+        limit_cpu     Set or get the CPU limit in shares for the container.
+        limit_disk    set or get the disk limit for the container.
+        limit_memory  Set or get the memory limit for the container.
+        link          Do blocking read on results from a job.
+        list          List containers.
+        net_in        Forward port on external interface to container.
+        net_out       Allow traffic from the container to address.
+        ping          Ping warden.
+        run           Short hand for spawn(stream(cmd)) i.e. spawns a command, streams the result.
+        spawn         Spawns a command inside a container and returns the job id.
+        stop          Stop all processes inside a container.
+        stream        Do blocking stream on results from a job.
+        help          Show help.
+
+Use --help with each command for more information.
+warden> net_in --help
+command: net_in
+description: Forward port on external interface to container.
+usage: net_in [options]
+
+[options] can be one of the following:
+
+        --handle <handle> (string)  # required
+        [--host_port <host_port> (uint32)]  # optional
+        [--container_port <container_port> (uint32)]  # optional
+warden>
+
+warden> net_in --handle 18fglrqcs23
+host_port : 61013
+container_port : 61013
+</pre>
+
+You may get additional networking details on warden containers virtual nic NAT, and received traffic:
+
+<pre class="terminal">
+$ iptables -t nat -L -v
+[...]
+Chain warden-instance-18fglrqcs23 (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:15009 to:10.254.4.170:10001
+    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:25009 to:10.254.4.170:20001
+    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:61003 to:10.254.4.170:61003
+    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:61013 to:10.254.4.170:61013
+</pre>
+
+
 There are other ways to check whether the process is running. For example, given that you have a container with handle `16io51f6jri` running `redis-server`, you can find the corresponding process tree:
 
 <pre class="terminal">
-$ ps auxf
-...
+$ ps auxf | less
+... [ search for 16io51f6jri:] /16io51f6jri
 root      5291  0.0  0.0  14564   496 ?        S    06:43   0:00 wshd: 16io51f6jri
 10000     5351  0.0  0.0  17708  1220 ?        Ss   06:43   0:00  \_ /bin/bash
 10000     5353  0.1  0.0  36220  1772 ?        Sl   06:43   0:12      \_ /var/vcap/packages/redis26/bin/redis-server /var/vcap/store/redis/instances/9407af2c-0628-484b-a5f8-5c8634421a35/redis.conf
@@ -157,6 +253,28 @@ Its corresponding PID of `wshd` will be put into the corresponding Warden depot 
 <pre class="terminal">
 $ cat /var/vcap/store/containers/16io51f6jri/run/wshd.pid
 5291
+</pre>
+
+### <a id="entering"></a>Entering into a Warden container
+
+Use wsh to enter within the container and interactively run commands within the container (e.g. curl from same NIC, send signals ...)
+
+<pre class="terminal">
+
+# cd /var/vcap/data/rabbit/containers/18fglrqcs23
+# ./bin/wsh --user vcap
+
+vcap@18fglrqcs23:~$ ps aux --cols=2000
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0   1124   292 ?        S s  Feb20   0:00 wshd: 18fglrqcs23
+vcap        35  0.0  0.0  17712  1180 ?        S s  Feb20   0:00 /bin/bash
+vcap        36  0.8  1.0  68568 44316 ?        S l  Feb20  36:05  \_ /var/vcap/packages/erlang/lib/erlang/erts-6.2/bin/beam -W w -K true -A30 -P 1048576 -- -root /var/vcap/packages/erlang/lib/erlang -progname erl -- -home /home/vcap -- -pa /var/vcap/packages/rabbitmq-3.0/sbin/../ebin -noshell -noinput -s rabbit boot -sname f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost -boot start_sasl -config /var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/config/rabbitmq -kernel inet_default_connect_options [{nodelay,true}] -rabbit tcp_listeners [{"auto",10001}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit error_logger {file,"/var/vcap/sys/service-log/rabbit/f80a348e-e937-4e4d-96c9-d65ef35ed960/f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost.log"} -rabbit sasl_error_logger {file,"/var/vcap/sys/service-log/rabbit/f80a348e-e937-4e4d-96c9-d65ef35ed960/f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost-sasl.log"} -rabbit enabled_plugins_file "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/config/enabled_plugins" -rabbit plugins_dir "/var/vcap/packages/rabbitmq-3.0/sbin/../plugins" -rabbit plugins_expand_dir "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/plugins" -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/mnesia" -smp disable
+vcap       117  0.0  0.0  10792   356 ?        S s  Feb20   0:00      \_ inet_gethost 4
+vcap       118  0.0  0.0  17112   800 ?        S    Feb20   0:00          \_ inet_gethost 4
+vcap        55  0.0  0.0  10824   332 ?        S    Feb20   0:01 /var/vcap/packages/erlang/lib/erlang/erts-6.2/bin/epmd -daemon
+vcap     14969  0.0  0.0  17892  1804 pts/0    S s  13:36   0:00 /bin/bash
+vcap     14993  0.0  0.0  15036  1004 pts/0    R +  13:36   0:00  \_ ps auxf --cols=2000
+
 </pre>
 
 ### <a id="service-data"></a>Service instance logs, data and localdb
@@ -240,4 +358,7 @@ wshd(2398)───bash(2457)───mongod(2459)─┬─proxyctl(2470)─┬�
 ### <a id="services-rabbit"></a>RabbitMQ daylimit daemon
 
 RabbitMQ has a daylimit daemon to monitor the bandwidth outside Warden container (monitored by monit) and it will take care of the bandwidth of each RabbitMQ instance. A RabbitMQ instance will be able to work without the daylimit daemon, while the daylimit daemon will block an instance when the throughput reaches its day limit.
+
+Note that RabbitMQ from cf-services-contrib-release is community supported and has some known short comings, search vcap-dev@ for more details and how to improve it.
+
 
