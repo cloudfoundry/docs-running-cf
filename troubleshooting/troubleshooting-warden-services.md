@@ -198,6 +198,7 @@ warden> help
         help          Show help.
 
 Use --help with each command for more information.
+
 warden> net_in --help
 command: net_in
 description: Forward port on external interface to container.
@@ -208,11 +209,6 @@ usage: net_in [options]
         --handle <handle> (string)  # required
         [--host_port <host_port> (uint32)]  # optional
         [--container_port <container_port> (uint32)]  # optional
-warden>
-
-warden> net_in --handle 18fglrqcs23
-host_port : 61013
-container_port : 61013
 </pre>
 
 You may get additional networking details on warden containers virtual nic NAT, and received traffic:
