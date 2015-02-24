@@ -102,7 +102,7 @@ $ bundle exec steno-prettify /var/vcap/sys/log/warden/warden.log
 
 You can also redirect the prettified log to a file to make it easier for navigation.
 
-You way find the following script handy to set up an alias to run steno-prettify from any current directory:
+You may find the following script handy to set up an alias to run steno-prettify from any current directory:
 
 <pre class="terminal">
 #!/bin/bash
@@ -355,6 +355,6 @@ wshd(2398)───bash(2457)───mongod(2459)─┬─proxyctl(2470)─┬�
 
 RabbitMQ has a daylimit daemon to monitor the bandwidth outside Warden container (monitored by monit) and it will take care of the bandwidth of each RabbitMQ instance. A RabbitMQ instance will be able to work without the daylimit daemon, while the daylimit daemon will block an instance when the throughput reaches its day limit.
 
-Note that RabbitMQ from cf-services-contrib-release is community supported and has some known short comings, search vcap-dev@ for more details and how to improve it.
+Note that RabbitMQ from cf-services-contrib-release is community supported and has some known shortcomings, search vcap-dev@ for more details and how to improve it.
 
 
