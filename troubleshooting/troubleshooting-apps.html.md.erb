@@ -107,12 +107,12 @@ To do this:
 
 1. Run `cf target` to target the space containing the application.
 
-1. Run `CF_TRACE=true cf app APPLICATION-NAME | grep guid` to show the GUID of the application.
+1. Run `cf app APPLICATION-NAME --guid` to show the GUID of the application.
 
     <pre class="terminal">
-    $ CF_TRACE=true cf app my-new-app | grep guid
+    $ cf app my-new-app --guid
 
-    "guid": "0a709d5b-0d9b-400b-900a-81594583b634",
+    0a709d5b-0d9b-400b-900a-81594583b634
     </pre>
 
 1. Run `bosh ssh` to open a secure shell into a NATS node.
