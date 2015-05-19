@@ -2,7 +2,7 @@
 title: Troubleshooting Wardenized Services
 ---
 
-## <a id="intro"></a>Introduction
+<a id="intro"></a>Introduction
 
 This document shows how to debug a Wardenized service in a development or production environment.
 
@@ -124,20 +124,20 @@ fi
 
 Save it to a file and source it, or add it to vcap bash profile:
 <pre class="terminal">
-# vi ~/setUpSteno.bash
+$ vi ~/setUpSteno.bash
 [...]
-# source ~/setUpSteno.bash
+$ source ~/setUpSteno.bash
 ready to use steno-prettify alias, try steno-prettify on one of the following files:
 -rw-r--r-- 1 root root    2130 Feb 20 11:47 /var/vcap/sys/log/daylimit/daylimit.log
--rw-r--r-- 1 root root       0 Feb 20 10:45 /var/vcap/sys/log/rabbit_node/rabbit_logrotate_cron.log
--rw-r--r-- 1 root root 4179849 Feb 23 13:57 /var/vcap/sys/log/rabbit_node/rabbit_node.log
+-rw-r--r-- 1 root root       0 Feb 20 10:45 /var/vcap/sys/log/rabbit\_node/rabbit\_logrotate\_cron.log
+-rw-r--r-- 1 root root 4179849 Feb 23 13:57 /var/vcap/sys/log/rabbit\_node/rabbit\_node.log
 -rw-r--r-- 1 root root 9443178 Feb 23 13:41 /var/vcap/sys/log/rabbit/warden/warden.log
 
-# steno-prettify /var/vcap/sys/log/rabbit/warden/warden.stdout.log
-2015-02-20 10:41:29.678178 Warden::Server pid=3364  tid=6bfe fid=0ff4 warden/server.rb/run!:271 server={"unix_domain_path"=>"/tmp/warden.sock", "unix_domain_permissions"=>511, "container_klass"=>"Warden::Container::Linux", "container_grace_time"=>nil, "job_output_limit"=>10485760, "quota"=>{"disk_quota_enabled"=>false}, "allow_nested_warden"=>false, "container_rootfs_path"=>"/var/vcap/packages/rootfs_lucid64", "container_depot_path"=>"/var/vcap/data/rabbit/containers"},logging={"level"=>"debug", "file"=>"/var/vcap/sys/log/rabbit/warden/warden.log"},network={"pool_network"=>"10.254.0.0/18", "deny_networks"=>[], "allow_networks"=>[], "mtu"=>1500},port={"pool_start_port"=>61001, "pool_size"=>4000},user={"pool_start_uid"=>10000, "pool_size"=>4096}    INFO -- Configuration
+$ steno-prettify /var/vcap/sys/log/rabbit/warden/warden.stdout.log
+2015-02-20 10:41:29.678178 Warden::Server pid=3364  tid=6bfe fid=0ff4 warden/server.rb/run!:271 server={"unix\_domain\_path"=>"/tmp/warden.sock", "unix\_domain\_permissions"=>511, "container\_klass"=>"Warden::Container::Linux", "container\_grace\_time"=>nil, "job\_output\_limit"=>10485760, "quota"=>{"disk\_quota\_enabled"=>false}, "allow\_nested\_warden"=>false, "container\_rootfs\_path"=>"/var/vcap/packages/rootfs\_lucid64", "container\_depot\_path"=>"/var/vcap/data/rabbit/containers"},logging={"level"=>"debug", "file"=>"/var/vcap/sys/log/rabbit/warden/warden.log"},network={"pool\_network"=>"10.254.0.0/18", "deny\_networks"=>[], "allow\_networks"=>[], "mtu"=>1500},port={"pool\_start\_port"=>61001, "pool\_size"=>4000},user={"pool\_start\_uid"=>10000, "pool_size"=>4096}    INFO -- Configuration
 [...]
 
-# tail -f /var/vcap/sys/log/rabbit/warden/warden.stdout.log | steno-prettify
+$ tail -f /var/vcap/sys/log/rabbit/warden/warden.stdout.log | steno-prettify
 ...
 </pre>
 
@@ -257,8 +257,8 @@ Use wsh to enter within the container and interactively run commands within the 
 
 <pre class="terminal">
 
-# cd /var/vcap/data/rabbit/containers/18fglrqcs23
-# ./bin/wsh --user vcap
+$ cd /var/vcap/data/rabbit/containers/18fglrqcs23
+$ ./bin/wsh --user vcap
 
 vcap@18fglrqcs23:~$ ps aux --cols=2000
 USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
@@ -273,7 +273,7 @@ vcap     14993  0.0  0.0  15036  1004 pts/0    R +  13:36   0:00  \_ ps auxf --c
 
 </pre>
 
-### <a id="service-data"></a>Service instance logs, data and localdb
+### <a id="service-data"></a>Service instance logs, data, and localdb
 
 The data of the service sits in `/var/vcap/store/SERVICE-NAME/instances/UUID`:
 
@@ -327,11 +327,11 @@ utils.sh  warden_service_ctl
 
 Service node code will use the `warden_service_ctl` script to start, stop, and ping the status of the service instance. You can also use the script manually with Warden client to start and stop the instance but it is dangerous to do that manually.
 
-## <a id="services"></a>Service specific issue
+## <a id="services"></a>Service Specific Issues
 
-### <a id="services-mongo"></a>MongoDB proxy
+### <a id="services-mongo"></a>MongoDB Proxy
 
-MongoDB has a corresponding proxy and they won’t be able to work without it. Mongodb will have their proxy running within Warden:
+MongoDB has a required, corresponding proxy. MongoDB will have their proxy running within Warden:
 
 <pre class="terminal">
 $ cat /var/vcap/store/containers/16iod87tbpe/run/wshd.pid
@@ -351,7 +351,7 @@ wshd(2398)───bash(2457)───mongod(2459)─┬─proxyctl(2470)─┬�
                                        └─{mongod}(2505)
 </pre>
 
-### <a id="services-rabbit"></a>RabbitMQ daylimit daemon
+### <a id="services-rabbit"></a>RabbitMQ Daylimit Daemon
 
 RabbitMQ has a daylimit daemon to monitor the bandwidth outside Warden container (monitored by monit) and it will take care of the bandwidth of each RabbitMQ instance. A RabbitMQ instance will be able to work without the daylimit daemon, while the daylimit daemon will block an instance when the throughput reaches its day limit.
 
