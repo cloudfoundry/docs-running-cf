@@ -368,6 +368,17 @@ else
 fi
 </pre>
 
+###<a id="debugging-cloudcontroller"></a>Interactive cloudcontroller shell ###
+
+The cloud controller jobs embeds a pry shell, see http://pryrepl.org/ for some background. This may allow to interact with
+cc_ng classes such as scripting some operations or access the cc_db using model classes, see [example](https://www.pivotaltracker.com/story/show/81076206)
+
+<pre class="terminal">
+$ cd /var/vcap/jobs/cloud_controller_ng
+$ bin/console
+[...]
+</pre>
+
 ###<a id="force-recreate"></a>Forcing a VM Recreate ###
 
 If BOSH or an operator identifies a VM as corrupted, BOSH can recreate the VM.
