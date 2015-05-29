@@ -346,8 +346,27 @@ Note the job name and index of the failing VM.
 1. Run `sudo su -` to enter the root environment with root privileges.
 1. Run `monit summary` to determine which processes are not running.
 1. Review the log files found in `/var/vcap/sys/log/` to determine the root
-cause of the process failures.
+cause of the process failures. Some of these logs are formatted using steno, with timestamps instead of human formatted dates. Use `steno-prettify` to format it for humans
 1. Use `monit restart all` or `monit restart PROCESS` to start the processes.
+
+Execute the following commands to set up steno-prettify in the cloudcontroller:
+
+<pre class="terminal">
+export CC_JOB_DIR=/var/vcap/jobs/cloud_controller_ng
+source $CC_JOB_DIR/bin/ruby_version.sh
+
+CC_PACKAGE_DIR=/var/vcap/packages/cloud_controller_ng
+export BUNDLE_GEMFILE=$CC_PACKAGE_DIR/cloud_controller_ng/Gemfile
+export HOME=/home/vcap # rake needs it to be set to run tasks
+
+if [ -f $BUNDLE_GEMFILE ]; then
+	alias  steno-prettify="bundle exec steno-prettify"
+	echo "ready to use steno-prettify alias, try steno-prettify on one of the following files:"
+	find /var/vcap/sys/log/ -name "*.log" | egrep  -v "err|out|ctl" | xargs ls -al
+else
+	echo "could not find Gemfile into ${STENO_DIR}:" `ls -al ${BUNDLE_GEMFILE}`
+fi
+</pre>
 
 ###<a id="force-recreate"></a>Forcing a VM Recreate ###
 
