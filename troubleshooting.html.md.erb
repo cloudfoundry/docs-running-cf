@@ -346,7 +346,7 @@ Note the job name and index of the failing VM.
 1. Run `sudo su -` to enter the root environment with root privileges.
 1. Run `monit summary` to determine which processes are not running.
 1. Review the log files found in `/var/vcap/sys/log/` to determine the root
-cause of the process failures. Some of these logs are formatted using steno, with timestamps instead of human formatted dates. Use `steno-prettify` to format it for humans
+cause of the process failures. Some of these logs are formatted using steno with timestamps instead of human-formatted dates. Use `steno-prettify` to format it for humans
 1. Use `monit restart all` or `monit restart PROCESS` to start the processes.
 
 Execute the following commands to set up steno-prettify in the cloudcontroller:
