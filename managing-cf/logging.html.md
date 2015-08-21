@@ -39,4 +39,4 @@ properties:
     transport: udp
 ```
 
-Cloud Foundry no longer provides a component in `cf-release` for aggregating syslog messages from CF components.
+Cloud Foundry no longer provides a component in `cf-release` for aggregating syslog messages from Cloud Foundry components.

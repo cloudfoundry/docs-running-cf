@@ -17,8 +17,7 @@ title: Error Codes
 <li>Ask the customer to ensure that their credentials are correct.</li>
 <li>Ask the customer to run <code>cf logout</code> and <code>cf login</code>.</li>
 <li>Ask the customer to rerun the last commands with <code>CF_TRACE=true</code> and send you the output.</li>
-<li>Ask the customer to send you the <code>~/.cf/config.json</code>. Ensure that the access token, authorization end point, and
-login end point are correct</li>
+<li>Ask the customer to send you the <code>~/.cf/config.json</code>. Ensure that the access token, authorization end point, and login end point are correct</li>
 <li>Ensure that the <em>UAA</em> and <em>Login</em> servers are up.</li>
 </ol>
 
@@ -172,8 +171,7 @@ or Space manager.
 <li>Ensure that the customer is not running custom <code>cf curl</code> commands.
 
 <ol>
-<li>If they are doing a <code>cf curl -X DELETE</code> then the url must have the <code>?recursive=true</code> param, and thus
-deleting non empty organizations or spaces.</li>
+<li>If they are doing a <code>cf curl -X DELETE</code> then the url must have the <code>?recursive=true</code> param, and thus deleting non empty organizations or spaces.</li>
 </ol></li>
 </ol>
 
@@ -219,8 +217,8 @@ deleting non empty organizations or spaces.</li>
 
 <ol>
 <li>Ask the customer to run the command with <code>CF_TRACE=true</code> and send you back the output.</li>
-<li>Ensure that the resource exists, e.g. the Organization, Space, App or Service etc exists.</li>
-<li>Ensure that the user has the permissions to access the resoure</li>
+<li>Ensure that the resource exists, e.g. the Organization, Space, App, or Service etc exists.</li>
+<li>Ensure that the user has the permissions to access the resource</li>
 </ol>
 
 <h2>20002: UaaIdTaken</h2>
@@ -267,7 +265,7 @@ deleting non empty organizations or spaces.</li>
 <h3>Possible Solutions</h3>
 
 <ol>
-<li>Ensure that the customer does not have invalid organization name, i.e. the organization name is too long or has invalid characters.</li>
+<li>Ensure that the customer does not have invalid organization name. For example, check to see if the organization name is too long or contains invalid characters.</li>
 <li>Ask the customer to run the command with <code>CF_TRACE=true</code> and send you back the output.</li>
 </ol>
 
