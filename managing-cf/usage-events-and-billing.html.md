@@ -33,7 +33,7 @@ The app usage events with the 'BUILDPACK_SET' state do not represent an actual a
 
 Service usage events provide information about when users create, update, and delete service instances.
 
-Unlike App Usage Events, Service Usage Events do not expire.  
+Service usage events are not persisted indefinitely. They do not currently expire like App Usage Events, but will in future releases of Cloud Foundry.
 
 #### Endpoint
 
