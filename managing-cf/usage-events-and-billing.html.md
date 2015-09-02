@@ -5,11 +5,11 @@ title: Usage Events and Billing
 ## Usage Events
 Usage events can be used by Cloud Foundry operators to construct billing information for apps and service instances.
 
-Despite being similar in name, usage events are different from regular Cloud Foundry events (`/vX/events`). Cloud Foundry events should NOT be used for billing purposes; They are recorded regardless of the action succeeding and are not guaranteed to be in the correct order.
+Despite being similar in name, usage events are different from Cloud Foundry audit events (`/v2/events`). The audit events stored in the events table should not be used for billing purposes; They are recorded regardless of the action succeeding and are not guaranteed to be in the correct order.
 
 ### App Usage Events
 
-App usage events provide information about when users create, delete and update apps. They also include information about the app to enable operators to bill based on resource usage.
+App Usage Events provide information about when users create, delete and update apps. They also include information about the app to enable operators to bill based on resource usage.
 
 App Usage Events expire after 31 days by default. This is configurable using the cf-release manifest property `cc.app_usage_events.cutoff_age_in_days`.
 
@@ -26,14 +26,14 @@ Multiple 'STARTED' events can occur in a row, so as to indicate updates to the a
 
 Multiple 'STOPPED' events cannot occur without 'STARTED' events in-between them.  
 
-The app usage events with the 'BUILDPACK_SET' state do not represent an actual application state; They instead signify that a buildpack has been used for the application. This can be used by operators who wish to charge for buildpack usage.
+The App Usage Events with the 'BUILDPACK_SET' state do not represent an actual application state; They instead signify that a buildpack has been used for the application. This can be used by operators who wish to charge for buildpack usage.
 
 
 ### Service Usage Events
 
-Service usage events provide information about when users create, update, and delete service instances.
+Service Usage Events provide information about when users create, update, and delete service instances.
 
-Service usage events are not persisted indefinitely. They do not currently expire like App Usage Events, but will in future releases of Cloud Foundry.
+Service Usage Events currently do not expire like App Usage Events. The expiration of Service Usage Events will be implemented in a future Cloud Foundry release.
 
 #### Endpoint
 
@@ -43,17 +43,17 @@ For documentation on the response information, see the [api docs](http://apidocs
 
 #### Event States
 
-Service Usage events have the following valid states: 'CREATED', 'DELETED', and 'UPDATED'.  These signify the desired state of the service.
+Service Usage Events have the following valid states: 'CREATED', 'DELETED', and 'UPDATED'.  These signify the desired state of the service.
 
 #### Managed Service Instances vs User Provided Service Instances
 
-Service usage events include the `service_instance_type` field to distinguish between managed service instances (service instances backed by a broker) and user provided service instances. You will likely not need to consider user provided service instances for billing purposes.
+Service Usage Events include the `service_instance_type` field to distinguish between managed service instances (service instances backed by a broker) and user provided service instances. You will likely not need to consider user provided service instances for billing purposes.
 
 ## Using Usage Events
 
 
 ### Ordering Usage Events
-Order of events returned from the API will match the sequence of events that occurred in the system.
+Order of events returned from the API are guaranteed to match the sequence of events that occurred in the system.
 
 The timestamps on events should not be used to sequence events.  They may come from different cloud controller instances whose time could be slightly mismatched.  Unless you're billing on the millisecond, they will be precise enough for normal usage.
 
@@ -73,7 +73,7 @@ If you always use the last event guid for `after_guid`, then you may miss events
 It is recommended that operators select their `after_guid` from an event far enough back in time to ensure that all hanging transactions finish.  The exact buffer period depends on the expected transaction time of a particular Cloud Foundry installation, but 1 minute is typically sufficient to prevent data loss.
 
 ### External Warehouse
-To generate accurate billing information, Cloud Foundry operators will need to maintain their own, external data warehouses. These warehouses can persist app usage events for longer than their expiration period and prevent operators from having to continuously make expensive usage event queries.
+To generate accurate billing information, Cloud Foundry operators will need to maintain their own, external data warehouses. These warehouses can persist App Usage Events and Service Usage Events for longer than their expiration periods and prevent operators from having to continuously make expensive usage event queries.
 
 Commonly, operators generate aggregate billing events from the raw Cloud Foundry usage events to reduce the number of raw events they need to store.
 
