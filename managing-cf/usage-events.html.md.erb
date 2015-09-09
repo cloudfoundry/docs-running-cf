@@ -85,4 +85,4 @@ When an operator first starts billing, there may be applications or instances wi
 
 The purge endpoints are used to create initial events for all apps or service instances. The seeded events will all have the current timestamp, rather than the time the app was actually started. 
 
-<p class='note'><strong>Note</strong>The purge endpoints will delete ALL existing events, so it is important to use them <strong>only once</strong> when you start to record usage events for the first time. The purge endpoints are <strong>not</strong> intended to be called multiple times. Calling these events multiple times may result in lost events.</p>
+<p class='note'><strong>Note</strong>: The purge endpoints delete <strong>all</strong> existing events, so it is important to use them <strong>only once</strong> when you start to record usage events for the first time. The purge endpoints are <strong>not</strong> intended to be called multiple times. Calling these events multiple times may result in lost events.</p>
