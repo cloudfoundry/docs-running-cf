@@ -13,7 +13,7 @@ This section includes the following topics, with corresponding examples:
 * Checking the status of Warden server
 * Checking the log and config of Warden
 * Looking into a Warden container
-* Service instance logs, data and localdb
+* Service instance logs, data, and localdb
 
 ### <a id="check-status"></a>Checking Status of Warden Server
 
@@ -84,7 +84,7 @@ pool_start_uid: 10000
 pool_size: 4096
 </pre>
 
-The rootfs and container depot position is labelled in yellow and they could offer some information on debugging. The Warden log is labelled in green and it records whether the Warden server started correctly and how it handled incoming requests. The socket that the Warden server listens on is found at `/tmp/warden.sock`.
+The rootfs and container depot position is labelled in yellow and could offer some information for debugging. The Warden log is labelled in green. It records whether the Warden server started correctly and how it handled incoming requests. The socket that the Warden server listens on is found at `/tmp/warden.sock`.
 
 Warden uses [Steno](https://github.com/cloudfoundry/steno) for logging. You can use `steno-prettify` to make it more human readable. `steno-prettify` is a gem that is installed with Warden so you can use it without additional installation after going into the `warden` directory:
 
@@ -171,7 +171,7 @@ hello world
 ...
 </pre>
 
-The `help` option will give you more information on how to run a command or script within a Warden container.
+The `help` option will give you more information about running a command or script within a Warden container.
 
 <pre class="terminal">
 $ ./bin/warden
