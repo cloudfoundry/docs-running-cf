@@ -80,7 +80,7 @@ When an operator first starts billing, there may be applications or instances wi
 
 |Event Type| Endpoint | Documentation |
 |---|---|---|
-| App Usage Events | `/v2/app_usage_events/destructively_purge_all_and_reseed_started_apps`| [api docs](http://apidocs.cloudfoundry.org/latest-release/service_usage_events/list_service_usage_events.html) |
+| App Usage Events | `/v2/app_usage_events/destructively_purge_all_and_reseed_started_apps`| [api docs](http://apidocs.cloudfoundry.org/latest-release/app_usage_events/purge_and_reseed_app_usage_events.html) |
 | Service Usage Events | `/v2/service_usage_events/destructively_purge_all_and_reseed_existing_instances` | [api docs](http://apidocs.cloudfoundry.org/latest-release/service_usage_events/purge_and_reseed_service_usage_events.html) |
 
 The purge endpoints are used to create initial events for all apps or service instances. The seeded events will all have the current timestamp, rather than the time the app was actually started. 
