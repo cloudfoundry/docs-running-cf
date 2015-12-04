@@ -34,7 +34,7 @@ The App Usage Events with the 'BUILDPACK_SET' state do not represent an actual a
 
 Service Usage Events provide information about when users create, update, and delete service instances.
 
-Service Usage Events currently do not expire like App Usage Events. The expiration of Service Usage Events will be implemented in a future Cloud Foundry release.
+Service Usage Events expire after 31 days by default.  This is configurable using the cf-release manifest property `cc.service_usage_events.cutoff_age_in_days`.  Expiration of Service Usage Events was introduced in cf-release v226.
 
 #### Endpoint
 
