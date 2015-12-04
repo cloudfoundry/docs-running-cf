@@ -2,6 +2,8 @@
 title: Usage Events and Billing
 ---
 
+<strong><%= modified_date %></strong>
+
 ## Usage Events
 Cloud Foundry operators can use usage events to construct billing information for apps and service instances.
 
@@ -22,9 +24,9 @@ For documentation on the response information, see the [api docs](http://apidocs
 #### Event States
 App Usage Events have the following valid states: 'STARTED', 'STOPPED', and 'BUILDPACK_SET'.
 
-Multiple 'STARTED' events can occur in a row, so as to indicate updates to the app. You can parse the response to determine the specific difference.  
+Multiple 'STARTED' events can occur in a row, so as to indicate updates to the app. You can parse the response to determine the specific difference.
 
-Multiple 'STOPPED' events cannot occur without 'STARTED' events between them.  
+Multiple 'STOPPED' events cannot occur without 'STARTED' events between them.
 
 The App Usage Events with the 'BUILDPACK_SET' state do not represent an actual application state. Instead, they signify that a buildpack has been used for the application. This can be used by operators who wish to charge for buildpack usage.
 
@@ -83,6 +85,6 @@ When an operator first starts billing, there may be applications or instances wi
 | App Usage Events | `/v2/app_usage_events/destructively_purge_all_and_reseed_started_apps`| [api docs](http://apidocs.cloudfoundry.org/latest-release/app_usage_events/purge_and_reseed_app_usage_events.html) |
 | Service Usage Events | `/v2/service_usage_events/destructively_purge_all_and_reseed_existing_instances` | [api docs](http://apidocs.cloudfoundry.org/latest-release/service_usage_events/purge_and_reseed_service_usage_events.html) |
 
-The purge endpoints are used to create initial events for all apps or service instances. The seeded events will all have the current timestamp, rather than the time the app was actually started. 
+The purge endpoints are used to create initial events for all apps or service instances. The seeded events will all have the current timestamp, rather than the time the app was actually started.
 
 <p class='note'><strong>Note</strong>: The purge endpoints delete <strong>all</strong> existing events, so it is important to use them <strong>only once</strong> when you start to record usage events for the first time. The purge endpoints are <strong>not</strong> intended to be called multiple times. Calling these events multiple times may result in lost events.</p>
