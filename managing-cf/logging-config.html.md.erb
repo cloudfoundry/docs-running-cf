@@ -1,0 +1,60 @@
+---
+title: Configuring System Logging
+---
+
+<strong><%= modified_date %></strong>
+
+This topic explains how to configure the Cloud Foundry [Loggregator system](../../loggregator/architecture.html).
+
+## <a id='scaling'></a> Scaling Loggregator ##
+
+Cloud Foundry system components and apps constantly generate log and metrics data. The [Metron](../../loggregator/architecture.html#metron) agent running on each component or application VM collects and sends this data out to [Doppler](../../loggregator/architecture.html#doppler) components, which temporarily buffer the data before periodically forwarding it to the [Traffic Controller](../../loggregator/architecture.html#traffic-controller). The Traffic Controller then serves the aggregated data stream through the Firehose WebSocket endpoint.
+
+When the log and metrics data input to a Doppler exceeds its buffer size for a given interval, data can be lost. You can take several actions to minimize this loss.
+
+### Increase Doppler buffer size
+
+You can increase the Doppler internal buffer size by increasing the `doppler.message_drain_buffer_size` property from its default value of `100` in your Cloud Foundry BOSH deployment manifest.
+
+### Add additional Doppler server instances
+
+You can increase the number of Doppler servers by increasing the `instances` property for the `doppler_z1` and `doppler_z2` jobs in your Cloud Foundry BOSH deployment manifest.
+
+## <a id='syslog-forward'></a> Enabling System Log Forwarding ##
+
+Cloud Foundry can forward syslog data to an external aggregator service instead of routing it to the Loggregator Firehose.
+
+To do this, add the following properties to the `properties` hash in your CF deployment manifest.
+
+```
+properties:
+  syslog_daemon_config:
+  		address: YOUR-SYSLOG-AGGREGATOR-IP
+       	port: YOUR-SYSLOG-AGGREGATOR-TCP-PORT
+     	transport: YOUR-TRANSPORT-PROTOCOL
+```
+Replace `YOUR-TRANSPORT-PROTOCOL` with one of the following transport protocols:
+
+- `tcp`
+- `udp`
+- `relp`
+
+## <a id='customizing'></a>Customizing Loggregator Components ##
+
+You can customize each Loggregator component by changing its properties in the CF deployment manifest. The following details some of the most commonly-used changes.
+
+### DEA Logging Agent ###
+<%= partial '../../loggregator/manifest_properties/dea_logging_agent'%>
+
+### Doppler ###
+<%= partial '../../loggregator/manifest_properties/doppler' %>
+
+### Traffic Controller ###
+<%= partial '../../loggregator/manifest_properties/loggregator_trafficcontroller' %>
+
+###  Metron Agent ###
+<%= partial '../../loggregator/manifest_properties/metron_agent' %>
+
+### Syslog Drain Binder###
+See [Using Log Management Services](../../devguide/services/log-management.html).
+<%= partial '../../loggregator/manifest_properties/syslog_drain_binder' %>
