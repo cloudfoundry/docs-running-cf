@@ -133,3 +133,7 @@ Use the following processes to view the contents of the HM9000 data store.
 1. Run `bosh ssh hm9000_z1/0` to open a secure shell into the HM9000 VM.
 1. Run `/var/vcap/packages/hm9000/hm9000 dump --config=/var/vcap/jobs/hm9000/config.json > /tmp/hm9000ds`.
 This command outputs the data store into a text file, `/tmp/hm9000ds`.
+
+## <a id='ssh-access'></a>Accessing Apps with SSH ##
+If you need to troubleshoot an instance of an app, you can gain SSH access to the app with the Diego proxy and daemon. See the Diego SSH topic for details on [SSH configuration and procedures](./diego-ssh.html). 
+
