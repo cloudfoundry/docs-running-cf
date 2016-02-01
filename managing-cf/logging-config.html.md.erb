@@ -41,20 +41,469 @@ Replace `YOUR-TRANSPORT-PROTOCOL` with one of the following transport protocols:
 
 ## <a id='customizing'></a>Customizing Loggregator Components ##
 
-You can customize each Loggregator component by changing its properties in the CF deployment manifest. The following details some of the most commonly-used changes.
+You can customize each Loggregator component by changing its properties in the CF deployment manifest. The following details some of the most commonly used changes.
 
 ### DEA Logging Agent ###
-<%= partial '../../loggregator/manifest_properties/dea_logging_agent'%>
+
+<table>
+	<tr>
+		<th><strong>Property</strong></th>
+		<th><strong>Description</strong></th>
+		<th><strong>Default</strong></th>
+	</tr>
+	<tr>
+		<td>dea_logging_agent.debug</td>
+	    <td>Boolean value to turn on verbose mode</td>
+	    <td>false</td>
+	</tr>
+	<tr>
+		<td>metron_endpoint.host</td>
+	    <td>The host used to emit messages to the Metron agent</td>
+	    <td>127.0.0.1</td>
+	</tr>
+	<tr>
+		<td>metron_endpoint.dropsonde_port</td>
+	    <td>The port used to emit dropsonde messages to the Metron agent</td>
+	    <td>3457</td>
+	</tr>
+	<tr>
+	    <td>metron_endpoint.shared_secret</td>
+	    <td>The key used to sign log messages</td>
+	    <td>No default value</td>
+	</tr>
+	<tr>
+	     <td>dea_logging_agent.status.port</td>
+	    <td>Port used to run the varz endpoint</td>
+	    <td>0</td>
+	</tr>
+	<tr>
+	    <td>nats.user</td>
+	    <td>Username for cc client to connect to NATS</td>
+	    <td>No default value</td>
+	</tr>
+  	<tr>
+  	  	<td>nats.password</td>
+  	    <td>Password for cc client to connect to NATS</td>
+  	    <td>No default value</td>
+  	</tr>
+  	<tr>
+  	  	<td>nats.machines</td>
+  	    <td>IP addresses of Cloud Foundry NATS servers</td>
+  	    <td>No default value</td>
+  	</tr>
+	<tr>
+	    <td>nats.port</td>
+	    <td>IP port of Cloud Foundry NATS server</td>
+	    <td>No default value</td>
+	</tr>
+</table>
 
 ### Doppler ###
-<%= partial '../../loggregator/manifest_properties/doppler' %>
+
+<table>
+	<tr>
+		<th><strong>Property</strong></th>
+		<th><strong>Description</strong></th>
+		<th><strong>Default</strong></th>
+	</tr>
+	<tr>
+		<td>doppler.zone</td>
+		<td>Zone of the doppler server</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>doppler.debug</td>
+		<td>boolean value to turn on verbose logging for doppler system (dea agent &amp; doppler server)</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>doppler.status.user</td>
+		<td>username used to log into <code>varz</code> endpoint</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.status.port</td>
+		<td>Port used to run the <code>varz</code> endpoint</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.status.port</td>
+		<td>port used to run the varz endpoint</td>
+		<td>0</td>
+	</tr>
+	<tr>
+		<td>doppler.maxRetainedLogMessages</td>
+		<td>number of log messages to retain per application</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>doppler.incoming_port</td>
+		<td>Port for incoming log messages in the legacy format</td>
+		<td>3456</td>
+	</tr>
+	<tr>
+		<td>doppler.dropsonde_incoming_port</td>
+		<td>Port for incoming messages in the dropsonde format</td>
+		<td>3457</td>
+	</tr>
+	<tr>
+		<td>doppler.outgoing_port</td>
+		<td>Port for outgoing log messages</td>
+		<td>8081</td>
+	</tr>
+	<tr>
+		<td>doppler.blacklisted_syslog_ranges</td>
+		<td>Blacklist for IPs that should not be used as syslog drains, e.g. internal ip addresses.</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>doppler.container_metric_ttl_seconds</td>
+		<td>TTL (in seconds) for container usage metrics</td>
+		<td>120</td>
+	</tr>
+	<tr>
+		<td> doppler.unmarshaller_count</td>
+		<td>Number of parallel unmarshallers to run within Doppler</td>
+		<td>5</td>
+	</tr>
+	<tr>
+		<td>doppler.sink_inactivity_timeout_seconds</td>
+		<td>Interval before removing a sink due to inactivity</td>
+		<td>3600</td>
+	</tr>
+	<tr>
+		<td>doppler.sink_dial_timeout_seconds</td>
+		<td>Dial timeout for sinks</td>
+		<td>1</td>
+	</tr>
+	<tr>
+		<td>doppler.sink_io_timeout_seconds</td>
+		<td>I/O Timeout on sinks</td>
+		<td>0</td>
+	</tr>
+	<tr>
+		<td>doppler_endpoint.shared_secret</td>
+		<td>Shared secret used to verify cryptographically signed doppler messages</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>doppler.message_drain_buffer_size</td>
+		<td>Size of the internal buffer used by doppler to store messages. If the buffer gets full doppler will drop the messages.</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>etcd.machines</td>
+		<td>IPs pointing to the ETCD cluster</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>metron_endpoint.host</td>
+		<td>The host used to emit messages to the Metron agent</td>
+		<td>127.0.0.1</td>
+	</tr>
+	<tr>
+		<td>metron_endpoint.dropsonde_port</td>
+		<td>The port used to emit dropsonde messages to the Metron agent</td>
+		<td>default: 3457</td>
+	</tr>
+	<tr>
+		<td>ssl.skip_cert_verify</td>
+		<td>when connecting over TLS, don't verify certificates</td>
+		<td>false</td>
+	</tr>
+</table>
 
 ### Traffic Controller ###
-<%= partial '../../loggregator/manifest_properties/loggregator_trafficcontroller' %>
+
+<table>
+	<tr>
+		<th><strong>Property Name</strong></th>
+		<th><strong>Description</strong></th>
+		<th><strong>Default</strong></th>
+	</tr>
+		<td>traffic_controller.zone</td>
+		<td>Zone of the loggregator_trafficcontroller
+		<td></td>
+	</tr>
+	<tr>
+		<td>traffic_controller.debug</td>
+		<td>boolean value to turn on verbose logging for loggregator system (dea agent &amp; loggregator server)</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>loggregator.outgoing_dropsonde_port</td>
+		<td>Port for outgoing dropsonde messages</td>
+		<td>8081</td>
+	</tr>
+	<tr>
+		<td>loggregator.doppler_port</td>
+		<td>Port for outgoing doppler messages</td>
+		<td>8081</td>
+	</tr>
+	<tr>
+		<td>traffic_controller.outgoing_port  Port on which the traffic controller listens to for requests</td>
+		<td>8080</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>traffic_controller.status.user</td>
+		<td>username used to log into varz endpoint</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>traffic_controller.status.password</td>
+		<td>password used to log into varz endpoint</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>traffic_controller.status.port</td>
+		<td>port used to run the varz endpoint</td>
+		<td>0</td>
+	</tr>
+	<tr>
+		<td>doppler.uaa_client_id</td>
+		<td>Doppler's client id to connect to UAA</td>
+		<td>doppler</td>
+	</tr>
+	<tr>
+		<td>uaa.clients.doppler.secret</td>
+		<td>Doppler's client secret to connect to UAA
+		<td></td>
+	</tr>
+	<tr>
+		<td>uaa.url</td>
+		<td>URL of UAA</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>uaa.no_ssl</td>
+		<td>Do not use SSL to connect to UAA (used in case uaa.url is not set)</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>metron_endpoint.dropsonde_port</td>
+		<td>The port used to emit dropsonde messages to the Metron agent</td>
+		<td>3457</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.machines</td>
+		<td>IPs pointing to the ETCD cluster</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.maxconcurrentrequests</td>
+		<td>Number of concurrent requests to ETCD</td>
+		<td>10</td>
+	</tr>
+	<tr>
+		<td>system_domain</td>
+		<td>Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>nats.user</td>
+		<td>Username for cc client to connect to NATS</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>nats.password</td>
+		<td>Password for cc client to connect to NATS</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>nats.machines</td>
+		<td>IP addresses of Cloud Foundry NATS servers</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>nats.port</td>
+		<td>IP port of Cloud Foundry NATS server</td>
+		<td>4222</td>
+	</tr>
+	<tr>
+		<td>loggregator_endpoint.shared_secret</td>
+		<td>Shared secret used to verify cryptographically signed loggregator messages</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>ssl.skip_cert_verify</td>
+		<td>when connecting over https, ignore bad ssl certificates</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>cc.srv_api_uri</td>
+		<td>API URI of cloud controller</td>
+		<td></td>
+	</tr>
+</table>
 
 ###  Metron Agent ###
-<%= partial '../../loggregator/manifest_properties/metron_agent' %>
+
+<table>
+	<tr>
+		<th><strong>Property Name</strong></th>
+		<th><strong>Description</strong></th>
+		<th><strong>Default</strong></th>
+	</tr>
+		<td>syslog_daemon_config.address</td>
+		<td>IP address for syslog aggregator</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>syslog_daemon_config.port</td>
+		<td>TCP port of syslog aggregator</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>syslog_daemon_config.transport</td>
+		<td>Transport to be used when forwarding logs (tcp\|udp\|relp).</td>
+		<td>tcp</td>
+	</tr>
+	<tr>
+		<td>syslog_daemon_config.fallback_addresses</td>
+		<td>Addresses of fallback servers to be used if the primary syslog server is down. Only tcp or relp are supported. Each list entry should consist of address, transport and port keys. </td>
+		<td> []</td>
+	</tr>
+	<tr>
+		<td>syslog_daemon_config.custom_rule</td>
+		<td>Custom rule for syslog forward daemon</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>metron_agent.incoming_port</td>
+		<td>Incoming port for legacy log messages</td>
+		<td> 3456</td>
+	</tr>
+	<tr>
+		<td>metron_agent.dropsonde_incoming_port</td>
+		<td>Incoming port for dropsonde log messages</td>
+		<td> 3457</td>
+	</tr>
+	<tr>
+		<td>metron_agent.debug</td>
+		<td>boolean value to turn on verbose mode</td>
+		<td> false</td>
+	</tr>
+	<tr>
+		<td>metron_agent.zone</td>
+		<td>Availability zone where this agent is running</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>metron_agent.deployment</td>
+		<td>Name of deployment (added as tag on all outgoing metrics)
+		<td></td>
+	</tr>
+	<tr>
+		<td>metron_agent.etcd_query_interval_milliseconds</td>
+		<td>Interval for querying ETCD for trafficcontroller heartbeats</td>
+		<td> 5000</td>
+	</tr>
+	<tr>
+		<td>metron_agent.logrotate.freq_min</td>
+		<td>The frequency in minutes which logrotate will rotate VM logs</td>
+		<td> 5</td>
+	</tr>
+	<tr>
+		<td>metron_agent.logrotate.rotate</td>
+		<td>The number of files that logrotate will keep around on the VM</td>
+		<td> 7</td>
+	</tr>
+	<tr>
+		<td>metron_agent.logrotate.size</td>
+		<td>The size at which logrotate will decide to rotate the log file</td>
+		<td> 50M</td>
+	</tr>
+	<tr>
+		<td>loggregator.dropsonde_incoming_port</td>
+		<td>Port where loggregator listens for dropsonde log messages</td>
+		<td> 3457</td>
+	</tr>
+	<tr>
+		<td>loggregator_endpoint.shared_secret</td>
+		<td>Shared secret used to verify cryptographically signed loggregator messages
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.machines</td>
+		<td>IPs pointing to the ETCD cluster
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.maxconcurrentrequests</td>
+		<td>Number of concurrent requests to ETCD</td>
+		<td> 106</td>
+	</tr>
+</table>
 
 ### Syslog Drain Binder###
+
 See [Using Log Management Services](../../devguide/services/log-management.html).
-<%= partial '../../loggregator/manifest_properties/syslog_drain_binder' %>
+
+<table>
+	<tr>
+		<th><strong>Property Name</strong></th>
+		<th><strong>Description</strong></th>
+		<th><strong>Default</strong></th>
+	</tr>
+		<td>metron_endpoint.host</td>
+		<td>The host used to emit messages to the Metron agent</td>
+		<td>127.0.0.1</td>
+	</tr>
+	<tr>
+		<td>metron_endpoint.dropsonde_port</td>
+		<td>The port used to emit dropsonde messages to the Metron agent</td>
+		<td>3457</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.machines</td>
+		<td>IPs pointing to the ETCD cluster</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.maxconcurrentrequests</td>
+		<td>Number of concurrent requests to ETCD</td>
+		<td>10</td>
+	</tr>
+	<tr>
+		<td>system_domain</td>
+		<td>Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen
+		<td></td>
+	</tr>
+	<tr>
+		<td>syslog_drain_binder.drain_url_ttl_seconds</td>
+		<td>Time to live for drain urls in seconds</td>
+		<td>60</td>
+	</tr>
+	<tr>
+		<td>syslog_drain_binder.update_interval_seconds</td>
+		<td>Interval on which to poll cloud controller in seconds</td>
+		<td>15</td>
+	</tr>
+	<tr>
+		<td>syslog_drain_binder.polling_batch_size</td>
+		<td>Batch size for the poll from cloud controller</td>
+		<td>1000</td>
+	</tr>
+	<tr>
+		<td>syslog_drain_binder.debug</td>
+		<td>boolean value to turn on verbose logging for syslog_drain_binder</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>cc.bulk_api_password</td>
+		<td>password for the bulk api</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>cc.srv_api_uri</td>
+		<td>API URI of cloud controller</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>ssl.skip_cert_verify</td>
+		<td>when connecting over https, ignore bad ssl certificates</td>
+		<td>false</td>
+	</tr>	
+</table>
+
