@@ -10,7 +10,7 @@ Quota plans are named sets of memory, service, and instance usage quotas. For ex
 
 Quota plans are not directly associated with user accounts. Instead, every organization has a list of available quota plans, and the account admin assigns a specific quota plan from the list to the organization. Everyone in the organization shares the quotas described by the plan. There is no limit to the number of defined quota plans an account can have, but only one plan can be assigned at a time.
 
-# <a id='attributes'></a>Quota Plan Attributes #
+## <a id='attributes'></a>Quota Plan Attributes ##
 
 <table border="1" class="nic" >
 <tr>
@@ -39,106 +39,174 @@ Quota plans are not directly associated with user accounts. Instead, every organ
 </tr>
 </table>
 
-# <a id='default'></a>Default Quota Plan #
+
+
+## <a id='default'></a>Default Quota Plan ##
 
 Cloud Foundry installs with one `default` quota plan with the following limits:
 
-* Memory Limit: 10240 MB
+* Memory Limit: `10240 MB`
 
-* Total Routes: 1000
+* Total Routes: `1000`
 
-* Total Services: 100
+* Total Services: `100`
 
-* Non-basic Services Allowed: True
+* Non-basic Services Allowed: `True`
 
-* Trial DB Allowed: True
+* Trial DB Allowed: `True`
 
-# <a id='new'></a>Creating a New Quota Plan #
+## <a id='new'></a>Creating a New Quota Plan for an Org ##
 
-You can create a new quota plan in one of two ways:
+<p class="note"><strong>Note</strong>: The org manager sets and manages quotas. See the <a href="../../concepts/roles.html">Orgs, Spaces, Roles, and Permissions topic </a> for more information.</p>
 
-* Directly modify the CF deployment manifest before deploying.
-* Use `cf create-quota` after deploying.
+You can create a new quota plan for an org in one of two ways:
 
-## <a id='manifest'></a> Modifying the Manifest ##
+* Directly [modify the CF deployment manifest](#manifest) before deploying.
+* Use [`cf create-quota`](#create-quota) after deploying.
+
+### <a id='manifest'></a> Modifying the Manifest ###
 
 1. In a terminal window, run `bosh edit deployment` to open the deployment manifest YAML file in your default text editor.
-1. Search for "quota_definitions".
-1. Add a new quota definition with limits that you specify. Use the default quota definition as a formatting template.
+1. Search for `quota_definitions`.
+1. Add a new quota definition with limits that you specify. Use the default quota definition as a formatting template. The following example shows the `quota_definitions` portion of the `cf.yml` manifest after adding the `silver_quota` plan:
 
-    The following example shows the `quota_definitions` portion of the `cf.yml` manifest after adding the “silver_quota” plan:
-
-    ```
-    quota_definitions:
-      default:
-        memory_limit: 10240M
-        non_basic_services_allowed: true
-        total_routes: 1000
-        total_services: 100
-        trial_db_allowed: true
-      silver_quota:
-        memory_limit: 2048M
-        non_basic_services_allowed: true
-        total_routes: 500
-        total_services: 25
-        trial_db_allowed: true
-    ```
-
+    <pre class='terminal'>
+        quota_definitions:
+          default:
+            memory_limit: 10240M
+            non_basic_services_allowed: true
+            total_routes: 1000
+            total_services: 100
+            trial_db_allowed: true
+          silver_quota:
+            memory_limit: 2048M
+            non_basic_services_allowed: true
+            total_routes: 500
+            total_services: 25
+            trial_db_allowed: true
+    </pre>
 1. Save and close the deployment manifest.
 
-## <a id='create-quota'></a>Using cf create-quota ##
+### <a id='create-quota'></a>Using cf create-quota ###
 
 In a terminal window, run the following command. Replace the placeholder attributes with the values for this quota plan:
 
- ```
+<pre class='terminal'>
 $ cf create-quota  QUOTA [-m MEMORY] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans]
- ```
+</pre>
 
 Example:
 
- ```
+<pre class='terminal'>
 $ cf create-quota small -m 2048M -r 10 -s 10 --allow-paid-service-plans
- ```
+</pre>
 
-# <a id='modify'></a> Modifying a Quota Plan #
+## <a id='modify'></a> Modifying an Existing Quota Plan for an Org##
 
-You can modify an existing quota plan in one of two ways:
+You can modify an existing quota plan for an org in one of two ways:
 
-* Directly modify the CF deployment manifest before deploying.
-* Use `cf update-quota` after deploying.
+* Directly [modify the CF deployment manifest](#modify) before deploying.
+* Use [`cf update-quota`](#update-quota) after deploying.
 
-## <a id='modify'></a> Modifying the Manifest ##
+### <a id='modify'></a> Modifying the Manifest ###
 
 1. In a terminal window, run `bosh edit deployment` to open the deployment manifest YAML file in your default text editor.
-1. Search for "quota_definitions".
+1. Search for `quota_definitions`.
 1. Modify the value of the attribute.
 1. Save and close the deployment manifest.
 
-## <a id='update-quota'></a> Using cf update-quota ##
+### <a id='update-quota'></a> Using cf update-quota ###
 
 1. Run `cf quotas` to find the names of all quota definitions available to your organization. Note the name of the quota plan to be modified.
 
-    ```
+    <pre class='terminal'>
     $ cf quotas
     Getting quotas as admin@example.com...
     OK
 
     name           total memory limit   instance memory limit   routes       service instances   paid service plans
-    free           0                    0                       1000     0                   disallowed
-    paid           10G                  0                       1000     -1                  allowed
-    small          2G                   0                         10     10                  allowed
-    trial          2G                   0                       1000     10                  disallowed
-    ```
+    free           0                    0                       1000         0                   disallowed
+    paid           10G                  0                       1000        -1                   allowed
+    small          2G                   0                         10        10                   allowed
+    trial          2G                   0                       1000        10                   disallowed
+    </pre>
 
 1. Run `cf update-quota` with the name of the quota. Use the appropriate flags to specify the attributes.
 
-```
+<pre class='terminal'>
 cf update-quota QUOTA [-m MEMORY] [-n NEW_NAME] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans | --disallow-paid-service-plans]
-```
+</pre>
 
 Example:
 
- ```
+<pre class='terminal'>
 $ cf update-quota small -m 4096M -n medium -r 20 -s 20 --allow-paid-service-plans
- ```
-<p class="note"><strong>Note</strong>: To create or modify quotas for individual spaces rather than across an entire organization, you can use the <code>space-quota</code> command. It is almost identical to the <code>quota</code> command. For example: to create a quota for a space, use <code>create-space-quota</code>. To modify that quota, use the <code>update-quota</code> command. The org manager sets and manages the space quotas.
+</pre>
+
+## <a id='space'></a>Creating and Modifying Quota Plans for a Space ##
+
+To create or modify quotas for individual [spaces](../../concepts/roles.html) rather than across an entire organization, you can use the following commands below.  
+
+### <a id='new-space'></a>Creating a New Quota Plan for a Space ###
+To create a quota for a space, run the following command <code>create-space-quota</code> in the terminal.  Replace the placeholder attributes with the values for this quota plan:
+
+<pre class='terminal'> cf create-space-quota QUOTA [-i INSTANCE_MEMORY] [-m MEMORY] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans]
+</pre>
+
+Example:
+
+<pre class='terminal'>
+$ cf create-space-quota big -i 20 -m 4096M -r 20 -s 20 --allow-paid-service-plans
+</pre>
+
+### <a id='modify-space'></a>Modifying a Quota Plan for a Space ###
+
+1. Run `cf space-quotas` to find the names of all space quota available to your organization. Note the name of the quota plan to be modified.
+
+    <pre class='terminal'>
+    $ cf space-quotas
+    Getting quotas as admin@example.com...
+    OK
+
+    name           total memory limit   instance memory limit   routes       service instances   paid service plans
+    big            2G                   unlimited               0            10                  allowed
+    trial          2G                   0                       0            10                  allowed
+    </pre>
+
+To modify that quota, use the <code>update-space-quota</code> command. 
+
+<pre class='terminal'> cf update-space-quota SPACE-QUOTA-NAME [-i MAX-INSTANCE-MEMORY] [-m MEMORY] [-n NEW_NAME] [-r ROUTES] [-s SERVICES] [--allow-paid-service-plans | --disallow-paid-service-plans]
+</pre>
+
+Example:
+
+<pre class='terminal'>
+$ cf update-space-quota big -i 20 -m 4096M -n bigger -r 20 -s 20 --allow-paid-service-plans
+</pre>
+
+## <a id='cfhelp'></a>Run cf help ##
+
+For more information regarding quotas, run `cf help` to view a list of all cf CLI commands and a brief description of each. Scroll to view org and space quotas usage and information.
+
+<pre class='terminal'>
+ORG ADMIN:
+   quotas                                 List available usage quotas
+   quota                                  Show quota info
+   set-quota                              Assign a quota to an org
+
+   create-quota                           Define a new resource quota
+   delete-quota                           Delete a quota
+   update-quota                           Update an existing resource quota
+
+   share-private-domain                   Share a private domain with an org
+   unshare-private-domain                 Unshare a private domain with an org
+
+SPACE ADMIN:
+   space-quotas                           List available space resource quotas
+   space-quota                            Show space quota info
+   create-space-quota                     Define a new space resource quota
+   update-space-quota                     update an existing space quota
+   delete-space-quota                     Delete a space quota definition and unassign the space quota from all spaces
+   set-space-quota                        Assign a space quota definition to a space
+   unset-space-quota                      Unassign a quota from a space
+</pre>
