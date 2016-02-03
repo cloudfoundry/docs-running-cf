@@ -59,12 +59,14 @@ Cloud Foundry installs with one `default` quota plan with the following limits:
 
 <p class="note"><strong>Note</strong>: The org manager sets and manages quotas. See the <a href="../../concepts/roles.html">Orgs, Spaces, Roles, and Permissions topic </a> for more information.</p>
 
-You can create a new quota plan for an org in one of two ways:
+Setting an org quota is required. You can create a new quota plan for an org in one of two ways:
 
 * Directly [modify the CF deployment manifest](#manifest) before deploying.
 * Use [`cf create-quota`](#create-quota) after deploying.
 
 ### <a id='manifest'></a> Modifying the Manifest ###
+
+Default quota plans applied to orgs are specified in the manifest. In order to modify a quota plan, locate and edit the manifest.
 
 1. In a terminal window, run `bosh edit deployment` to open the deployment manifest YAML file in your default text editor.
 1. Search for `quota_definitions`.
@@ -92,13 +94,13 @@ You can create a new quota plan for an org in one of two ways:
 In a terminal window, run the following command. Replace the placeholder attributes with the values for this quota plan:
 
 <pre class='terminal'>
-$ cf create-quota  QUOTA [-m MEMORY] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans]
+$ cf create-quota QUOTA [-m TOTAL_MEMORY] [-i INSTANCE_MEMORY] [-r ROUTES] [-s SERVICE_INSTANCES] [--allow-paid-service-plans]
 </pre>
 
 Example:
 
 <pre class='terminal'>
-$ cf create-quota small -m 2048M -r 10 -s 10 --allow-paid-service-plans
+$ cf create-quota small -m 2048M -i 1024M -r 10 -s 10 --allow-paid-service-plans
 </pre>
 
 ## <a id='modify'></a> Modifying an Existing Quota Plan for an Org##
@@ -145,7 +147,7 @@ $ cf update-quota small -m 4096M -n medium -r 20 -s 20 --allow-paid-service-plan
 
 ## <a id='space'></a>Creating and Modifying Quota Plans for a Space ##
 
-To create or modify quotas for individual [spaces](../../concepts/roles.html) rather than across an entire organization, you can use the following commands below.  
+To create or modify quotas for individual [spaces](../../concepts/roles.html) rather than across an entire organization, you can use the following commands below. Setting a space quota is optional.  
 
 ### <a id='new-space'></a>Creating a New Quota Plan for a Space ###
 To create a quota for a space, run the following command <code>create-space-quota</code> in the terminal.  Replace the placeholder attributes with the values for this quota plan:
@@ -156,7 +158,7 @@ To create a quota for a space, run the following command <code>create-space-quot
 Example:
 
 <pre class='terminal'>
-$ cf create-space-quota big -i 20 -m 4096M -r 20 -s 20 --allow-paid-service-plans
+$ cf create-space-quota big -i 1024M -m 4096M -r 20 -s 20 --allow-paid-service-plans
 </pre>
 
 ### <a id='modify-space'></a>Modifying a Quota Plan for a Space ###
