@@ -126,7 +126,7 @@ VM
 
 ####<a id="vms"></a>BOSH VMS ####
 
-`bosh vms` provides an overview of the virtual machines BOSH is managing as part of the current deployment.
+`bosh vms` provides an overview of the virtual machines (VMs) BOSH is managing as part of the current deployment.
 
 <pre class="terminal">
 $ bosh vms
@@ -371,6 +371,16 @@ else
 	echo "could not find Gemfile into ${STENO_DIR}:" `ls -al ${BUNDLE_GEMFILE}`
 fi
 </pre>
+
+###<a id="debugging-cloudcontrollerdump"></a>Viewing Cloud Controller Diagnostics ###
+
+If your Cloud Controller (CC) is in a bad state, for example you experience a resource spike or an infinite loop, you can retrieve a json file with diagnostic information. This file includes data such as stack traces for running threads, which is not available in the CF logs. 
+
+1. SSH into the Cloud Controller’s VM by following the [BOSH SSH](#ssh) instructions above and selecting <code>cloud_controller</code> in step four.
+1. In the terminal window, run the following to get the PID of the CC process:
+<pre class="terminal">$ cat /var/vcap/sys/run/cloud\_controller\_ng/cloud\_controller\_ng.pid </pre> 
+1. Use root access to run the following command to send a signal to the CC. This command will not terminate the CC process. <pre class="terminal">$ kill -USR1 PID </pre> 
+1. Find the json file in `/var/vcap/data/cloud_controller_ng/diagnostics`. If your diagnostics directory is located elsewhere, look for the diagnostics key in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` in order to find the json file.
 
 ###<a id="debugging-cloudcontroller"></a>Interactive cloudcontroller shell ###
 

@@ -26,7 +26,7 @@ in the same directory.
 
 ## Log Forwarding
 
-Each BOSH job in `cf-release` includes a job named `metron_agent`. Metron itself acts as a forwarding agent for Doppler within the Loggregator metric system, but it also includes a [template](https://github.com/cloudfoundry/loggregator/blob/develop/bosh/jobs/metron_agent/templates/syslog_forwarder.conf.erb) for configuring the `rsyslogd` daemon to forward logs to a remote machine. The [relevant manifest properties](https://github.com/cloudfoundry/loggregator/blob/develop/bosh/jobs/metron_agent/spec#L13-L19) are:
+Each BOSH job in `cf-release` includes a job named `metron_agent`. Metron itself acts as a forwarding agent for Doppler within the Loggregator metric system, but it also includes a [template](https://github.com/cloudfoundry/loggregator/blob/develop/jobs/metron_agent/templates/syslog_forwarder.conf.erb) for configuring the `rsyslogd` daemon to forward logs to a remote machine. The [`syslog_daemon_config`](https://github.com/cloudfoundry/loggregator/blob/develop/jobs/metron_agent/spec) properties include:
 
 * `syslog_daemon_config.address`: the IP address (or DNS name) of a remote system that should receive component logs from this VM
 * `syslog_daemon_config.port`: the port on which the log recipient is listening
