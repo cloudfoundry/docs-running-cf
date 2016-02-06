@@ -307,7 +307,7 @@ To use `bosh logs`:
 1. Run `bosh vms` to identify VMs in your deployment by job name and index.
 1. Run `bosh logs JOB-NAME INDEX` to view the logs from the identified VM.
 
-###<a id="non-responsive"></a>Logging into a Non-Responsive BOSH VM ###
+###<a id="non-responsive"></a>Log into a Non-Responsive BOSH VM ###
 
 A VM under heavy system load can stop responding to some commands but still
 function in a limited way.
@@ -330,7 +330,7 @@ non-responsive VM.
 	$ ssh -t vcap@192.168.86.53 'sh'
 	</pre>
 
-###<a id="terminate"></a>Terminating a BOSH SSH Session ###
+###<a id="terminate"></a>Terminate a BOSH SSH Session ###
 
 Use `~.`, entered at the beginning of a new line, to terminate a `bosh ssh` or
 `ssh` session.
@@ -384,8 +384,8 @@ If your Cloud Controller (CC) is in a bad state, for example you experience a re
 
 ###<a id="debugging-cloudcontroller"></a>Interactive cloudcontroller shell ###
 
-The cloud controller jobs embeds a pry shell, see http://pryrepl.org/ for some background. This may allow to interact with
-cc_ng classes such as scripting some operations or access the cc_db using model classes, see [example](https://www.pivotaltracker.com/story/show/81076206)
+The Cloud Controller jobs embeds a [pry shell](http://pryrepl.org/). This may allow users to interact with
+cc\_ng classes, such as scripting some operations, or to access the cc\_db using model classes. For examples, the [CF CAPI Tracker](https://www.pivotaltracker.com/story/show/81076206)
 
 <pre class="terminal">
 $ cd /var/vcap/jobs/cloud_controller_ng
