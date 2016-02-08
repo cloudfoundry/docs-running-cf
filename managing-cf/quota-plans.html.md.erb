@@ -10,7 +10,9 @@ Quota plans are named sets of memory, service, and instance usage quotas. For ex
 
 Quota plans are not directly associated with user accounts. Instead, every organization has a list of available quota plans, and the account admin assigns a specific quota plan from the list to the organization. Everyone in the organization shares the quotas described by the plan. There is no limit to the number of defined quota plans an account can have, but only one plan can be assigned at a time.
 
-## <a id='attributes'></a>Quota Plan Attributes ##
+Setting a quota plan for an [organization](../../concepts/roles.html) is required. Setting a [space](../../concepts/roles.html) quota is optional. 
+
+## <a id='attributes'></a>Org Quota Plan Attributes ##
 
 <table border="1" class="nic" >
 <tr>
@@ -41,7 +43,7 @@ Quota plans are not directly associated with user accounts. Instead, every organ
 
 
 
-## <a id='default'></a>Default Quota Plan ##
+## <a id='default'></a>Default Quota Plan for an Org##
 
 Cloud Foundry installs with one `default` quota plan with the following limits:
 
@@ -165,7 +167,9 @@ $ cf update-quota small -i 2048M -m 4096M -n medium -r 20 -s 20 --allow-paid-ser
 
 ## <a id='space'></a>Creating and Modifying Quota Plans for a Space ##
 
-To create or modify quotas for individual [spaces](../../concepts/roles.html) rather than across an entire organization, you can use the following commands below. Setting a space quota is optional.  
+For each org, Org Managers create and modify quota plans for a space. If an Org Manager allocates a space quota, CF verifies that resources are are within the allocated space limit.  For example, when a Space Developer deploys an application, CF first checks the memory allocation at the space level, then at the org level. 
+
+To create or modify quotas for individual [spaces](../../concepts/roles.html) within an entire organization, use the following commands.  
 
 ### <a id='new-space'></a>Creating a New Quota Plan for a Space ###
 To create a quota for a space, run the following command <code>create-space-quota</code> in the terminal.  Replace the placeholder attributes with the values for this quota plan:
