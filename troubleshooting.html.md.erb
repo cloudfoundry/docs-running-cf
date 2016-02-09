@@ -7,7 +7,7 @@ title: Troubleshooting Cloud Foundry
 This guide provides help with diagnosing and resolving issues encountered when
 installing and running Cloud Foundry.
 
-##<a id="issues-installing"></a>Troubleshooting Issues Installing Cloud Foundry ##
+##<a id="issues-installing"></a>Troubleshoot Cloud Foundry Installation Issues ##
 
 An installation or update can fail for reasons that have nothing to do with the
 software that you are installing.
@@ -15,7 +15,7 @@ If an installation or update fails once, start over and try again.
 If it fails a second time, use the following information to troubleshoot the
 issue.
 
-###<a id="bound-timeout"></a>Timeouts in "creating bound missing vms" phase ###
+###<a id="bound-timeout"></a>Timeouts in "creating bound missing vms" Phase ###
 
 When deploying Cloud Foundry with BOSH, the "creating bound missing vms" phase
 occurs after package compilation.
@@ -102,7 +102,7 @@ the operating system reports an "Out of Disk Space" error.
 To resolve this issue, delete these log files from the `tmp` directory of the
 affected computer manually or by rebooting.
 
-##<a id="issues-running"></a>Troubleshooting Issues Running Cloud Foundry ##
+##<a id="issues-running"></a>Troubleshoot Cloud Foundry Operation Issues ##
 
 ###<a id="bosh-cli"></a>Use the BOSH CLI for Troubleshooting ###
 
@@ -277,7 +277,7 @@ Use this password if you need sudo access in this session.
   Starting interactive shell on job loggregator_trafficcontroller/0
   </pre>
 
-###<a id="viewing-logs"></a>Viewing BOSH Logs ###
+###<a id="viewing-logs"></a>View BOSH Logs ###
 
 You can access BOSH logs by two methods:
 
@@ -340,7 +340,7 @@ use `~~.`, entered at the beginning of a new line.
 The outermost secure shell session consumes the second `~` and passes the
 remaining `~.` command to the inner `ssh` session.
 
-###<a id="failing-job"></a>Debugging a Failing Job ###
+###<a id="failing-job"></a>Debug a Failing Job ###
 
 1. Run `bosh vms` to determine which job VMs in your deployment are failing.
 Note the job name and index of the failing VM.
@@ -372,17 +372,31 @@ else
 fi
 </pre>
 
-###<a id="debugging-cloudcontrollerdump"></a>Viewing Cloud Controller Diagnostics ###
+###<a id="debugging-cc-diagnostics"></a>View Cloud Controller Diagnostics ###
 
-If your Cloud Controller (CC) is in a bad state, for example you experience a resource spike or an infinite loop, you can retrieve a json file with diagnostic information. This file includes data such as stack traces for running threads, which is not available in the CF logs. 
+If your BOSH deployment experiences a resource spike, an infinite loop, or another undesirable performance issue, you can refer to the CC diagnostics JSON file for debugging. The file contains data that are unavailable in the output from [CF logging](./managing-cf/logging.html), including stack traces for running threads. 
 
-1. SSH into the Cloud Controller’s VM by following the [BOSH SSH](#ssh) instructions above and selecting <code>cloud_controller</code> in step four.
-1. In the terminal window, run the following to get the PID of the CC process:
+Follow these instructions to SSH into the Cloud Controller VM and populate the diagnostics file with updated information.
+
+1. Provide BOSH with the correct public key.
+<pre class="terminal">
+$ ssh-keygen -t rsa
+</pre>
+1. Accept the defaults.
+1. Begin an SSH session to the deployment.
+<pre class="terminal">
+$ bosh ssh
+</pre>
+1. Enter the number corresponding to the <code>cloud_controller</code> from the list of VMs.
+1. Retrieve the PID of the CC process.
 <pre class="terminal">$ cat /var/vcap/sys/run/cloud\_controller\_ng/cloud\_controller\_ng.pid </pre> 
-1. Use root access to run the following command to send a signal to the CC. This command will not terminate the CC process. <pre class="terminal">$ kill -USR1 PID </pre> 
-1. Find the json file in `/var/vcap/data/cloud_controller_ng/diagnostics`. If your diagnostics directory is located elsewhere, look for the diagnostics key in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` in order to find the json file.
+1. Send the user defined `USR1` signal to the CC process to populate the JSON log file for reference. This command does not terminate the CC process. 
+<pre class="terminal">
+$ kill -USR1 CLOUD-CONTROLLER-PID
+</pre> 
+1. Navigate to the JSON file in the diagnostics directory to see the record of the `USR1` signal passed to your CC VM. The default location of the diagnostics directory is `/var/vcap/data/cloud_controller_ng/diagnostics`. Refer to the value of the `cc.directories.diagnostics` property in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` for the location of the diagnostics directory.
 
-###<a id="debugging-cloudcontroller"></a>Interactive cloudcontroller shell ###
+###<a id="debugging-cloudcontroller"></a>Use the Interactive Cloud Controller Shell ###
 
 The Cloud Controller jobs embeds a [pry shell](http://pryrepl.org/). This may allow users to interact with
 cc\_ng classes, such as scripting some operations, or to access the cc\_db using model classes. For examples, the [CF CAPI Tracker](https://www.pivotaltracker.com/story/show/81076206)
@@ -393,7 +407,7 @@ $ bin/console
 [...]
 </pre>
 
-###<a id="force-recreate"></a>Forcing a VM Recreate ###
+###<a id="force-recreate"></a>Force a VM Recreate ###
 
 If BOSH or an operator identifies a VM as corrupted, BOSH can recreate the VM.
 This recreation function can fail if a drain script on the VM is broken or times
@@ -429,7 +443,7 @@ task.
 	. . .
 	</pre>
 
-###<a id="scale-deas"></a>Scaling Droplet Execution Agents ###
+###<a id="scale-deas"></a>Scale Droplet Execution Agents ###
 
 Droplet Execution Agents (DEAs) stage and run applications.
 Follow the steps below to increase the resource pool for DEAs and the number of
@@ -443,7 +457,7 @@ downloaded deployment manifest.
 of DEAs.
 1. Run `bosh deploy` to update your deployment.
 
-###<a id="hm9000"></a>Recovering from HM9000 Failure ###
+###<a id="hm9000"></a>Recover from HM9000 Failure ###
 
 The Cloud Foundry Health Manager, HM9000, reconciles the expected states of
 applications and VMs in a deployment with their actual states.
