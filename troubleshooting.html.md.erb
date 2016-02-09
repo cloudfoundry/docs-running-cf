@@ -34,7 +34,7 @@ Error 450002: Timed out pinging to 1da06ba3de2f after 600 seconds
 
 Perform the following steps to determine the cause of the time out:
 
-* Use your IaaS console to make sure the timed-out VM is booting correctly
+* Use your IaaS console to make sure the timed-out virtual machine (VM) is booting correctly
 * Check the Agent log on the VM that timed out for a "handshake" connection
 between the BOSH Director and the Agent
 * Use the [Netcat](http://nmap.org/ncat/) networking utility to test for routing
@@ -374,9 +374,10 @@ fi
 
 ###<a id="debugging-cc-diagnostics"></a>View Cloud Controller Diagnostics ###
 
-If your BOSH deployment experiences a resource spike, an infinite loop, or another undesirable performance issue, you can refer to the Cloud Controller (CC) diagnostics JSON file for debugging. The file contains data that are unavailable in the output from [CF logging](./managing-cf/logging.html), including stack traces for running threads. 
+If your BOSH deployment experiences a resource spike, an infinite loop, or another undesirable performance issue, you can refer to the Cloud Controller (CC) diagnostics JSON file for debugging. 
+The file contains data that are unavailable in the output from [Cloud Foundry logging](./managing-cf/logging.html), including stack traces for running threads. 
 
-Follow these instructions to SSH into the Cloud Controller VM and populate the diagnostics file with updated information.
+Follow the instructions below to SSH into the Cloud Controller VM and populate the diagnostics file with updated information.
 
 1. Provide BOSH with the correct public key.
 <pre class="terminal">
@@ -394,7 +395,9 @@ $ bosh ssh
 <pre class="terminal">
 $ kill -USR1 CLOUD-CONTROLLER-PID
 </pre> 
-1. Navigate to the JSON file in the diagnostics directory to see the record of the `USR1` signal passed to your CC VM. The default location of the diagnostics directory is `/var/vcap/data/cloud_controller_ng/diagnostics`. Refer to the value of the `cc.directories.diagnostics` property in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` for the location of the diagnostics directory.
+1. Navigate to the JSON file in the diagnostics directory to see the record of the `USR1` signal passed to your CC VM. 
+Refer to the value of the `cc.directories.diagnostics` property in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` for the location of the diagnostics directory. 
+The default location of the diagnostics directory is `/var/vcap/data/cloud_controller_ng/diagnostics`. 
 
 ###<a id="debugging-cloudcontroller"></a>Use the Interactive Cloud Controller Shell ###
 
