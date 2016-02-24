@@ -4,21 +4,61 @@ title: Configuring SSH Access
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to configure your Cloud Foundry deployment to allow Diego SSH access to application instances, and details about load balancing SSH sessions.
+This topic describes how to configure your Cloud Foundry deployment to allow SSH access to application instances, and details about load balancing SSH sessions.
 
-## <a id='diego-configuration'></a> Diego configuration
+## <a id='architecture-configuration'></a> Cloud Foundry Configuration
 
-You can configure SSH access for Cloud Foundry app instances running on Diego. The SSH proxy instances facilitate access to apps with these BOSH properties:
+You configure Application SSH access differently for Diego-based vs DEA-based Cloud Foundry architectures.
 
-- `diego.ssh_proxy.host_key`: The Diego SSH proxy instances utilize a PEM-encoded RSA private host key. Pivotal recommends deployment operators generate individual key pairs for each deployment and supply those in the manifest.
+### <a id='diego-configuration'></a> Diego Architecture
 
-- `diego.ssh_proxy.enable_cf_auth`: Activates the CF Authenticator in the proxies. This property should be enabled for the `cf ssh` command to connect to the Diego SSH server running in the instance.
+To enable SSH access to apps running on Diego, configure the BOSH and UAA properties in your deployment manifests as follows.
 
-- `diego.ssh_proxy.enable_diego_auth`: Activates the Diego Authenticator in the proxies. For a production deployment, this property should be disabled, as it allows access to any instance running the Diego SSH server with only the receptor credentials. Developers running development deployments can enable it to provide an alternate mechanism to establish SSH sessions.
+#### <a id='bosh-configuration'></a> Diego Properties
 
-The properties `diego.ssh_proxy.cc.internal_service_hostname` and `diego.ssh_proxy.cc.external_port` should not require direct configuration if an operator uses the spiff-based manifest-generation scripts to generate the Diego deployment manifest.
+Configure the following properties in your manifest for Diego, `diego.yml`.
 
-## <a id="cf-configuration"></a> CF configuration
+1. `diego.ssh_proxy.host_key`: Generate a unique key pair and supply the PEM-encoded RSA private host key for this value. This secures the Application SSH proxy running in the instance container.
+
+1. `diego.ssh_proxy.enable_cf_auth`: Set this property to `true` to activate the CF Authenticator in the proxies. This enables the `cf ssh` command to connect with the SSH proxy.
+
+1. `diego.ssh_proxy.enable_diego_auth`: Set this property to `false` to disable the Diego Authenticator in the proxies, preventing SSH access through Diego API calls.
+<p class='note'><strong>Note:</strong> Developers running development deployments can enable this property to support API calls, as an alternate mechanism to establish SSH sessions.</p>
+
+1. `diego.ssh_proxy.cc.internal_service_hostname` and `diego.ssh_proxy.cc.external_port`: If you use `generate_deployment_manifest` or another spiff-based manifest-generation script, you do not need to configure these properties.
+
+#### <a id='uaa-configuration'></a> UAA Properties
+
+Configure properties in your Cloud Foundry manifest, `cf-deployment.yml`, as follows.
+
+1. Create a stub YAML file `uaa.yml` based on the template below:
+<pre><code>
+properties:
+  <<: (( merge ))
+  app_ssh:
+    host_key_fingerprint: HOST-KEY-FINGERPRINT
+    oauth_client_id: ssh-proxy
+  cc:
+    allow_app_ssh_access: true
+  uaa:
+    clients:
+      <<: (( merge ))
+      ssh-proxy:
+        authorized-grant-types: authorization_code
+        autoapprove: true
+        override: true
+        redirect-uri: /login
+        scope: openid,cloud_controller.read,cloud_controller.write
+        secret: SSH-PROXY-SECRET
+</code></pre>
+
+1. Change the `host_key_fingerprint` field value to the secure key that you generated when deploying Diego.
+
+1. For the `secret` field, specify a user password.
+
+1. To create your Cloud Foundry manifest, `cf-deployment.yml`, pass the resulting `uaa.yml` file to `generate_deployment_manifest` or another spiff-based manifest-generation script.
+
+### <a id="cf-configuration"></a> DEA Architecture
 
 For Cloud Foundry app instances running on DEAs you can configure SSH access with these BOSH properties.
 
@@ -28,6 +68,8 @@ The following BOSH properties are relevant for SSH configuration in [cf-release]
 - `app_ssh.port`: Port of the externally routable SSH endpoint advertised through the Cloud Controller info endpoint.
 - `cc.allow_app_ssh_access`: As mentioned above, whether to allow SSH access at all for CF app instances.
 	
+<p class='note'><strong>Note: </strong>You need to configure and deploy Diego even if you run your apps under DEA architecture.</p>
+
 If SSH access is allowed for the CF deployment, Cloud Controller will advertise the SSH endpoint to be `ssh.<system-domain>`, accepting traffic on the port given in `app_ssh.port`. Cloud Controller's `/v2/info` endpoint provides this SSH endpoint in its `app_ssh_endpoint` field and the host key fingerprint above in its `app_ssh_host_key_fingerprint` field.
 
 ## <a id="ssh-load-balancer-configuration"></a> SSH Load Balancer configuration
