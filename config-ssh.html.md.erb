@@ -21,14 +21,14 @@ Enabling SSH access requires generating a RSA key pair for your SSH proxy.
 <p class="note"><strong>Note</strong>: You should generate a unique key pair for each deployment.</p>
 
 1. Generate your key pair, entering an empty string for the passphrase when prompted.
-<pre class="terminal">$ ssh-keygen -f YOUR-DEPLOYMENT-DIRECTORY/keypair/ssh-proxy-host-key.pem
-$ ssh-keygen -lf YOUR-DEPLOYMENT-DIRECTORY/keypair/ssh-proxy-host-key.pem.pub | cut -d ' ' -f2 > YOUR-DEPLOYMENT-DIRECTORY/keypair/ssh-proxy-host-key-fingerprint
+<pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
+$ ssh-keygen -lf ssh-proxy-host-key.pem.pub | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
 </pre>
 1. Locate your PEM-encoded private key in `ssh-proxy-host-key.pem` and your public key fingerprint in `ssh-proxy-host-key-fingerprint`. You will need to copy the contents of these files into your Cloud Foundry and Diego manifests.
 
-### <a id='cf-manifest'></a> Cloud Foundry Manifest
+### <a id='cf-manifest'></a> Configure Your Cloud Foundry Manifest
 
-Your manifest for Cloud Foundry, `cf-deployment.yml` should include the following properties:
+Your manifest for Cloud Foundry should include the following properties:
 
   <pre><code>properties:
     app\_ssh:
@@ -47,12 +47,12 @@ Your manifest for Cloud Foundry, `cf-deployment.yml` should include the followin
           secret: SSH-PROXY-SECRET
   </code></pre>
 
-1. Change `HOST-KEY-FINGERPRINT` to the public key fingerprint of the RSA key pair that you generated. It should be located in `YOUR-DEPLOYMENT-DIRECTORY/keypair/ssh-proxy-host-key-fingerprint`.
+1. Change `HOST-KEY-FINGERPRINT` to the public key fingerprint of the RSA key pair that you generated. It should be located in your `ssh-proxy-host-key-fingerprint` file.
 1. For `SSH-PROXY-SECRET`, provide a client secret that Diego will use to register the `ssh-proxy` client with your User Account and Authentication (UAA) server. 
 
-### <a id='diego-manifest'></a> Diego Manifest
+### <a id='diego-manifest'></a> Configure Your Diego Manifest
 
-Your manifest for Diego, `diego.yml`, should include the following properties:
+Your manifest for Diego should include the following properties:
 
   <pre><code>properties:
     ssh\_proxy:
@@ -67,7 +67,7 @@ Your manifest for Diego, `diego.yml`, should include the following properties:
       uaa\_token_url: <span>https</span>://uaa.YOUR-SYSTEM-DOMAIN/oauth/token
   </code></pre>
 
-1. `ssh_proxy.host_key`: Supply the PEM-encoded private key from the RSA key pair that you originally generated for your deployment. This key secures the Application SSH proxy running in each container.
+1. `ssh_proxy.host_key`: Supply the PEM-encoded private key from the RSA key pair that you originally generated for your deployment. This key secures the SSH proxy that brokers connections to individual app containers.
 1. Specify CF Authentication only by setting `enable_cf_auth` to `true` and `enable_diego_auth` to `false`, as in the example above.
 1. For `SSH-PROXY-SECRET`, enter the same secret you provided in the `ssh-proxy.secret` field in your Cloud Foundry manifest.
 1. To complete the `uaa_token_url` field, provide `YOUR-SYSTEM-DOMAIN`.
@@ -76,11 +76,11 @@ Your manifest for Diego, `diego.yml`, should include the following properties:
 
 ### <a id="ha-proxy"></a>Using HAProxy
 
-If you are using the HAproxy job from cf-release as the gorouter load balancer and you set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to true, HAproxy will also serve as the load balancer for Diego's SSH proxies. This configuration relies on the presence of the same consul server cluster that Diego components use for service discovery. This configuration also works well for deployments where all traffic on the system domain and its subdomains is directed towards the HAproxy job, as is the case for a BOSH-Lite CF deployment on the default `bosh-lite.com` domain.
+If you are using the HAproxy job as the gorouter load balancer and you set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `true`, HAproxy serves as the load balancer for Diego's SSH proxies. This configuration relies on the presence of the same consul server cluster that Diego components use for service discovery. Use this configuration for deployments where all traffic on the system domain and its subdomains is directed towards the HAproxy job, as is the case for a BOSH-Lite Cloud Foundry deployment on the default `bosh-lite.com` domain.
 
-### <a id="aws"></a>Using ELBs on Amazon Web Services
+### <a id="aws"></a>Using Elastic Load Balancers (ELBs) on Amazon Web Services (AWS)
 
-For AWS deployments, where the infrastructure offers load-balancing as a service through ELBs, the deployment operator can provision an ELB to balance load across the Diego SSH proxy instances. This ELB should be configured to listen to TCP traffic on the port given by the `app_ssh.port` property in the Cloud Foundry manifest and to send it to port 2222. 
+For AWS deployments, where the infrastructure offers load-balancing as a service through ELBs, the deployment operator can provision an ELB to load balance across the Diego SSH proxy instances. This ELB should be configured to listen to TCP traffic on the port given by the `app_ssh.port` property in the Cloud Foundry manifest and to send it to port 2222. 
 
 In the Diego manifest, register the SSH proxies with your ELB by editing the `cloud_properties` values.
 
@@ -107,20 +107,20 @@ In the Diego manifest, register the SSH proxies with your ELB by editing the `cl
 
 ## <a id="disable-ssh"></a> Disable SSH
 
-If you want to disable SSH access for a deployment, follow the steps below.
+If you want to disable SSH access for a deployment:
 
-1. Comment out the `ssh-proxy` properties within `uaa.clients` in your Cloud Foundry manifest.
-  <pre><code>properties:
-    uaa:
-      clients:
-        #ssh-proxy:
-          #authorized-grant-types: authorization\_code
-          #autoapprove: true
-          #override: true
-          #redirect-uri: /login
-          #scope: openid,cloud_controller.read,cloud\_controller.write
-          #secret: SSH-PROXY-SECRET
-  </code></pre>
+1. Set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `false`.
+
+1. Redeploy Cloud Foundry.
+
+If you want to reset your deployment to remove all SSH proxy configuration:
+
+1. Set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `false`.
+
+1. Delete the `ssh-proxy` properties within `uaa.clients` in your Cloud Foundry manifest.
+
+1. Redeploy Cloud Foundry.
+
 1. Install the UAA Command Line Interface (UAAC).
 <pre class="terminal">$ gem install cf-uaac</pre>
 
@@ -136,8 +136,6 @@ Context: admin, from client admin</pre>
 
 1. Delete your `ssh-proxy` client.
 <pre class="terminal">$ uaac token client delete ssh-proxy</pre>
-
-1. Redeploy Cloud Foundry.
 
 ## <a id="troubleshooting"></a>Troubleshooting
 
