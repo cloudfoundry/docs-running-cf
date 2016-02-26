@@ -26,7 +26,7 @@ $ ssh-keygen -lf YOUR-DEPLOYMENT-DIRECTORY/keypair/ssh-proxy-host-key.pem.pub | 
 </pre>
 1. Locate your PEM-encoded private key in `ssh-proxy-host-key.pem` and your public key fingerprint in `ssh-proxy-host-key-fingerprint`. You will need to copy the contents of these files into your Cloud Foundry and Diego manifests.
 
-### <a id='cf-manifest'></a> Cloud Foundry Manifest
+### <a id='cf-manifest'></a> Configure Your Cloud Foundry Manifest
 
 Your manifest for Cloud Foundry, `cf-deployment.yml` should include the following properties:
 
@@ -50,7 +50,7 @@ Your manifest for Cloud Foundry, `cf-deployment.yml` should include the followin
 1. Change `HOST-KEY-FINGERPRINT` to the public key fingerprint of the RSA key pair that you generated. It should be located in `YOUR-DEPLOYMENT-DIRECTORY/keypair/ssh-proxy-host-key-fingerprint`.
 1. For `SSH-PROXY-SECRET`, provide a client secret that Diego will use to register the `ssh-proxy` client with your User Account and Authentication (UAA) server. 
 
-### <a id='diego-manifest'></a> Diego Manifest
+### <a id='diego-manifest'></a> Configure Your Diego Manifest
 
 Your manifest for Diego, `diego.yml`, should include the following properties:
 
