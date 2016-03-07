@@ -1,5 +1,6 @@
 ---
 title: Troubleshooting Cloud Foundry
+owner: Runtime
 ---
 
 <strong><%= modified_date %></strong>
@@ -374,8 +375,8 @@ fi
 
 ###<a id="debugging-cc-diagnostics"></a>View Cloud Controller Diagnostics ###
 
-If your BOSH deployment experiences a resource spike, an infinite loop, or another undesirable performance issue, you can refer to the Cloud Controller (CC) diagnostics JSON file for debugging. 
-The file contains data that are unavailable in the output from [Cloud Foundry logging](./managing-cf/logging.html), including stack traces for running threads. 
+If your BOSH deployment experiences a resource spike, an infinite loop, or another undesirable performance issue, you can refer to the Cloud Controller (CC) diagnostics JSON file for debugging.
+The file contains data that are unavailable in the output from [Cloud Foundry logging](./managing-cf/logging.html), including stack traces for running threads.
 
 Follow the instructions below to SSH into the Cloud Controller VM and populate the diagnostics file with updated information.
 
@@ -390,14 +391,14 @@ $ bosh ssh
 </pre>
 1. Enter the number corresponding to the <code>cloud_controller</code> from the list of VMs.
 1. Retrieve the PID of the CC process.
-<pre class="terminal">$ cat /var/vcap/sys/run/cloud\_controller\_ng/cloud\_controller\_ng.pid </pre> 
-1. Send the user defined `USR1` signal to the CC process to populate the JSON log file for reference. This command does not terminate the CC process. 
+<pre class="terminal">$ cat /var/vcap/sys/run/cloud\_controller\_ng/cloud\_controller\_ng.pid </pre>
+1. Send the user defined `USR1` signal to the CC process to populate the JSON log file for reference. This command does not terminate the CC process.
 <pre class="terminal">
 $ kill -USR1 CLOUD-CONTROLLER-PID
-</pre> 
-1. Navigate to the JSON file in the diagnostics directory to see the record of the `USR1` signal passed to your CC VM. 
-Refer to the value of the `cc.directories.diagnostics` property in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` for the location of the diagnostics directory. 
-The default location of the diagnostics directory is `/var/vcap/data/cloud_controller_ng/diagnostics`. 
+</pre>
+1. Navigate to the JSON file in the diagnostics directory to see the record of the `USR1` signal passed to your CC VM.
+Refer to the value of the `cc.directories.diagnostics` property in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` for the location of the diagnostics directory.
+The default location of the diagnostics directory is `/var/vcap/data/cloud_controller_ng/diagnostics`.
 
 ###<a id="debugging-cloudcontroller"></a>Use the Interactive Cloud Controller Shell ###
 

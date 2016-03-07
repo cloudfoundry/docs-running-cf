@@ -1,5 +1,6 @@
 ---
 title: Creating and Modifying Quota Plans
+owner: Runtime
 ---
 
 <strong><%= modified_date %></strong>
@@ -10,7 +11,7 @@ Quota plans are named sets of memory, service, and instance usage quotas. For ex
 
 Quota plans are not directly associated with user accounts. Instead, every organization has a list of available quota plans, and the account admin assigns a specific quota plan from the list to the organization. Everyone in the organization shares the quotas described by the plan. There is no limit to the number of defined quota plans an account can have, but only one plan can be assigned at a time.
 
-Setting a quota plan for an [organization](../../concepts/roles.html) is required. Setting a [space](../../concepts/roles.html) quota is optional. 
+Setting a quota plan for an [organization](../../concepts/roles.html) is required. Setting a [space](../../concepts/roles.html) quota is optional.
 
 ## <a id='attributes'></a>Org Quota Plan Attributes ##
 
@@ -158,12 +159,12 @@ Options include:
 
     Example:
     <pre class='terminal'> $ cf update-quota small -i 2048M -m 4096M -n medium -r 20 -s 20 --allow-paid-service-plans</pre>
-    
+
 ## <a id='space'></a>Creating and Modifying Quota Plans for a Space ##
 
-For each org, Org Managers create and modify quota plans for a space. If an Org Manager allocates a space quota, CF verifies that resources are within the allocated space limit.  For example, when a Space Developer deploys an application, CF first checks the memory allocation at the space level, then at the org level. 
+For each org, Org Managers create and modify quota plans for a space. If an Org Manager allocates a space quota, CF verifies that resources are within the allocated space limit.  For example, when a Space Developer deploys an application, CF first checks the memory allocation at the space level, then at the org level.
 
-To create or modify quotas for individual [spaces](../../concepts/roles.html) within an entire organization, use the following commands.  
+To create or modify quotas for individual [spaces](../../concepts/roles.html) within an entire organization, use the following commands.
 
 ### <a id='new-space'></a>Creating a New Quota Plan for a Space ###
 In a terminal window, run the following command to create a quota for a space. Replace the placeholder attributes with the values for this quota plan:
@@ -190,7 +191,7 @@ $ cf create-space-quota big -i 1024M -m 4096M -r 20 -s 20 --allow-paid-service-p
     big            2G                   unlimited               0            10                  allowed
     trial          2G                   0                       0            10                  allowed
     </pre>
-To modify that quota, use the <code>update-space-quota</code> command. 
+To modify that quota, use the <code>update-space-quota</code> command.
     <pre class='terminal'> $ cf update-space-quota SPACE-QUOTA-NAME [-i MAX-INSTANCE-MEMORY] [-m MEMORY] [-n NEW_NAME] [-r ROUTES] [-s SERVICES] [--allow-paid-service-plans | --disallow-paid-service-plans]</pre>
 Example:
     <pre class='terminal'> $ cf update-space-quota big -i 20 -m 4096M -n bigger -r 20 -s 20 --allow-paid-service-plans</pre>
