@@ -1,22 +1,16 @@
 ---
-title: Identifying the API Endpoint for your Cloud Foundry Instance
+title: Identifying your Cloud Foundry API Endpoint and Version
 owner: CAPI
 ---
 
 <strong><%= modified_date %></strong>
 
-The API endpoint, or target URL, for your Cloud Foundry instance is the URL of
-the Cloud Controller in your Cloud Foundry instance.
-Find your API endpoint by consulting your cloud operator or from the command
-line.
+The API endpoint, or target URL, for your Cloud Foundry instance is the URL of the Cloud Controller. This topic explains how to find your API endpoint from the command line, along with your version of the Cloud Controller API. You can also consult your cloud operator to find out this information.
 
-## <a id='cli'></a>From the Command Line ##
+From a command line, use the `cf api` command to view your API endpoint and Cloud Controller API (CC API) version number:
 
-From a command line, use the `cf api` command to view your API endpoint.
-
-Example:
-
-<pre class='termnial'>
+<pre class='terminal'>
 $ cf api
-API endpoint: https://api.example.com (API version: 2.2.0)
+API endpoint: https://api.example.com (API version: 2.55.0)
 </pre>
+
