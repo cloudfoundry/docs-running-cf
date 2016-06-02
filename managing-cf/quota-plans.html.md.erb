@@ -29,10 +29,16 @@ Setting a quota plan for an [organization](../../concepts/roles.html) is require
   <td>memory_limit</td><td>Maximum memory usage allowed</td><td>An integer and a unit of measurement like M, MB, G, or GB</td><td>2048M</td>
 </tr>
 <tr>
+  <td>app_instance_limit</td><td>Maximum app instances allowed</td><td>An integer</td><td>25</td>
+</tr>
+<tr>
   <td>non_basic_services_allowed</td><td>Determines whether users can provision instances of non-free service plans. Does not control plan visibility. When false, non-free service plans may be visible in the marketplace but instances can not be provisioned.</td><td><code>true</code> or <code>false</code></td><td>true</td>
 </tr>
 <tr>
   <td>total_routes</td><td>Maximum routes allowed</td><td>An integer</td><td>500</td>
+</tr>
+<tr>
+  <td>total_reserved_route_ports</td><td>Maximum routes with reserved ports</td><td>An integer not greater than total_routes</td><td>60</td>
 </tr>
 <tr>
   <td>total_services</td><td>Maximum services allowed</td><td>An integer</td><td>25</td>
