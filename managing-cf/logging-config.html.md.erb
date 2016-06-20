@@ -74,161 +74,176 @@ You can customize each Loggregator component by changing its properties in the C
 ### Doppler ###
 
 <table>
-  <tr>
-    <th><strong>Property</strong></th>
-    <th><strong>Description</strong></th>
-    <th><strong>Default</strong></th>
-  </tr>
-  <tr>
-    <td>doppler.zone</td>
-    <td>Zone of the doppler server</td>
-    <td>No default value</td>
-  </tr>
-  <tr>
-    <td>doppler.debug</td>
-    <td>boolean value to turn on verbose logging for doppler system (dea agent &amp; doppler server)</td>
-    <td>false</td>
-  </tr>
-  <tr>
-    <td>doppler.maxRetainedLogMessages</td>
-    <td>number of log messages to retain per application</td>
-    <td>100</td>
-  </tr>
-  <tr>
-    <td>doppler.dropsonde_incoming_port</td>
-    <td>Port for incoming messages in the dropsonde format</td>
-    <td>3457</td>
-  </tr>
-  <tr>
-    <td>doppler.incoming_tcp_port</td>
-    <td>Port for incoming tcp messages</td>
-    <td>3458</td>
-  </tr>
-  <tr>
-    <td>doppler.tls.enable</td>
-    <td>Enable TLS listener on doppler so that it can receive dropsonde envelopes over TLS transport. If enabled, Cert and Key files must be specified.</td>
-    <td>false</td>
-  </tr>
-  <tr>
-    <td>doppler.tls.port</td>
-    <td>Port for incoming messages in the dropsonde format over tls listener</td>
-    <td>3459</td>
-  </tr>
-  <tr>
-    <td>doppler.tls.server_cert</td>
-    <td>TLS server certificate</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>doppler.tls.server_key</td>
-    <td>TLS server key</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>loggregator.tls.ca_cert</td>
-    <td>CA root required for key/cert verification</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>loggregator.etcd.require_ssl</td>
-    <td>Enable ssl for all communication with etcd</td>
-    <td>false</td>
-  </tr>
-  <tr>
-    <td>loggregator.etcd.ca_cert</td>
-    <td>PEM-encoded CA certificate</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>loggregator.etcd.client_cert</td>
-    <td>PEM-encoded client certificate</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>loggregator.etcd.client_key</td>
-    <td>PEM-encoded client key</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>doppler.outgoing_port</td>
-    <td>Port for outgoing log messages</td>
-    <td>8081</td>
-  </tr>
-  <tr>
-    <td>doppler.websocket_write_timeout_seconds</td>
-    <td>Interval before a websocket write is aborted if it does not succeed</td>
-    <td>60</td>
-  </tr>
-  <tr>
-    <td>doppler.blacklisted_syslog_ranges</td>
-    <td>Blacklist for IPs that should not be used as syslog drains, e.g. internal IP addresses</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>doppler.container_metric_ttl_seconds</td>
-    <td>TTL (in seconds) for container usage metrics</td>
-    <td>120</td>
-  </tr>
-  <tr>
-    <td>doppler.unmarshaller_count</td>
-    <td>Number of parallel unmarshallers to run within Doppler</td>
-    <td>5</td>
-  </tr>
-  <tr>
-    <td>doppler.sink_inactivity_timeout_seconds</td>
-    <td>Interval before removing a sink due to inactivity</td>
-    <td>3600</td>
-  </tr>
-  <tr>
-    <td>doppler.sink_dial_timeout_seconds</td>
-    <td>Dial timeout for sinks</td>
-    <td>1</td>
-  </tr>
-  <tr>
-    <td>doppler.sink_io_timeout_seconds</td>
-    <td>I/O Timeout on sinks</td>
-    <td>0</td>
-  </tr>
-  <tr>
-    <td>doppler_endpoint.shared_secret</td>
-    <td>Shared secret used to verify cryptographically signed dropsonde messages</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>doppler.message_drain_buffer_size</td>
-    <td>Size of the internal buffer used by doppler to store messages for output to firehose or 'cf logs'. If the buffer gets full doppler will drop the messages.</td>
-    <td>10000</td>
-  </tr>
-  <tr>
-    <td>doppler.syslog_skip_cert_verify</td>
-    <td>When connecting over TLS, do not verify certificates for syslog sink</td>
-    <td>true</td>
-  </tr>
-  <tr>
-    <td>doppler.locked_memory_limit</td>
-    <td>Size (KB) of shell's locked memory limit. Set to 'kernel' to use the kernel's default. Non-numeric values other than 'kernel', 'soft', 'hard', and 'unlimited' will result in an error.</td>
-    <td>unlimited</td>
-  </tr>
-  <tr>
-    <td>doppler.pprof_port</td>
-    <td>The pprof port for runtime profiling data</td>
-    <td>6060</td>
-  </tr>
-  <tr>
-    <td>loggregator.etcd.machines</td>
-    <td>IPs pointing to the ETCD cluster</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>metron_endpoint.host</td>
-    <td>The host used to emit messages to the Metron agent</td>
-    <td>127.0.0.1</td>
-  </tr>
-  <tr>
-    <td>metron_endpoint.dropsonde_port</td>
-    <td>The port used to emit dropsonde messages to the Metron agent</td>
-    <td>3457</td>
-  </tr>
+	<tr>
+		<th><strong>Property</strong></th>
+		<th><strong>Description</strong></th>
+		<th><strong>Default</strong></th>
+	</tr>
+	<tr>
+		<td>doppler.zone</td>
+		<td>Zone of the doppler server</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.debug</td>
+		<td>boolean value to turn on verbose logging for doppler system (dea agent &amp; doppler server)</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>doppler.maxRetainedLogMessages</td>
+		<td>number of log messages to retain per application</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>doppler.dropsonde_incoming_port</td>
+		<td>Port for incoming messages in the dropsonde format</td>
+		<td>3457</td>
+	</tr>
+	<tr>
+		<td>doppler.incoming_tcp_port</td>
+		<td>Port for incoming tcp messages</td>
+		<td>3458</td>
+	</tr>
+	<tr>
+		<td>doppler.tls.enable</td>
+		<td>Enable TLS listener on doppler so that it can receive dropsonde envelopes over TLS transport. If enabled, Cert and Key files must be specified.</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>doppler.tls.port</td>
+		<td>Port for incoming messages in the dropsonde format over tls listener</td>
+		<td>3459</td>
+	</tr>
+	<tr>
+		<td>doppler.tls.server_cert</td>
+		<td>TLS server certificate</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.tls.server_key</td>
+		<td>TLS server key</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.tls.ca_cert</td>
+		<td>CA root required for key/cert verification</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.require_ssl</td>
+		<td>Enable ssl for all communication with etcd</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.ca_cert</td>
+		<td>PEM-encoded CA certificate</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.client_cert</td>
+		<td>PEM-encoded client certificate</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.client_key</td>
+		<td>PEM-encoded client key</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.outgoing_port</td>
+		<td>Port for outgoing log messages</td>
+		<td>8081</td>
+	</tr>
+	<tr>
+		<td>doppler.websocket_write_timeout_seconds</td>
+		<td>Interval before a websocket write is aborted if it does not succeed</td>
+		<td>60</td>
+	</tr>
+	<tr>
+		<td>doppler.blacklisted_syslog_ranges</td>
+		<td>Blacklist for IPs that should not be used as syslog drains, e.g. internal IP addresses</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.container_metric_ttl_seconds</td>
+		<td>TTL (in seconds) for container usage metrics</td>
+		<td>120</td>
+	</tr>
+	<tr>
+		<td>doppler.unmarshaller_count</td>
+		<td>Number of parallel unmarshallers to run within Doppler</td>
+		<td>5</td>
+	</tr>
+	<tr>
+		<td>doppler.sink_inactivity_timeout_seconds</td>
+		<td>Interval before removing a sink due to inactivity</td>
+		<td>3600</td>
+	</tr>
+	<tr>
+		<td>doppler.sink_dial_timeout_seconds</td>
+		<td>Dial timeout for sinks</td>
+		<td>1</td>
+	</tr>
+	<tr>
+		<td>doppler.sink_io_timeout_seconds</td>
+		<td>I/O Timeout on sinks</td>
+		<td>0</td>
+	</tr>
+	<tr>
+		<td>doppler_endpoint.shared_secret</td>
+		<td>Shared secret used to verify cryptographically signed dropsonde messages</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.message_drain_buffer_size</td>
+		<td>Size of the internal buffer used by doppler to store messages for output to firehose or 'cf logs'. If the buffer gets full doppler will drop the messages.</td>
+		<td>10000</td>
+	</tr>
+	<tr>
+		<td>doppler.syslog_skip_cert_verify</td>
+		<td>When connecting over TLS, do not verify certificates for syslog sink</td>
+		<td>true</td>
+	</tr>
+	<tr>
+		<td>doppler.locked_memory_limit</td>
+		<td>Size (KB) of shell's locked memory limit. Set to 'kernel' to use the kernel's default. Non-numeric values other than 'kernel', 'soft', 'hard', and 'unlimited' will result in an error.</td>
+		<td>unlimited</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.machines</td>
+		<td>IPs pointing to the ETCD cluster</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.require_ssl</td>
+		<td>Enable ssl for all communication with etcd</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.ca_cert</td>
+		<td>PEM-encoded CA certificate</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.etcd.client_cert</td>
+		<td>PEM-encoded client certificate</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>doppler.etcd.client_key</td>
+		<td>PEM-encoded client key</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>metron_endpoint.host</td>
+		<td>The host used to emit messages to the Metron agent</td>
+		<td>127.0.0.1</td>
+	</tr>
+	<tr>
+		<td>metron_endpoint.dropsonde_port</td>
+		<td>The port used to emit dropsonde messages to the Metron agent</td>
+		<td>3457</td>
+	</tr>
 </table>
 
 ### Traffic Controller ###
