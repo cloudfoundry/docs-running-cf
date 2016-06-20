@@ -193,8 +193,28 @@ You can customize each Loggregator component by changing its properties in the C
 		<td>100</td>
 	</tr>
 	<tr>
-		<td>etcd.machines</td>
+		<td>loggregator.etcd.machines</td>
 		<td>IPs pointing to the ETCD cluster</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.require_ssl</td>
+		<td>Enable ssl for all communication with etcd</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.ca_cert</td>
+		<td>PEM-encoded CA certificate</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>doppler.etcd.client_cert</td>
+		<td>PEM-encoded client certificate</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>doppler.etcd.client_key</td>
+		<td>PEM-encoded client key</td>
 		<td>No default value</td>
 	</tr>
 	<tr>
@@ -297,6 +317,26 @@ You can customize each Loggregator component by changing its properties in the C
 		<td>10</td>
 	</tr>
 	<tr>
+		<td>loggregator.etcd.require_ssl</td>
+		<td>Enable ssl for all communication with etcd</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.ca_cert</td>
+		<td>PEM-encoded CA certificate</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>traffic_controller.etcd.client_cert</td>
+		<td>PEM-encoded client certificate</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>traffic_controller.etcd.client_key</td>
+		<td>PEM-encoded client key</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
 		<td>system_domain</td>
 		<td>Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen</td>
 		<td></td>
@@ -396,11 +436,6 @@ You can customize each Loggregator component by changing its properties in the C
 		<td></td>
 	</tr>
 	<tr>
-		<td>metron_agent.etcd_query_interval_milliseconds</td>
-		<td>Interval for querying ETCD for trafficcontroller heartbeats</td>
-		<td> 5000</td>
-	</tr>
-	<tr>
 		<td>metron_agent.logrotate.freq_min</td>
 		<td>The frequency in minutes which logrotate will rotate VM logs</td>
 		<td> 5</td>
@@ -435,6 +470,26 @@ You can customize each Loggregator component by changing its properties in the C
 		<td>Number of concurrent requests to ETCD</td>
 		<td> 106</td>
 	</tr>
+	<tr>
+		<td>loggregator.etcd.require_ssl</td>
+		<td>Enable ssl for all communication with etcd</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.ca_cert</td>
+		<td>PEM-encoded CA certificate</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>metron_agent.etcd.client_cert</td>
+		<td>PEM-encoded client certificate</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>metron_agent.etcd.client_key</td>
+		<td>PEM-encoded client key</td>
+		<td>No default value</td>
+	</tr>
 </table>
 
 ### Syslog Drain Binder###
@@ -465,6 +520,26 @@ See [Using Log Management Services](../../devguide/services/log-management.html)
 		<td>loggregator.etcd.maxconcurrentrequests</td>
 		<td>Number of concurrent requests to ETCD</td>
 		<td>10</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.require_ssl</td>
+		<td>Enable ssl for all communication with etcd</td>
+		<td>false</td>
+	</tr>
+	<tr>
+		<td>loggregator.etcd.ca_cert</td>
+		<td>PEM-encoded CA certificate</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>syslog_drain_binder.etcd.client_cert</td>
+		<td>PEM-encoded client certificate</td>
+		<td>No default value</td>
+	</tr>
+	<tr>
+		<td>syslog_drain_binder.etcd.client_key</td>
+		<td>PEM-encoded client key</td>
+		<td>No default value</td>
 	</tr>
 	<tr>
 		<td>system_domain</td>
