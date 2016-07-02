@@ -80,7 +80,7 @@ file: /var/vcap/sys/log/warden/warden.log
 syslog: vcap.services.redis.warden
 level: debug
 network:
-pool_start_address: 10.254.0.0
+pool_start_address: 192.0.2.0
 pool_size: 4096
 user:
 pool_start_uid: 10000
@@ -137,7 +137,7 @@ ready to use steno-prettify alias, try steno-prettify on one of the following fi
 -rw-r--r-- 1 root root 9443178 Feb 23 13:41 /var/vcap/sys/log/rabbit/warden/warden.log
 
 $ steno-prettify /var/vcap/sys/log/rabbit/warden/warden.stdout.log
-2015-02-20 10:41:29.678178 Warden::Server pid=3364  tid=6bfe fid=0ff4 warden/server.rb/run!:271 server={"unix\_domain\_path"=>"/tmp/warden.sock", "unix\_domain\_permissions"=>511, "container\_klass"=>"Warden::Container::Linux", "container\_grace\_time"=>nil, "job\_output\_limit"=>10485760, "quota"=>{"disk\_quota\_enabled"=>false}, "allow\_nested\_warden"=>false, "container\_rootfs\_path"=>"/var/vcap/packages/rootfs\_lucid64", "container\_depot\_path"=>"/var/vcap/data/rabbit/containers"},logging={"level"=>"debug", "file"=>"/var/vcap/sys/log/rabbit/warden/warden.log"},network={"pool\_network"=>"10.254.0.0/18", "deny\_networks"=>[], "allow\_networks"=>[], "mtu"=>1500},port={"pool\_start\_port"=>61001, "pool\_size"=>4000},user={"pool\_start\_uid"=>10000, "pool_size"=>4096}    INFO -- Configuration
+2015-02-20 10:41:29.678178 Warden::Server pid=3364  tid=6bfe fid=0ff4 warden/server.rb/run!:271 server={"unix\_domain\_path"=>"/tmp/warden.sock", "unix\_domain\_permissions"=>511, "container\_klass"=>"Warden::Container::Linux", "container\_grace\_time"=>nil, "job\_output\_limit"=>10485760, "quota"=>{"disk\_quota\_enabled"=>false}, "allow\_nested\_warden"=>false, "container\_rootfs\_path"=>"/var/vcap/packages/rootfs\_lucid64", "container\_depot\_path"=>"/var/vcap/data/rabbit/containers"},logging={"level"=>"debug", "file"=>"/var/vcap/sys/log/rabbit/warden/warden.log"},network={"pool\_network"=>"192.0.2.0/18", "deny\_networks"=>[], "allow\_networks"=>[], "mtu"=>1500},port={"pool\_start\_port"=>61001, "pool\_size"=>4000},user={"pool\_start\_uid"=>10000, "pool_size"=>4096}    INFO -- Configuration
 [...]
 
 $ tail -f /var/vcap/sys/log/rabbit/warden/warden.stdout.log | steno-prettify
@@ -221,10 +221,10 @@ $ iptables -t nat -L -v
 [...]
 Chain warden-instance-18fglrqcs23 (1 references)
  pkts bytes target     prot opt in     out     source               destination
-    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:15009 to:10.254.4.170:10001
-    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:25009 to:10.254.4.170:20001
-    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:61003 to:10.254.4.170:61003
-    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:61013 to:10.254.4.170:61013
+    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:15009 to:192.0.2.170:10001
+    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:25009 to:192.0.2.170:20001
+    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:61003 to:192.0.2.170:61003
+    0     0 DNAT       tcp  --  any    any     anywhere             0.rabbit-node.services1.cf-services-contrib.bosh  tcp dpt:61013 to:192.0.2.170:61013
 </pre>
 
 
@@ -317,8 +317,8 @@ sqlite> PRAGMA table_info(vcap_services_redis_node_provisioned_services);
 8|version|VARCHAR(50)|0||0
 
 sqlite> select * from vcap_services_redis_node_provisioned_services;
-5e8bbae6-2c3d-429e-bec7-a5b695d2c4f4|5000|0508e659-c6d0-4d6f-b64f-4ab1049984c7|1|0|20|16j9dohgvks|10.254.0.2|2.6
-2b4e0275-7da1-4da7-88c1-7c907b6b1b8c|5001|cd189a0e-144c-44fa-8e36-281c38e52e5c|1|0|20|16j9dohgvkt|10.254.0.6|2.6
+5e8bbae6-2c3d-429e-bec7-a5b695d2c4f4|5000|0508e659-c6d0-4d6f-b64f-4ab1049984c7|1|0|20|16j9dohgvks|192.0.2.2|2.6
+2b4e0275-7da1-4da7-88c1-7c907b6b1b8c|5001|cd189a0e-144c-44fa-8e36-281c38e52e5c|1|0|20|16j9dohgvkt|192.0.2.6|2.6
 </pre>
 
 Some useful operations are listed above to show the table name, schema and values with the table that is used by the service node. The start, stop, and check\_status operations on the instance are all done by the `warden_service_ctl` script. On the node, it sits in `/var/vcap/store/SERVICE-NAME_common/bin`:

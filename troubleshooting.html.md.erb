@@ -85,7 +85,7 @@ infrastructure for the BOSH Agent.
 
 	<pre class="terminal">
 	. . .
-	2013-10-03_14:35:21.83222 #[608] INFO: loaded new infrastructure settings:  {"vm"=>{"name"=>"vm-4d80ede4-b0a5", "id"=>"vm-360"}, {"user"=>"agent", "password"=>"agent"}}, "mbus"=>"nats://nats:nats@<strong>192.168.86.17:4222</strong>", "env"=>{"bosh"}}}}}
+	2013-10-03_14:35:21.83222 #[608] INFO: loaded new infrastructure settings:  {"vm"=>{"name"=>"vm-4d80ede4-b0a5", "id"=>"vm-360"}, {"user"=>"agent", "password"=>"agent"}}, "mbus"=>"nats://nats:nats@<strong>192.0.2.17:4222</strong>", "env"=>{"bosh"}}}}}
     </pre>
 
 1. Run the [Netcat](http://nmap.org/ncat/) command `nc -v IP-ADDRESS PORT` to
@@ -93,8 +93,8 @@ determine whether it is possible to establish a connection between the NATS
 message bus and this VM.
 
 	<pre class="terminal">
-	$ nc -v 192.168.86.17 4222
-	Connection to 192.168.86.17 4222 port [tcp/*] succeeded!
+	$ nc -v 192.0.2.17 4222
+	Connection to 192.0.2.17 4222 port [tcp/*] succeeded!
 	</pre>
 
 ###<a id="out-of-space"></a>Out of Disk Space Error ###
@@ -113,7 +113,7 @@ affected computer manually or by rebooting.
 into the BOSH Director.
 
     <pre class="terminal">
-	$ bosh target 192.168.86.10
+	$ bosh target 192.0.2.10
 	Target set to 'bosh'
 	Your username: admin
 	Enter password: *****
@@ -137,21 +137,21 @@ $ bosh vms
 +-----------------------------------+---------+---------------------------------+---------------+
 | Job/index                         | State   | Resource Pool      				| IPs           |
 +-----------------------------------+---------+---------------------------------+---------------+
-| unknown/unknown                   | running | smoke-tests        				| 192.168.86.14 |
-| cloud_controller/0                | running | cloud_controller   				| 192.168.86.23 |
-| collector/0                       | running | collector          				| 192.168.86.25 |
-| consoledb/0                       | running | consoledb          				| 192.168.86.29 |
-| dea/0                             | running | dea                				| 192.168.86.47 |
-| health_manager/0                  | running | health_manager                  | 192.168.86.20 |
-| loggregator/0                     | running | loggregator                     | 192.168.86.31 |
-| loggregator_trafficcontroller/0   | running | loggregator_trafficcontroller   | 192.168.86.32 |
-| nats/0                            | running | nats               				| 192.168.86.19 |
-| nfs_server/0                      | running | nfs_server         				| 192.168.86.21 |
-| router/0                          | running | router             				| 192.168.86.16 |
-| saml_login/0                      | running | saml_login         				| 192.168.86.28 |
-| syslog/0                          | running | syslog             				| 192.168.86.24 |
-| uaa/0                             | running | uaa                				| 192.168.86.27 |
-| uaadb/0                           | running | uaadb              				| 192.168.86.26 |
+| unknown/unknown                   | running | smoke-tests        				| 192.0.2.14 |
+| cloud_controller/0                | running | cloud_controller   				| 192.0.2.23 |
+| collector/0                       | running | collector          				| 192.0.2.25 |
+| consoledb/0                       | running | consoledb          				| 192.0.2.29 |
+| dea/0                             | running | dea                				| 192.0.2.47 |
+| health_manager/0                  | running | health_manager                  | 192.0.2.20 |
+| loggregator/0                     | running | loggregator                     | 192.0.2.31 |
+| loggregator_trafficcontroller/0   | running | loggregator_trafficcontroller   | 192.0.2.32 |
+| nats/0                            | running | nats               				| 192.0.2.19 |
+| nfs_server/0                      | running | nfs_server         				| 192.0.2.21 |
+| router/0                          | running | router             				| 192.0.2.16 |
+| saml_login/0                      | running | saml_login         				| 192.0.2.28 |
+| syslog/0                          | running | syslog             				| 192.0.2.24 |
+| uaa/0                             | running | uaa                				| 192.0.2.27 |
+| uaadb/0                           | running | uaadb              				| 192.0.2.26 |
 +-----------------------------------+---------+---------------------------------+---------------+
 </pre>
 
@@ -325,10 +325,10 @@ non-responsive VM.
 	+---------------+---------+----------------+---------------+
 	| Job/index     | State   | Resource Pool  | IPs           |
 	+---------------+---------+----------------+---------------+
-	| mysql_node/0  | unknown | mysql_node     | 192.168.86.53 |
+	| mysql_node/0  | unknown | mysql_node     | 192.0.2.53 |
 	+---------------+---------+----------------+---------------+
 
-	$ ssh -t vcap@192.168.86.53 'sh'
+	$ ssh -t vcap@192.0.2.53 'sh'
 	</pre>
 
 ###<a id="terminate"></a>Terminate a BOSH SSH Session ###
