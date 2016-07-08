@@ -83,19 +83,19 @@ infrastructure for the BOSH Agent.
     In this line, locate the IP address and port following
     <strong>nats://nats:nats@</strong>.
 
-	<pre class="terminal">
-	. . .
-	2013-10-03_14:35:21.83222 #[608] INFO: loaded new infrastructure settings:  {"vm"=>{"name"=>"vm-4d80ede4-b0a5", "id"=>"vm-360"}, {"user"=>"agent", "password"=>"agent"}}, "mbus"=>"nats://nats:nats@<strong>192.0.2.17:4222</strong>", "env"=>{"bosh"}}}}}
+    <pre class="terminal">
+    . . .
+    2013-10-03_14:35:21.83222 #[608] INFO: loaded new infrastructure settings:  {"vm"=>{"name"=>"vm-4d80ede4-b0a5", "id"=>"vm-360"}, {"user"=>"agent", "password"=>"agent"}}, "mbus"=>"nats://nats:nats@<strong>192.0.2.17:4222</strong>", "env"=>{"bosh"}}}}}
     </pre>
 
 1. Run the [Netcat](http://nmap.org/ncat/) command `nc -v IP-ADDRESS PORT` to
 determine whether it is possible to establish a connection between the NATS
 message bus and this VM.
 
-	<pre class="terminal">
-	$ nc -v 192.0.2.17 4222
-	Connection to 192.0.2.17 4222 port [tcp/*] succeeded!
-	</pre>
+    <pre class="terminal">
+    $ nc -v 192.0.2.17 4222
+    Connection to 192.0.2.17 4222 port [tcp/*] succeeded!
+    </pre>
 
 ###<a id="out-of-space"></a>Out of Disk Space Error ###
 
@@ -113,12 +113,12 @@ affected computer manually or by rebooting.
 into the BOSH Director.
 
     <pre class="terminal">
-	$ bosh target 192.0.2.10
-	Target set to 'bosh'
-	Your username: admin
-	Enter password: *****
-	Logged in as 'admin'
-	</pre>
+    $ bosh target 192.0.2.10
+    Target set to 'bosh'
+    Your username: admin
+    Enter password: *****
+    Logged in as 'admin'
+    </pre>
 
 1. Use the following BOSH commands to troubleshoot your deployment:
 
@@ -135,23 +135,23 @@ VM
 $ bosh vms
 
 +-----------------------------------+---------+---------------------------------+---------------+
-| Job/index                         | State   | Resource Pool      				| IPs           |
+| Job/index                         | State   | Resource Pool                      | IPs           |
 +-----------------------------------+---------+---------------------------------+---------------+
-| unknown/unknown                   | running | smoke-tests        				| 192.0.2.14 |
-| cloud_controller/0                | running | cloud_controller   				| 192.0.2.23 |
-| collector/0                       | running | collector          				| 192.0.2.25 |
-| consoledb/0                       | running | consoledb          				| 192.0.2.29 |
-| dea/0                             | running | dea                				| 192.0.2.47 |
+| unknown/unknown                   | running | smoke-tests                        | 192.0.2.14 |
+| cloud_controller/0                | running | cloud_controller                   | 192.0.2.23 |
+| collector/0                       | running | collector                          | 192.0.2.25 |
+| consoledb/0                       | running | consoledb                          | 192.0.2.29 |
+| dea/0                             | running | dea                                | 192.0.2.47 |
 | health_manager/0                  | running | health_manager                  | 192.0.2.20 |
 | loggregator/0                     | running | loggregator                     | 192.0.2.31 |
 | loggregator_trafficcontroller/0   | running | loggregator_trafficcontroller   | 192.0.2.32 |
-| nats/0                            | running | nats               				| 192.0.2.19 |
-| nfs_server/0                      | running | nfs_server         				| 192.0.2.21 |
-| router/0                          | running | router             				| 192.0.2.16 |
-| saml_login/0                      | running | saml_login         				| 192.0.2.28 |
-| syslog/0                          | running | syslog             				| 192.0.2.24 |
-| uaa/0                             | running | uaa                				| 192.0.2.27 |
-| uaadb/0                           | running | uaadb              				| 192.0.2.26 |
+| nats/0                            | running | nats                               | 192.0.2.19 |
+| nfs_server/0                      | running | nfs_server                         | 192.0.2.21 |
+| router/0                          | running | router                             | 192.0.2.16 |
+| saml_login/0                      | running | saml_login                         | 192.0.2.28 |
+| syslog/0                          | running | syslog                             | 192.0.2.24 |
+| uaa/0                             | running | uaa                                | 192.0.2.27 |
+| uaadb/0                           | running | uaadb                              | 192.0.2.26 |
 +-----------------------------------+---------+---------------------------------+---------------+
 </pre>
 
@@ -319,17 +319,17 @@ secure shell in a more direct manner:
 1. Run `ssh -t vcap@IP-ADDRESS 'sh'` where IP-ADDRESS is the IP address of the
 non-responsive VM.
 
-	<pre class="terminal">
-	$ bosh vms
+    <pre class="terminal">
+    $ bosh vms
 
-	+---------------+---------+----------------+---------------+
-	| Job/index     | State   | Resource Pool  | IPs           |
-	+---------------+---------+----------------+---------------+
-	| mysql_node/0  | unknown | mysql_node     | 192.0.2.53 |
-	+---------------+---------+----------------+---------------+
+    +---------------+---------+----------------+---------------+
+    | Job/index     | State   | Resource Pool  | IPs           |
+    +---------------+---------+----------------+---------------+
+    | mysql_node/0  | unknown | mysql_node     | 192.0.2.53 |
+    +---------------+---------+----------------+---------------+
 
-	$ ssh -t vcap@192.0.2.53 'sh'
-	</pre>
+    $ ssh -t vcap@192.0.2.53 'sh'
+    </pre>
 
 ###<a id="terminate"></a>Terminate a BOSH SSH Session ###
 
@@ -365,11 +365,11 @@ export BUNDLE_GEMFILE=$CC_PACKAGE_DIR/cloud_controller_ng/Gemfile
 export HOME=/home/vcap # rake needs it to be set to run tasks
 
 if [ -f $BUNDLE_GEMFILE ]; then
-	alias  steno-prettify="bundle exec steno-prettify"
-	echo "ready to use steno-prettify alias, try steno-prettify on one of the following files:"
-	find /var/vcap/sys/log/ -name "*.log" | egrep  -v "err|out|ctl" | xargs ls -al
+    alias  steno-prettify="bundle exec steno-prettify"
+    echo "ready to use steno-prettify alias, try steno-prettify on one of the following files:"
+    find /var/vcap/sys/log/ -name "*.log" | egrep  -v "err|out|ctl" | xargs ls -al
 else
-	echo "could not find Gemfile into ${STENO_DIR}:" `ls -al ${BUNDLE_GEMFILE}`
+    echo "could not find Gemfile into ${STENO_DIR}:" `ls -al ${BUNDLE_GEMFILE}`
 fi
 </pre>
 
@@ -420,10 +420,10 @@ To resolve this issue:
 
 1. SSH into the VM and use the `sv stop agent` command to kill the BOSH Agent.
 
-	<pre class="terminal">
-	$ bosh ssh myVM
-	$ sv stop agent
-	</pre>
+    <pre class="terminal">
+    $ bosh ssh myVM
+    $ sv stop agent
+    </pre>
 
 1. Let the BOSH Health Monitor automatically restart the VM.
 To follow the status of this process:
@@ -432,20 +432,20 @@ To follow the status of this process:
 task.
 * Run `bosh task TASK-ID` with the task ID of the "scan and fix" task.
 
-	<pre class="terminal">
-	$ bosh tasks --no-filter
-	+----+---------+--------------------+-------+--------------+--------+
-	| #  | State   | Timestamp          | User  | Description  | Result |
-	+----+---------+--------------------+-------+--------------+--------+
-	| 83 | running | 01-21 12:07:34 UTC | admin | scan and fix | active |
-	+----+---------+--------------------+-------+--------------+--------+
+    <pre class="terminal">
+    $ bosh tasks --no-filter
+    +----+---------+--------------------+-------+--------------+--------+
+    | #  | State   | Timestamp          | User  | Description  | Result |
+    +----+---------+--------------------+-------+--------------+--------+
+    | 83 | running | 01-21 12:07:34 UTC | admin | scan and fix | active |
+    +----+---------+--------------------+-------+--------------+--------+
 
-	$ bosh task 83
+    $ bosh task 83
 
-	Director task 83
-	  Started scanning 1 vms
-	. . .
-	</pre>
+    Director task 83
+      Started scanning 1 vms
+    . . .
+    </pre>
 
 ###<a id="scale-deas"></a>Scale Droplet Execution Agents ###
 
