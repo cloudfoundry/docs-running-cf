@@ -449,7 +449,7 @@ task.
 
 ###<a id="scale-deas"></a>Scale Droplet Execution Agents ###
 
-Droplet Execution Agents (DEAs) stage and run applications.
+In older versions of Cloud Foundry that use the Droplet Execution Agent (DEA) architecture, DEAs stage and run applications.
 Follow the steps below to increase the resource pool for DEAs and the number of
 DEAs available in your deployment.
 
@@ -463,8 +463,7 @@ of DEAs.
 
 ###<a id="hm9000"></a>Recover from HM9000 Failure ###
 
-The Cloud Foundry Health Manager, HM9000, reconciles the expected states of
-applications and VMs in a deployment with their actual states.
+In older versions of Cloud Foundry that use the Droplet Execution Agent (DEA) architecture, the Cloud Foundry Health Manager, HM9000, reconciles the expected states of applications and VMs in a deployment with their actual states.
 To do this, the HM9000 uses state information kept in
 [etcd](https://github.com/coreos/etcd), a high-availability data store
 distributed across multiple nodes.
