@@ -411,15 +411,15 @@ $ bin/console
 [...]
 </pre>
 
-###<a id="debugging-full-dbs"></a>Troubleshooting full CF DBs ###
+###<a id="debugging-full-dbs"></a>Troubleshoot Cloud Foundry Databases ###
 
-The different databases (diego, cc_ng, uaa_db) are by default hosted within the ``postgres`` bosh job. This section provides diagnostic steps when the postgres job is dangerously reaching 100% persistent disk usage.
+The `postgres` BOSH job hosts the different databases used by Cloud Foundry, such as `diego`, `ccng`, and `uaadb`. If the `postgres` job reaches 100% persistent disk usage, it can impact performance. Perform the following steps to diagnose your `postgres` job:
 
-Retreive the associated credentials from the configuration (likely the bosh manifest, e.g. the uaadb) and connect to the db using the pgsql client of your choice. Alternatively, non-production deployments might find convenient to use a pgsql web ui deployed within CF itself such as [phppgadmin-cf](https://github.com/cloudfoundry-community/phppgadmin-cf/) within a space granted application security groups access to CF control plane (which is unrecommended in production), or similarly open a tunnel to the db from their desktop using cf-ssh.
+1. Retrieve the credentials for the `postgres` job from your BOSH manifest.
+1. Connect to the database using the PostgreSQL client of your choice. Alternatively, you can connect to the database using a PostgreSQL web interface such as [phppgadmin-cf](https://github.com/cloudfoundry-community/phppgadmin-cf/) or open an SSH tunnel to the database using `cf ssh`.
+1. Use the following SQL query to identify the largest schema:
 
-Identify the schema which has growth too much (e.g. inspired from [stackoverflow](http://stackoverflow.com/questions/4418403/list-of-schema-with-sizes-relative-and-absolute-in-a-postgresql-database))
-
-<pre class="terminal">
+    ```
     SELECT schema_name,
            pg_size_pretty(sum(table_size)::bigint),
            (sum(table_size) / pg_database_size(current_database())) * 100
@@ -431,9 +431,9 @@ Identify the schema which has growth too much (e.g. inspired from [stackoverflow
     ) t
     GROUP BY schema_name
     ORDER BY schema_name
-</pre>
+    ```
 
-Then identify the table which has grown too much (phppgadmin-cf provides browsing the table list and nb of entries in each).
+1. Using the output from the above query, identify the largest table.
 
 ###<a id="force-recreate"></a>Force a VM Recreate ###
 
