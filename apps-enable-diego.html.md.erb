@@ -116,10 +116,14 @@ $ cf add-plugin-repo CF-Community <span>http:</span>//plugins.cloudfoundry.org/
 $ cf install-plugin Diego-Enabler -r CF-Community
 </pre>
 
-1. Run `cf enable-diego APP-NAME` to enable Diego in your app manifest.
+1. Run `cf enable-diego APP-NAME` to enable Diego for your app.
 <pre class='terminal'>
 $ cf enable-diego EXAMPLE-APP
-Diego support for EXAMPLE-APP is set to true
+Setting EXAMPLE-APP Diego support to true
+OK
+
+Verifying EXAMPLE-APP Diego support is set to true
+OK
 </pre>
 
 1. Confirm that `APP-NAME` runs properly.
