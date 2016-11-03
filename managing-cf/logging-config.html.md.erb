@@ -30,9 +30,9 @@ To do this, add the following properties to the `properties` hash in your CF dep
 ```
 properties:
   syslog_daemon_config:
-  		address: YOUR-SYSLOG-AGGREGATOR-IP
-       	port: YOUR-SYSLOG-AGGREGATOR-TCP-PORT
-     	transport: YOUR-TRANSPORT-PROTOCOL
+      address: YOUR-SYSLOG-AGGREGATOR-IP
+         port: YOUR-SYSLOG-AGGREGATOR-TCP-PORT
+       transport: YOUR-TRANSPORT-PROTOCOL
 ```
 Replace `YOUR-TRANSPORT-PROTOCOL` with one of the following transport protocols:
 
@@ -49,215 +49,220 @@ You can customize each Loggregator component by changing its properties in the C
 <p class="note"><strong>Note</strong>: The DEA Logging Agent only exists in versions of Cloud Foundry that use the older Droplet Execution Agent (DEA) architecture, instead of the newer Diego architecture. For more information, see the <a href="../../concepts/diego/dea-vs-diego.html">Differences Between DEA and Diego Architectures</a> topic.</p>
 
 <table>
-	<tr>
-		<th><strong>Property</strong></th>
-		<th><strong>Description</strong></th>
-		<th><strong>Default</strong></th>
-	</tr>
-	<tr>
-		<td>dea_logging_agent.debug</td>
-	    <td>Boolean value to turn on verbose mode</td>
-	    <td>false</td>
-	</tr>
-	<tr>
-		<td>metron_endpoint.host</td>
-	    <td>The host used to emit messages to the Metron agent</td>
-	    <td>127.0.0.1</td>
-	</tr>
-	<tr>
-		<td>metron_endpoint.dropsonde_port</td>
-	    <td>The port used to emit dropsonde messages to the Metron agent</td>
-	    <td>3457</td>
-	</tr>
+  <tr>
+    <th><strong>Property</strong></th>
+    <th><strong>Description</strong></th>
+    <th><strong>Default</strong></th>
+  </tr>
+  <tr>
+    <td>dea_logging_agent.debug</td>
+      <td>Boolean value to turn on verbose mode</td>
+      <td>false</td>
+  </tr>
+  <tr>
+    <td>metron_endpoint.host</td>
+      <td>The host used to emit messages to the Metron agent</td>
+      <td>127.0.0.1</td>
+  </tr>
+  <tr>
+    <td>metron_endpoint.dropsonde_port</td>
+      <td>The port used to emit dropsonde messages to the Metron agent</td>
+      <td>3457</td>
+  </tr>
 </table>
 
 ### Doppler ###
 
 <table>
-	<tr>
-		<th><strong>Property</strong></th>
-		<th><strong>Description</strong></th>
-		<th><strong>Default</strong></th>
-	</tr>
-	<tr>
-		<td>doppler.zone</td>
-		<td>Zone of the doppler server</td>
-		<td>No default value</td>
-	</tr>
-	<tr>
-		<td>doppler.debug</td>
-		<td>boolean value to turn on verbose logging for doppler system (dea agent &amp; doppler server)</td>
-		<td>false</td>
-	</tr>
-	<tr>
-		<td>doppler.maxRetainedLogMessages</td>
-		<td>number of log messages to retain per application</td>
-		<td>100</td>
-	</tr>
-	<tr>
-		<td>doppler.dropsonde_incoming_port</td>
-		<td>Port for incoming messages in the dropsonde format</td>
-		<td>3457</td>
-	</tr>
-	<tr>
-		<td>doppler.incoming_tcp_port</td>
-		<td>Port for incoming tcp messages</td>
-		<td>3458</td>
-	</tr>
-	<tr>
-		<td>doppler.tls.enable</td>
-		<td>Enable TLS listener on doppler so that it can receive dropsonde envelopes over TLS transport. If enabled, Cert and Key files must be specified.</td>
-		<td>false</td>
-	</tr>
-	<tr>
-		<td>doppler.tls.port</td>
-		<td>Port for incoming messages in the dropsonde format over tls listener</td>
-		<td>3459</td>
-	</tr>
-	<tr>
-		<td>doppler.tls.server_cert</td>
-		<td>TLS server certificate</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>doppler.tls.server_key</td>
-		<td>TLS server key</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>loggregator.tls.ca_cert</td>
-		<td>CA root required for key/cert verification</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.require_ssl</td>
-		<td>Enable ssl for all communication with etcd</td>
-		<td>false</td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.ca_cert</td>
-		<td>PEM-encoded CA certificate</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.client_cert</td>
-		<td>PEM-encoded client certificate</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.client_key</td>
-		<td>PEM-encoded client key</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>doppler.outgoing_port</td>
-		<td>Port for outgoing log messages</td>
-		<td>8081</td>
-	</tr>
-	<tr>
-		<td>doppler.websocket_write_timeout_seconds</td>
-		<td>Interval before a websocket write is aborted if it does not succeed</td>
-		<td>60</td>
-	</tr>
-	<tr>
-		<td>doppler.blacklisted_syslog_ranges</td>
-		<td>Blacklist for IPs that should not be used as syslog drains, e.g. internal IP addresses</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>doppler.container_metric_ttl_seconds</td>
-		<td>TTL (in seconds) for container usage metrics</td>
-		<td>120</td>
-	</tr>
-	<tr>
-		<td>doppler.unmarshaller_count</td>
-		<td>Number of parallel unmarshallers to run within Doppler</td>
-		<td>5</td>
-	</tr>
-	<tr>
-		<td>doppler.sink_inactivity_timeout_seconds</td>
-		<td>Interval before removing a sink due to inactivity</td>
-		<td>3600</td>
-	</tr>
-	<tr>
-		<td>doppler.sink_dial_timeout_seconds</td>
-		<td>Dial timeout for sinks</td>
-		<td>1</td>
-	</tr>
-	<tr>
-		<td>doppler.sink_io_timeout_seconds</td>
-		<td>I/O Timeout on sinks</td>
-		<td>0</td>
-	</tr>
-	<tr>
-		<td>doppler_endpoint.shared_secret</td>
-		<td>Shared secret used to verify cryptographically signed dropsonde messages</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>doppler.message_drain_buffer_size</td>
-		<td>Size of the internal buffer used by doppler to store messages for output to firehose or 'cf logs'. If the buffer gets full doppler will drop the messages.</td>
-		<td>10000</td>
-	</tr>
-	<tr>
-		<td>doppler.syslog_skip_cert_verify</td>
-		<td>When connecting over TLS, do not verify certificates for syslog sink</td>
-		<td>true</td>
-	</tr>
-	<tr>
-		<td>doppler.locked_memory_limit</td>
-		<td>Size (KB) of shell's locked memory limit. Set to 'kernel' to use the kernel's default. Non-numeric values other than 'kernel', 'soft', 'hard', and 'unlimited' will result in an error.</td>
-		<td>unlimited</td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.machines</td>
-		<td>IPs pointing to the ETCD cluster</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>metron_endpoint.host</td>
-		<td>The host used to emit messages to the Metron agent</td>
-		<td>127.0.0.1</td>
-	</tr>
-	<tr>
-		<td>metron_endpoint.dropsonde_port</td>
-		<td>The port used to emit dropsonde messages to the Metron agent</td>
-		<td>3457</td>
-	</tr>
+  <tr>
+    <th><strong>Property</strong></th>
+    <th><strong>Description</strong></th>
+    <th><strong>Default</strong></th>
+  </tr>
+  <tr>
+    <td>doppler.zone</td>
+    <td>Zone of the doppler server</td>
+    <td>No default value</td>
+  </tr>
+  <tr>
+    <td>doppler.debug</td>
+    <td>boolean value to turn on verbose logging for doppler system (dea agent &amp; doppler server)</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>doppler.maxRetainedLogMessages</td>
+    <td>number of log messages to retain per application</td>
+    <td>100</td>
+  </tr>
+  <tr>
+    <td>doppler.dropsonde_incoming_port</td>
+    <td>Port for incoming messages in the dropsonde format</td>
+    <td>3457</td>
+  </tr>
+  <tr>
+    <td>doppler.incoming_tcp_port</td>
+    <td>Port for incoming tcp messages</td>
+    <td>3458</td>
+  </tr>
+  <tr>
+    <td>doppler.tls.enable</td>
+    <td>Enable TLS listener on doppler so that it can receive dropsonde envelopes over TLS transport. If enabled, Cert and Key files must be specified.</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>doppler.tls.port</td>
+    <td>Port for incoming messages in the dropsonde format over tls listener</td>
+    <td>3459</td>
+  </tr>
+  <tr>
+    <td>doppler.tls.server_cert</td>
+    <td>TLS server certificate</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>doppler.tls.server_key</td>
+    <td>TLS server key</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>loggregator.tls.ca_cert</td>
+    <td>CA root required for key/cert verification</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.require_ssl</td>
+    <td>Enable ssl for all communication with etcd</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.ca_cert</td>
+    <td>PEM-encoded CA certificate</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.client_cert</td>
+    <td>PEM-encoded client certificate</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.client_key</td>
+    <td>PEM-encoded client key</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>doppler.outgoing_port</td>
+    <td>Port for outgoing log messages</td>
+    <td>8081</td>
+  </tr>
+  <tr>
+    <td>doppler.websocket_write_timeout_seconds</td>
+    <td>Interval before a websocket write is aborted if it does not succeed</td>
+    <td>60</td>
+  </tr>
+  <tr>
+    <td>doppler.blacklisted_syslog_ranges</td>
+    <td>Blacklist for IPs that should not be used as syslog drains, e.g. internal IP addresses</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>doppler.container_metric_ttl_seconds</td>
+    <td>TTL (in seconds) for container usage metrics</td>
+    <td>120</td>
+  </tr>
+  <tr>
+    <td>doppler.unmarshaller_count</td>
+    <td>Number of parallel unmarshallers to run within Doppler</td>
+    <td>5</td>
+  </tr>
+  <tr>
+    <td>doppler.sink_inactivity_timeout_seconds</td>
+    <td>Interval before removing a sink due to inactivity</td>
+    <td>3600</td>
+  </tr>
+  <tr>
+    <td>doppler.sink_dial_timeout_seconds</td>
+    <td>Dial timeout for sinks</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>doppler.sink_io_timeout_seconds</td>
+    <td>I/O Timeout on sinks</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>doppler_endpoint.shared_secret</td>
+    <td>Shared secret used to verify cryptographically signed dropsonde messages</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>doppler.message_drain_buffer_size</td>
+    <td>Size of the internal buffer used by doppler to store messages for output to firehose or 'cf logs'. If the buffer gets full doppler will drop the messages.</td>
+    <td>10000</td>
+  </tr>
+  <tr>
+    <td>doppler.syslog_skip_cert_verify</td>
+    <td>When connecting over TLS, do not verify certificates for syslog sink</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>doppler.locked_memory_limit</td>
+    <td>Size (KB) of shell's locked memory limit. Set to 'kernel' to use the kernel's default. Non-numeric values other than 'kernel', 'soft', 'hard', and 'unlimited' will result in an error.</td>
+    <td>unlimited</td>
+  </tr>
+  <tr>
+    <td>doppler.pprof_port</td>
+    <td>The pprof port for runtime profiling data</td>
+    <td>6060</td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.machines</td>
+    <td>IPs pointing to the ETCD cluster</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>metron_endpoint.host</td>
+    <td>The host used to emit messages to the Metron agent</td>
+    <td>127.0.0.1</td>
+  </tr>
+  <tr>
+    <td>metron_endpoint.dropsonde_port</td>
+    <td>The port used to emit dropsonde messages to the Metron agent</td>
+    <td>3457</td>
+  </tr>
 </table>
 
 ### Traffic Controller ###
 
 <table>
-	<tr>
-		<th><strong>Property Name</strong></th>
-		<th><strong>Description</strong></th>
-		<th><strong>Default</strong></th>
-	<tr>
-		<td>traffic_controller.debug</td>
-		<td>boolean value to turn on verbose logging for loggregator system (dea agent &amp; loggregator server)</td>
-		<td>false</td>
-	</tr>
-	<tr>
-		<td>traffic_controller.disable_access_control</td>
-		<td>Traffic controller bypasses authentication with the UAA and CC</td>
-		<td>false</td>
-	</tr>
-	<tr>
-		<td>traffic_controller.locked_memory_limit</td>
-		<td>Size (KB) of shell's locked memory limit. Set to 'kernel' to use the kernel's default. Non-numeric values other than 'kernel', 'soft', 'hard', and 'unlimited' will result in an error.</td>
-		<td>unlimited</td>
-	</tr>
-	<tr>
-		<td>loggregator.outgoing_dropsonde_port</td>
-		<td>Port for outgoing dropsonde messages</td>
-		<td>8081</td>
-	</tr>
-	<tr>
-		<td>traffic_controller.security_event_logging.enabled</td>
-		<td>Enable logging of all requests made to the Traffic Controller in CEF format</td>
-		<td>false</td>
-	</tr>
+  <tr>
+    <th><strong>Property Name</strong></th>
+    <th><strong>Description</strong></th>
+    <th><strong>Default</strong></th>
+  <tr>
+    <td>traffic_controller.debug</td>
+    <td>boolean value to turn on verbose logging for loggregator system (dea agent &amp; loggregator server)</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>traffic_controller.disable_access_control</td>
+    <td>Traffic controller bypasses authentication with the UAA and CC</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>traffic_controller.locked_memory_limit</td>
+    <td>Size (KB) of shell's locked memory limit. Set to 'kernel' to use the kernel's default. Non-numeric values other than 'kernel', 'soft', 'hard', and 'unlimited' will result in an error.</td>
+    <td>unlimited</td>
+  </tr>
+  <tr>
+    <td>loggregator.outgoing_dropsonde_port</td>
+    <td>Port for outgoing dropsonde messages</td>
+    <td>8081</td>
+  </tr>
+  <tr>
+    <td>traffic_controller.security_event_logging.enabled</td>
+    <td>Enable logging of all requests made to the Traffic Controller in CEF format</td>
+    <td>false</td>
+  </tr>
   <tr>
     <td>doppler.uaa_client_id</td>
     <td>Doppler's client id to connect to UAA</td>
@@ -309,6 +314,11 @@ You can customize each Loggregator component by changing its properties in the C
     <td></td>
   </tr>
   <tr>
+    <td>traffic_controller.pprof_port</td>
+    <td>The pprof port for runtime profiling data</td>
+    <td>6060</td>
+  </tr>
+  <tr>
     <td>system_domain</td>
     <td>Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen</td>
     <td></td>
@@ -328,151 +338,156 @@ You can customize each Loggregator component by changing its properties in the C
 ###  Metron Agent ###
 
 <table>
-	<tr>
-		<th><strong>Property Name</strong></th>
-		<th><strong>Description</strong></th>
-		<th><strong>Default</strong></th>
+  <tr>
+    <th><strong>Property Name</strong></th>
+    <th><strong>Description</strong></th>
+    <th><strong>Default</strong></th>
   </tr>
   <tr>
-		<td>syslog_daemon_config.enable</td>
-		<td>Enable or disable rsyslog configuration for forwarding syslog messages into metron</td>
-		<td>true</td>
-	</tr>
+    <td>syslog_daemon_config.enable</td>
+    <td>Enable or disable rsyslog configuration for forwarding syslog messages into metron</td>
+    <td>true</td>
+  </tr>
   <tr>
-		<td>syslog_daemon_config.address</td>
-		<td>IP address for syslog aggregator</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>syslog_daemon_config.port</td>
-		<td>TCP port of syslog aggregator</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>syslog_daemon_config.transport</td>
-		<td>Transport to be used when forwarding logs (tcp\|udp\|relp).</td>
-		<td>tcp</td>
-	</tr>
-	<tr>
-		<td>syslog_daemon_config.fallback_addresses</td>
-		<td>Addresses of fallback servers to be used if the primary syslog server is down. Only tcp or relp are supported. Each list entry should consist of address, transport and port keys. </td>
-		<td>[]</td>
-	</tr>
-	<tr>
-		<td>syslog_daemon_config.custom_rule</td>
-		<td>Custom rule for syslog forward daemon</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>syslog_daemon_config.max_message_size</td>
-		<td>Maximum message size to be sent</td>
-		<td>4k</td>
-	</tr>
-	<tr>
-		<td>metron_endpoint.shared_secret</td>
-		<td>Shared secret used to verify cryptographically signed dropsonde messages</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>metron_agent.listening_port</td>
-		<td>Port the metron agent is listening on to receive dropsonde log messages</td>
+    <td>syslog_daemon_config.address</td>
+    <td>IP address for syslog aggregator</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>syslog_daemon_config.port</td>
+    <td>TCP port of syslog aggregator</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>syslog_daemon_config.transport</td>
+    <td>Transport to be used when forwarding logs (tcp\|udp\|relp).</td>
+    <td>tcp</td>
+  </tr>
+  <tr>
+    <td>syslog_daemon_config.fallback_addresses</td>
+    <td>Addresses of fallback servers to be used if the primary syslog server is down. Only tcp or relp are supported. Each list entry should consist of address, transport and port keys. </td>
+    <td>[]</td>
+  </tr>
+  <tr>
+    <td>syslog_daemon_config.custom_rule</td>
+    <td>Custom rule for syslog forward daemon</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>syslog_daemon_config.max_message_size</td>
+    <td>Maximum message size to be sent</td>
+    <td>4k</td>
+  </tr>
+  <tr>
+    <td>metron_endpoint.shared_secret</td>
+    <td>Shared secret used to verify cryptographically signed dropsonde messages</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>metron_agent.listening_port</td>
+    <td>Port the metron agent is listening on to receive dropsonde log messages</td>
     <td>3457</td>
-	</tr>
-	<tr>
-		<td>metron_agent.listening_address</td>
-		<td>Address the metron agent is listening on to receive dropsonde log messages provided for BOSH links and should not be overwritten</td>
-		<td>127.0.0.1</td>
-	</tr>
-	<tr>
-		<td>metron_agent.debug</td>
-		<td>Boolean value to turn on verbose mode</td>
-		<td>false</td>
-	</tr>
-	<tr>
-		<td>metron_agent.protocols</td>
-		<td>A priority list of protocols for metron to connect to doppler over.  Metron will refuse to connect to doppler over any protocol not in this list.</td>
-		<td>["udp"]</td>
-	</tr>
-	<tr>
-		<td>metron_agent.tls.client_cert</td>
-		<td>TLS client certificate</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>metron_agent.tls.client_key</td>
-		<td>TLS client key</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>metron_agent.tls.ca_cert</td>
-		<td>CA root required for key/cert verification</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>metron_agent.zone</td>
-		<td>Availability zone where this agent is running</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>metron_agent.deployment</td>
-		<td>Name of deployment (added as tag on all outgoing metrics)
-		<td></td>
-	</tr>
-	<tr>
-		<td>metron_agent.tcp.batching_buffer_bytes</td>
-		<td>The number of bytes which can be buffered prior to TCP writes (applies to TLS over TCP)</td>
-		<td>10240</td>
-	</tr>
-	<tr>
-		<td>metron_agent.tcp.batching_buffer_flush_interval_milliseconds</td>
-		<td>The maximum time that a message can stay in the batching buffer before being flushed</td>
-		<td>100</td>
-	</tr>
-	<tr>
-		<td>metron_agent.logrotate.freq_min</td>
-		<td>The frequency in minutes which logrotate will rotate VM logs</td>
-		<td>5</td>
-	</tr>
-	<tr>
-		<td>metron_agent.logrotate.rotate</td>
-		<td>The number of files that logrotate will keep around on the VM</td>
-		<td>7</td>
-	</tr>
-	<tr>
-		<td>metron_agent.logrotate.size</td>
-		<td>The size at which logrotate will decide to rotate the log file</td>
-		<td>50M</td>
-	</tr>
+  </tr>
+  <tr>
+    <td>metron_agent.listening_address</td>
+    <td>Address the metron agent is listening on to receive dropsonde log messages provided for BOSH links and should not be overwritten</td>
+    <td>127.0.0.1</td>
+  </tr>
+  <tr>
+    <td>metron_agent.debug</td>
+    <td>Boolean value to turn on verbose mode</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>metron_agent.protocols</td>
+    <td>A priority list of protocols for metron to connect to doppler over.  Metron will refuse to connect to doppler over any protocol not in this list.</td>
+    <td>["udp"]</td>
+  </tr>
+  <tr>
+    <td>metron_agent.tls.client_cert</td>
+    <td>TLS client certificate</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>metron_agent.tls.client_key</td>
+    <td>TLS client key</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>metron_agent.tls.ca_cert</td>
+    <td>CA root required for key/cert verification</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>metron_agent.zone</td>
+    <td>Availability zone where this agent is running</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>metron_agent.deployment</td>
+    <td>Name of deployment (added as tag on all outgoing metrics)
+    <td></td>
+  </tr>
+  <tr>
+    <td>metron_agent.tcp.batching_buffer_bytes</td>
+    <td>The number of bytes which can be buffered prior to TCP writes (applies to TLS over TCP)</td>
+    <td>10240</td>
+  </tr>
+  <tr>
+    <td>metron_agent.tcp.batching_buffer_flush_interval_milliseconds</td>
+    <td>The maximum time that a message can stay in the batching buffer before being flushed</td>
+    <td>100</td>
+  </tr>
+  <tr>
+    <td>metron_agent.logrotate.freq_min</td>
+    <td>The frequency in minutes which logrotate will rotate VM logs</td>
+    <td>5</td>
+  </tr>
+  <tr>
+    <td>metron_agent.logrotate.rotate</td>
+    <td>The number of files that logrotate will keep around on the VM</td>
+    <td>7</td>
+  </tr>
+  <tr>
+    <td>metron_agent.logrotate.size</td>
+    <td>The size at which logrotate will decide to rotate the log file</td>
+    <td>50M</td>
+  </tr>
   <tr>
     <td>loggregator.etcd.require_ssl</td>
     <td>Enable ssl for all communication with etcd</td>
     <td>false</td>
-	</tr>
+  </tr>
   <tr>
     <td>loggregator.etcd.machines</td>
     <td>IPs pointing to the ETCD cluster</td>
     <td></td>
-	</tr>
+  </tr>
   <tr>
     <td>loggregator.etcd.maxconcurrentrequests</td>
     <td>Number of concurrent requests to ETCD</td>
     <td>10</td>
-	</tr>
+  </tr>
   <tr>
     <td>loggregator.etcd.ca_cert</td>
     <td>PEM-encoded CA certificate</td>
     <td></td>
-	</tr>
+  </tr>
   <tr>
     <td>metron_agent.etcd.client_cert</td>
     <td>PEM-encoded client certificate</td>
     <td></td>
-	</tr>
+  </tr>
   <tr>
     <td>metron_agent.etcd.client_key</td>
     <td>PEM-encoded client key</td>
     <td></td>
-	</tr>
+  </tr>
+  <tr>
+    <td>metron_agent.pprof_port</td>
+    <td>The pprof port for runtime profiling data</td>
+    <td>6061</td>
+  </tr>
 </table>
 
 ### Syslog Drain Binder###
@@ -480,94 +495,93 @@ You can customize each Loggregator component by changing its properties in the C
 See [Using Log Management Services](../../devguide/services/log-management.html).
 
 <table>
-	<tr>
-		<th><strong>Property Name</strong></th>
-		<th><strong>Description</strong></th>
-		<th><strong>Default</strong></th>
-	</tr>
-		<td>metron_endpoint.host</td>
-		<td>The host used to emit messages to the Metron agent</td>
-		<td>127.0.0.1</td>
-	</tr>
-	<tr>
-		<td>metron_endpoint.dropsonde_port</td>
-		<td>The port used to emit dropsonde messages to the Metron agent</td>
-		<td>3457</td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.require_ssl</td>
-		<td>Enable ssl for all communication with etcd</td>
+  <tr>
+    <th><strong>Property Name</strong></th>
+    <th><strong>Description</strong></th>
+    <th><strong>Default</strong></th>
+  </tr>
+    <td>metron_endpoint.host</td>
+    <td>The host used to emit messages to the Metron agent</td>
+    <td>127.0.0.1</td>
+  </tr>
+  <tr>
+    <td>metron_endpoint.dropsonde_port</td>
+    <td>The port used to emit dropsonde messages to the Metron agent</td>
+    <td>3457</td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.require_ssl</td>
+    <td>Enable ssl for all communication with etcd</td>
     <td>false</td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.machines</td>
-		<td>IPs pointing to the ETCD cluster</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.maxconcurrentrequests</td>
-		<td>Number of concurrent requests to ETCD</td>
-		<td>10</td>
-	</tr>
-	<tr>
-		<td>loggregator.etcd.ca_cert</td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.machines</td>
+    <td>IPs pointing to the ETCD cluster</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.maxconcurrentrequests</td>
+    <td>Number of concurrent requests to ETCD</td>
+    <td>10</td>
+  </tr>
+  <tr>
+    <td>loggregator.etcd.ca_cert</td>
     <td>PEM-encoded CA certificate</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>syslog_drain_binder.etcd.client_cert</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>syslog_drain_binder.etcd.client_cert</td>
     <td>PEM-encoded client certificate</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>syslog_drain_binder.etcd.client_key</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>syslog_drain_binder.etcd.client_key</td>
     <td>PEM-encoded client key</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>system_domain</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>system_domain</td>
     <td>Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>syslog_drain_binder.drain_url_ttl_seconds</td>
-		<td>Time to live for drain urls in seconds</td>
-		<td>60</td>
-	</tr>
-	<tr>
-		<td>syslog_drain_binder.update_interval_seconds</td>
-		<td>Interval on which to poll cloud controller in seconds</td>
-		<td>15</td>
-	</tr>
-	<tr>
-		<td>syslog_drain_binder.polling_batch_size</td>
-		<td>Batch size for the poll from cloud controller</td>
-		<td>1000</td>
-	</tr>
-	<tr>
-		<td>syslog_drain_binder.debug</td>
-		<td>boolean value to turn on verbose logging for syslog_drain_binder</td>
-		<td>false</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>syslog_drain_binder.drain_url_ttl_seconds</td>
+    <td>Time to live for drain urls in seconds</td>
+    <td>60</td>
+  </tr>
+  <tr>
+    <td>syslog_drain_binder.update_interval_seconds</td>
+    <td>Interval on which to poll cloud controller in seconds</td>
+    <td>15</td>
+  </tr>
+  <tr>
+    <td>syslog_drain_binder.polling_batch_size</td>
+    <td>Batch size for the poll from cloud controller</td>
+    <td>1000</td>
+  </tr>
+  <tr>
+    <td>syslog_drain_binder.debug</td>
+    <td>boolean value to turn on verbose logging for syslog_drain_binder</td>
+    <td>false</td>
   </tr>
   <tr>
     <td>syslog_drain_binder.locked_memory_limit</td>
     <td>Size (KB) of shell's locked memory limit. Set to 'kernel' to use the kernel's default. Non-numeric values other than 'kernel', 'soft', 'hard', and 'unlimited' will result in an error.</td>
     <td>unlimited</td>
   </tr>
-	<tr>
-		<td>cc.bulk_api_password</td>
-		<td>password for the bulk api</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>cc.srv_api_uri</td>
-		<td>API URI of cloud controller</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>ssl.skip_cert_verify</td>
-		<td>when connecting over https, ignore bad ssl certificates</td>
-		<td>false</td>
-	</tr>
+  <tr>
+    <td>cc.bulk_api_password</td>
+    <td>password for the bulk api</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>cc.srv_api_uri</td>
+    <td>API URI of cloud controller</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ssl.skip_cert_verify</td>
+    <td>when connecting over https, ignore bad ssl certificates</td>
+    <td>false</td>
+  </tr>
 </table>
-
