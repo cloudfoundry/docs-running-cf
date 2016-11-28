@@ -25,7 +25,7 @@ Enabling SSH access requires generating a RSA key pair for your SSH proxy.
 <pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
 $ ssh-keygen -lf ssh-proxy-host-key.pem.pub | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
 </pre>
-<p class="note"><strong>Note</strong>: Recent versions of ssh-keygen print SHA256 fingerprint hashes of the keys. To get MD5 hashes of the server key fingerprints (the old behaviour), the -E option can be used to specify the hash algorithm</p>
+<p class="note"><strong>Note</strong>: Recent versions of ssh-keygen print the SHA256 fingerprint hashes of the keys. To obtain MD5 hashes of the server key fingerprints, use the -E option to specify the hash algorithm</p>
 <pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
 $ ssh-keygen -E md5 -lf ssh-proxy-host-key.pem.pub | sed 's/MD5://' | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
 </pre>
