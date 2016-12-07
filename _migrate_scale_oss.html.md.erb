@@ -19,7 +19,7 @@ You can scale your VMs by editing your Cloud Foundry and Diego manifests and red
           instances: INSTANCE-NUMBER
      ```
 
-1. Edit your Diego manifest to configure the Diego Cell VM for the capacity your apps require. The Diego Cell VM has a similar responsibility to the DEA VM to run applications. For example, if you have allocated three DEA instances with 32 GB of persistent disk and 32 GB of RAM for each, allocate three Diego Cell instances with 32 GB of persistent disk and 32 GB of RAM for each to have similar capacity on Diego as with DEAs. Locate the following component configurations under `resource_pools` in your Diego manifest and edit the `instance_type` property:
+1. Edit your Diego manifest to configure the Diego Cell VM for the capacity your apps require. The Diego Cell VM has a similar responsibility to the DEA VM to run applications. For example, if you have allocated three DEA instances with 32 GB of RAM for each, allocate three Diego Cell instances with 32 GB of RAM for each to have similar capacity on Diego as with DEAs. Locate the following component configurations under `resource_pools` in your Diego manifest and edit the `instance_type` property:
 
     ```
     resource_pools:
@@ -28,7 +28,7 @@ You can scale your VMs by editing your Cloud Foundry and Diego manifests and red
           instance_type: YOUR-IAAS-INSTANCE-TYPE
     ```
 
-    Your instance type varies by IaaS. Choose an instance type that corresponds to the persistent disk and RAM requirements of your configuration. For instance, if your deployment uses Amazon Web Services (AWS), this instance type could be `r3.xlarge`. 
+    Your instance type varies by IaaS. Choose an instance type that corresponds to the ephemeral disk (where the instance will be stored) and RAM requirements of your configuration. For instance, if your deployment uses Amazon Web Services (AWS), this instance type could be `r3.xlarge`. 
     <br/><br/>
     If you do not believe your deployment will utilize all of the available resources, you can set resource limits by locating the following component configurations under `properties` in your Diego manifest and replacing `default` with a specific value. If you do not specify values, Cloud Foundry matches the setting to the size of the VM you choose above. 
 
