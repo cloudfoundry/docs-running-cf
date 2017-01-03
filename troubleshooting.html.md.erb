@@ -503,6 +503,7 @@ To delete the contents of the etcd data store:
 1. Run `bosh vms` to identify the etcd nodes in your deployment.
 1. Run `bosh ssh` to open a secure shell into each etcd node.
 1. Run `monit stop etcd` on each etcd node.
-1. Delete or move the etcd storage directory, `/var/vcap/store`, on each etcd
+1. Delete or move the etcd storage directory, `/var/vcap/store/etcd`, on each etcd
 node.
+1. Run the script `/var/vcap/jobs/etcd/bin/pre-start` to re-create the storage directory.
 1. Run `monit start etcd` on each etcd node.
