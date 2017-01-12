@@ -1,0 +1,113 @@
+---
+title: Using Volume Services
+owner: Core Services
+---
+
+_(Question: For the title, does that sound actionable for a developer? When they hear volume services, do they know? For instance, an alternative might be: Using an External Filesystem with your App, or something)_
+<br><br>
+This topic describes how Cloud Foundry (CF) app developers can read and write to a mounted filesystem from their apps. In CF, a volume service provides volumes so your app can read and/or write to a reliable, non-ephemeral file system.
+
+## <a id="pre"></a> Prerequisite
+
+Before you can use a volume service with your app, your CF operator must [add a volume service to your deployment](./deploy-vol-services.html).
+
+You can run `cf marketplace` from the Cloud Foundry Command Line Interface (cf CLI) to see if there are any volume services available, such as `nfs`. If not, contact your CF operator with the volume service requirements for your app.
+
+_(Does the operator have control over the name of the Volume? For instance, how will they know from the CF Marketplace if a service is a "Volume service"? In the description? Or will it be named "nfs"? "efs"? etc)_
+
+## <a id="create"></a> Create and Bind a Service Instance
+
+To use a volume service deployed by your operator, you must create an instance of the service and bind it to an app. Follow the procedures below:
+
+1. <a href="../devguide/services/managing-services.html#marketplace">Create a service instance.</a>
+1. <a href="../devguide/services/managing-services.html#bind">Bind the service to an app.</a>
+
+## <a id='app'></a> Access the Volume Service from your App
+
+To access the volume service from your app, you must know which file path to use in your code. You can view the file path in the details of the service binding, which are available from the [VCAP_SERVICES](../deploy-apps/environment-variable.html#view-env) environment variable. Follow the steps below. 
+
+1. Run the `cf env` command to view environment variables for your app:_(I think we need fresh output here tailored to NFS)_
+  <pre class="terminal">
+  $ cf env YOUR-APP
+  VCAP\_SERVICES=
+  {
+    "volume_mounts": [
+      {
+        "driver": "cephdriver",
+        "container_dir": "/data/images",
+        "mode": "r",
+        "device_type": "shared",
+        "device": {
+          "volume_id": "bc2c1eab-05b9-482d-b0cf-750ee07de311",
+          "mount_config": {
+            "key": "value"
+          }
+        }
+      }
+    ]
+  }
+  </pre>
+
+2. Record the value of the `container_dir` property for so you can read and/or write to the volume from your app. 
+
+3. (Optional) To understand the remaining details of the service binding, see the table below: _(Which of these details does the developer truly need to know? Is there anything actionable for them? Or is this more "nice to have"? If so, are the details up-to-date?)_
+  <table border="1" class="nice">
+  <thead>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>volume\_mounts*</code></td>
+    <td>volume\_mount[]</td>
+    <td>An array of <code>volume\_mount</code> JSON objects. A <code>volume_mount</code> represents a remote storage device to be attached and mounted into the app container filesystem via a Volume Driver.</td>
+  </tr>
+  <tr>
+     <td>`driver`</td>
+     <td>string</td>
+     <td>Name of the volume driver plugin which manages the device</td>
+   </tr>
+   <tr>
+     <td><code>container\_dir</code></td>
+     <td>string</td>
+     <td>The directory to mount inside the application container</td>
+   </tr>
+   <tr>
+     <td><code>mode</code></td>
+     <td>string</td>
+     <td><code>r</code> if the volume is read-only, or <code>rw</code> if it is read-write</td>
+   </tr>
+   <tr>
+     <td><code>device\_type</code></td>
+     <td>string</td>
+     <td>A string specifying the type of device to mount. Currently only <code>shared</code> devices are supported.</td>
+   </tr>
+   <tr>
+     <td><code>device</code></td>
+     <td>device-object</td>
+     <td>Device object containing <code>device\_type</code> specific details. Currently only <code>shared_device</code> devices are supported. A <code>shared_device</code> is a subtype of a device. It represents a distributed file system which can be mounted on all app instances simultaneously.</td>
+   </tr>
+   <tr>
+     <td><code>volume\_id</code></td>
+     <td>string</td>
+     <td>ID of the shared volume to mount on every app instance</td>
+   </tr>
+   <tr>
+     <td><code>mount\_config</code></td>
+     <td>object</td>
+     <td>Configuration object passed to the driver when mounting the volume (optional)</td>
+   </tr>
+   </tbody>
+   </table>
+
+
+
+   
+   
+   
+   
+   
+   
