@@ -3,34 +3,45 @@ title: Adding Volume Services to your Deployment
 owner: Diego Persistence
 ---
 
-This document describes how CF operators can deploy volume services in Cloud Foundry (CF).
+This document describes how CF operators can deploy volume services in Cloud Foundry (CF). 
+
+<p class="note"><strong>Note</strong>: Volume services are only available to CF deployments that use the <a href="../concepts/diego/diego-architecture.html">Diego architecture</a>.</p>
 
 ##<a id="overview"></a> Overview
 
 A volume service gives apps access to an ephemeral filesystem, such as NFS. To provide a volume service for CF developers to use with their apps, you must deploy a driver and broker pair as outlined below in [Example: Deploy NFS to AWS](#example).
 
+### Additional Information
+
 For more information about volume services and the drivers and brokers available to CF, see the following links:
 
-* [Volume Services Google Doc](https://docs.google.com/document/d/1YtPMY9EjxlgJPa4SVVwIinfid_fshCF48xRhzyoZhrQ/edit?usp=sharing)
-* [NFS Volume Release Repository](https://github.com/cloudfoundry-incubator/nfs-volume-release)
-* [EFS Volume Release Repository](https://github.com/cloudfoundry-incubator/efs-volume-release)
-* [CEPHFS Release Repository](https://github.com/cloudfoundry-incubator/cephfs-bosh-release)
+* [Volume services Google Doc](https://docs.google.com/document/d/1YtPMY9EjxlgJPa4SVVwIinfid_fshCF48xRhzyoZhrQ/edit?usp=sharing)
+* [NFS volume release repository](https://github.com/cloudfoundry-incubator/nfs-volume-release)
+* [EFS volume release repository](https://github.com/cloudfoundry-incubator/efs-volume-release)
+* [CEPHFS release repository](https://github.com/cloudfoundry-incubator/cephfs-bosh-release)
 
 <p class="note"><strong>Note</strong>: For test purposes, you can deploy the <a href="https://github.com/cloudfoundry-incubator/local-volume-release.git">Local Volume Release</a> if running a single Diego Cell CF deployment. This is not for production deployments.</p>
+
+### Contact
+
+If you have any questions, you can contact the team that develops volume services for CF on the **#persi** channel in the [Cloud Foundry (Open Source)](https://cloudfoundry.slack.com) Slack organization.
 
 ##<a id="example"></a> Example: Deploy NFS Volume Service to AWS
 
 The following procedure provides an example of how to deploy the NFS broker and corresponding driver on AWS.
 
-###<a id="pre"></a>Prerequisite
+###<a id="pre"></a>Prerequisites
 
-This procedure requires a BOSH director that is v260 or later. Refer to the [NFS Volume Release Repository](https://github.com/cloudfoundry-incubator/nfs-volume-release) for more information.
+This procedure requires the following:
+
+* A CF deployment that uses the [Diego architecture](../concepts/diego/diego-architecture.html). 
+* A BOSH director that is v260 or later. Refer to the [NFS volume release repository](https://github.com/cloudfoundry-incubator/nfs-volume-release) for more information.
 
 ###<a id="cf"></a>Step 1: Enable Volume Services in CF
 
 1. Using the BOSH CLI, run the following command to list the VMs deployed by your BOSH director:
 	<pre class="terminal">$ bosh vms </pre>
-	* Examine the output for the CF Cloud Controller VM and note the corresponding `deployment name` for use in the next step.
+	* Examine the output for the CF Cloud Controller VM and record the corresponding `deployment name` for use in the next step.
 1. Run the following command using the `deployment name` from the last step to download your CF deployment manifest:
   <pre class="terminal"> $ bosh download manifest YOUR-CF-DEPLOYMENT-NAME > cf.yml</pre>
 1. Add the following property to the `cf.yml` manifest if it does not already exist:
@@ -54,10 +65,10 @@ This procedure requires a BOSH director that is v260 or later. Refer to the [NFS
 	</pre>
 1. Run the following command to list the VMs deployed by your BOSH director:
 	<pre class="terminal">$ bosh vms </pre>
-	* Examine the output for the diego cell VMs labeled `cell_*` and note the corresponding `deployment name` for use in the next step.
+	* Examine the output for the diego cell VMs labeled `cell_*` and record the corresponding `deployment name` for use in the next step.
 1. Create a new `runtime-config.yml` with the following content:
 	* Replace `YOUR-VERSION` with the `version` you previously recorded.
-	* For `YOUR-DIEGO-DEPLOYMENT-NAME`, use the noted `deployment name` from the previous step.
+	* For `YOUR-DIEGO-DEPLOYMENT-NAME`, use the `deployment name` from the previous step.
 
 		```
 		---
@@ -111,9 +122,9 @@ To create a NFS Service Broker, you must combine several pieces of information i
 
 #### Create the IaaS Settings Stub
 
-<p class="note"><strong>Note</strong>: This is an AWS specific IaaS Settings Stub. If you want to deploy on another IaaS, use the templates available in the <code>templates</code> directory of each volume services release respository.</p>
+<p class="note"><strong>Note</strong>: This is an AWS-specific IaaS Settings Stub. If you want to deploy on another IaaS, use the templates available in the <code>templates</code> directory of each volume services release respository.</p>
 
-1. Create an `iaas.yml` stub to for IaaS-specific settings by copying the template below:
+1. Create an `iaas.yml` stub for IaaS-specific settings by copying the template below:
 
 	```
 	 ---
@@ -193,7 +204,7 @@ To create a NFS Service Broker, you must combine several pieces of information i
 		</tr>
 		<tr>
 			<td><code>STATIC-IPs</code></td>
-			<td>Array of IP addresses that BOSH can use for the NFS Broker, such as <code>10.10.200.10 - 10.10.200.100</code></td>
+			<td>An Array of IP addresses that BOSH can use for the NFS Broker, such as <code>10.10.200.10 - 10.10.200.100</code></td>
 		</tr>
 	</table>
 
@@ -211,7 +222,7 @@ properties:
 
 #### Generate the Deployment Manifest
 
-1. Clone the NFS Volume Release repository:
+1. Clone the NFS volume release repository:
 <pre class="terminal">
 $ git clone http<span>s</span>://github.com/cloudfoundry-incubator/nfs-volume-release.git
 </pre>
@@ -225,6 +236,7 @@ $ cd nfs-volume-release
 <pre class="terminal">
 $ ./scripts/generate_manifest.sh cf.yml director-uuid.yml iaas.yml creds.yml
 </pre>
+	* Specify the path to each stub file you created.
 
 ###<a id="broker"></a>Step 4: Deploy the NFS Broker
 
@@ -247,3 +259,7 @@ $ ./scripts/generate_manifest.sh cf.yml director-uuid.yml iaas.yml creds.yml
 
 
 	CF Developers can now create an NFS service and bind instances to their apps as outlined in [Using an External File System (Volume Services)](../volume-services-v2.10.html)
+
+###<a id="server"></a>Step 5: (Optional) Deploy a Test NFS Server
+
+If you want to use NFS and do not currently have a server available, you can deploy the test NFS server bundled with the NFS Volume release. Follow the instructions from the NFS volume release repository: [Deploying the Test NFS Server (Optional)](https://github.com/cloudfoundry-incubator/nfs-volume-release#deploying-the-test-nfs-server-optional).
