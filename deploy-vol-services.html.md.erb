@@ -16,65 +16,68 @@ For more information about volume services and the drivers and brokers available
 * [EFS Volume Release Repository](https://github.com/cloudfoundry-incubator/efs-volume-release)
 * [CEPHFS Release Repository](https://github.com/cloudfoundry-incubator/cephfs-bosh-release)
 
-<p class="note"><strong>Note</strong>: When trying volume services out for the first time, you can deploy the [Local Volume Release](https://github.com/cloudfoundry-incubator/local-volume-release.git) if running a single Diego Cell CF deployment. We do not recommend this in production.
+<p class="note"><strong>Note</strong>: For test purposes, you can deploy the <a href="https://github.com/cloudfoundry-incubator/local-volume-release.git">Local Volume Release</a> if running a single Diego Cell CF deployment. This is not for production deployments.</p>
 
 ##<a id="example"></a> Example: Deploy NFS Volume Service to AWS
 
 The following procedure provides an example of how to deploy the NFS broker and corresponding driver on AWS.
-* These instructions require a v260+ BOSH director. Refer to the Release Repositories for more info.
 
-### Step 1: Enable Volume Services in CF
+###<a id="pre"></a>Prerequisite
 
-1. Run the following command to list the VMs deployed by your BOSH director:
+This procedure requires a BOSH director that is v260 or later. Refer to the [NFS Volume Release Repository](https://github.com/cloudfoundry-incubator/nfs-volume-release) for more information.
+
+###<a id="cf"></a>Step 1: Enable Volume Services in CF
+
+1. Using the BOSH CLI, run the following command to list the VMs deployed by your BOSH director:
 	<pre class="terminal">$ bosh vms </pre>
 	* Examine the output for the CF Cloud Controller VM and note the corresponding `deployment name` for use in the next step.
 1. Run the following command using the `deployment name` from the last step to download your CF deployment manifest:
   <pre class="terminal"> $ bosh download manifest YOUR-CF-DEPLOYMENT-NAME > cf.yml</pre>
-1. Add the following property to the `cf.yml` manifest if it does not already exist.
+1. Add the following property to the `cf.yml` manifest if it does not already exist:
 	`properties: cc: volume_services_enabled: true`
-1. Redeploy CF with volume services enabled!
+1. Redeploy CF with volume services enabled:
 	<pre class="terminal">$ bosh -d cf.yml deploy</pre>
 
 ###<a id="driver"></a> Step 2: Add the NFS Driver to Diego Cells
 
-1. Download the `nfs-volume-release` release from [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-incubator/nfs-volume-release)
+1. Download the `nfs-volume-release` release from [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-incubator/nfs-volume-release).
 1. Target your deployment using the BOSH CLI.
 	<pre class="terminal">$ bosh target BOSH-DIRECTOR-IP</pre>
 1. Upload the release to your BOSH director
 	<pre class="terminal">$ bosh upload release PATH-TO-DOWNLOADED-NFS-VOLUME-RELEASE</pre>
-	* Note the `version` of the release you just uploaded from the output for use later.
-
-	```
+	* Examine the output and record the `version` of the release you uploaded for later use.
+	<pre>
 	Release info
 	------------
 	Name:    nfs-volume
-	<strong>Version: 0.0.11</strong>
-	```
+	<b>Version: 0.0.11</b>
+	</pre>
 1. Run the following command to list the VMs deployed by your BOSH director:
 	<pre class="terminal">$ bosh vms </pre>
 	* Examine the output for the diego cell VMs labeled `cell_*` and note the corresponding `deployment name` for use in the next step.
 1. Create a new `runtime-config.yml` with the following content:
-	* For `version`, use the noted `version` from prior steps.
-	* For `deployments`, use the noted `deployment name` from the previous step.
+	* Replace `YOUR-VERSION` with the `version` you previously recorded.
+	* For `YOUR-DIEGO-DEPLOYMENT-NAME`, use the noted `deployment name` from the previous step.
 
-	```
-	---
-	releases:
-	- name: nfs-volume
-	  version: YOUR-VERSION-HERE
-	addons:
-	- name: voldrivers
-	  include:
-	    deployments:
-	    - YOUR-DIEGO-DEPLOYMENT-NAME
-	    jobs:
-	    - name: rep
-	      release: diego
-	  jobs:
-	  - name: nfsv3driver
-	    release: nfs-volume
-	    properties: {}
-	```
+		```
+		---
+		releases:
+		- name: nfs-volume
+		  version: YOUR-VERSION
+		addons:
+		- name: voldrivers
+		  include:
+		    deployments:
+		    - YOUR-DIEGO-DEPLOYMENT-NAME
+		    jobs:
+		    - name: rep
+		      release: diego
+		  jobs:
+		  - name: nfsv3driver
+		    release: nfs-volume
+		    properties: {}
+		```
+
 1. Update the BOSH runtime configuration:
 	<pre class="terminal">$ bosh update runtime-config runtime-config.yml</pre>
 1. Download the Diego manifest:
@@ -82,18 +85,18 @@ The following procedure provides an example of how to deploy the NFS broker and 
 1. Deploy Diego:
 	<pre class="terminal"> $ bosh -d diego.yml deploy</pre>
 
-###<a id="stubs"></a>Step 3: Create NFS Broker VM - Create Stub Files
+###<a id="stubs"></a>Step 3: Generate a Manifest for the NFS Broker
 
-In order to create a NFS Service Broker we need to combine pieces of information into a single BOSH manifest that we will deploy. We will put these pieces into stubs and then utilize a script to combine them.
+To create a NFS Service Broker, you must combine several pieces of information into a single BOSH manifest to deploy. Follow the steps below to put this information into stubs and use a script to combine them into a manifest.
 
-#### Cloud Foundry Stub
+#### Create the Cloud Foundry Stub
 1. Run the following command to list the VMs deployed by your BOSH director:
 	<pre class="terminal">$ bosh vms </pre>
-	* Examine the output for the CF Nats VM labeled `nats_*` and note the corresponding `deployment name` for use in the next step.
-1. Run the following command using the `deployment name` from the last step to download your CF deployment manifest:
+	* Examine the output for the CF Nats VM labeled `nats_*` and record the corresponding `deployment name` for use in the next step.
+1. Run the following command using the `deployment name` from the previous step to download your CF deployment manifest:
   <pre class="terminal"> $ bosh download manifest YOUR-CF-DEPLOYMENT-NAME > cf.yml</pre>
 
-#### Director Stub
+#### Create the Director Stub
 
 1. Run the following command to determine the UUID of your BOSH director:
 	<pre class="terminal"> $ bosh status --uuid</pre>
@@ -106,20 +109,11 @@ In order to create a NFS Service Broker we need to combine pieces of information
 	---
 	```
 
-#### IaaS Settings Stub
+#### Create the IaaS Settings Stub
 
-<p class="note"><strong>Note</strong>: This is an AWS specific IaaS Settings Stub. If deploying on another IaaS use the templates available with in each github release respository under the `templates` folder and fill in with the appropriate fields needed by BOSH.
+<p class="note"><strong>Note</strong>: This is an AWS specific IaaS Settings Stub. If you want to deploy on another IaaS, use the templates available in the <code>templates</code> directory of each volume services release respository.</p>
 
-Create an `iaas.yml` stub which will be specific to your IaaS. Replace each of the below parameters in the stub:
-
-`<--PUBLIC-BROKER-IP-->` --> Pre-Allocated AWS Elastic IP
-`<--SECURITY-GROUP-->` --> Security Group where the NFS Broker will be created. Ensure this security group has access to the security group your CF is deployed in.
-`<--SUBNET-->` --> Subnet where the NFS Broker will be created. Ensure this subnet has access to the subnet your CF is deployed in.
-`<--DNS-->` --> DNS IP address.
-`<--GATEWAY-->` --> Gateway address.
-`<--SUBNET-RANGE-->` --> CIDR range of the subnet where the NFS Broker will be created.
-`<--RESERVED-IPs-->` --> Array of IPs that BOSH will not use for the NFS Broker. `E.G.: 10.10.200.0 - 10.10.200.10`
-`<--STATIC-IPs-->` --> Array of IPs that BOSH can use for the NFS Broker. `E.G.: 10.10.200.10 - 10.10.200.100`
+1. Create an `iaas.yml` stub to for IaaS-specific settings by copying the template below:
 
 	```
 	 ---
@@ -127,23 +121,23 @@ Create an `iaas.yml` stub which will be specific to your IaaS. Replace each of t
      - name: nfsbroker
        networks:
        - name: public
-         static_ips: [<--PUBLIC-BROKER-IP-->]
+         static_ips: [PUBLIC-BROKER-IP]
 
      networks:
      - name: nfsvolume-subnet
        subnets:
        - cloud_properties:
            security_groups:
-           - <--SECURITY-GROUP-->
-           subnet: <--SUBNET-->
+           - SECURITY-GROUP
+           subnet: SUBNET
          dns:
-         - <--DNS-->
-         gateway: <--GATEWAY-->
-         range: <--SUBNET-RANGE-->
+         - DNS
+         gateway: GATEWAY
+         range: SUBNET-RANGE
          reserved:
-         - <--RESERVED-IPs-->
+         - RESERVED-IPs
          static:
-         - <--STATIC-IPs-->
+         - STATIC-IPs
 
      resource_pools:
        - name: medium
@@ -161,43 +155,95 @@ Create an `iaas.yml` stub which will be specific to your IaaS. Replace each of t
            instance_type: m3.large
            availability_zone: us-east-1c
 	```
-#### Credentials Stub
+
+1. Replace each of the below parameters in the stub:
+
+	<table>
+		<tr>
+			<th width="25%">For this value...</th>
+			<th>Replace with...</th>
+		</tr>
+		<tr>
+			<td><code>PUBLIC-BROKER-IP</code></td>
+			<td>A pre-allocated AWS Elastic IP address</td>
+		</tr>
+		<tr>
+			<td><code>SECURITY-GROUP</code></td>
+			<td>A Security Group in which to create the NFS Broker. Ensure this security group can access the security group that your CF deployment is in.</td>
+		</tr>
+		<tr>
+			<td><code>SUBNET</code></td>
+			<td>A subnet in which to create the NFS Broker. Ensure this subnet can access the subnet that your CF deployment is in.</td>
+		</tr>
+		<tr>
+			<td><code>DNS</code></td>
+			<td>Typically the DNS for your CF system domain unless you want to host the broker outside of CF.</td>
+		</tr>
+		<tr>
+			<td><code>GATEWAY</code></td>
+			<td>Typically the gateway address for your CF system domain unless you want to host the broker outside of CF.</td>
+		</tr>
+		<tr>
+			<td><code>SUBNET-RANGE</code></td>
+			<td>The CIDR range of the subnet in which to create the NFS Broker.</td>
+		</tr>
+		<tr>
+			<td><code>RESERVED-IPs</code></td>
+			<td>An Array of IP addresses that BOSH cannot use for the NFS Broker, such as <code>10.10.200.0 - 10.10.200.10</code></td>
+		</tr>
+		<tr>
+			<td><code>STATIC-IPs</code></td>
+			<td>Array of IP addresses that BOSH can use for the NFS Broker, such as <code>10.10.200.10 - 10.10.200.100</code></td>
+		</tr>
+	</table>
+
+#### Create the Credentials Stub
 
 Create a `creds.yml` file and paste in the following contents, replacing the indicated values with a username and password of your choosing:
 
 ```
-    ---
+---
 properties:
   nfsbroker:
-    username: <BROKER_USERNAME>
-    password: <BROKER_PASSWORD>
+    username: BROKER_USERNAME
+    password: BROKER_PASSWORD
 ```
 
-#### Step 2: Create NFS Broker VM - Generate the Deployment Manifest
+#### Generate the Deployment Manifest
 
-1. Download the script from github using the `git cli`
+1. Clone the NFS Volume Release repository:
 <pre class="terminal">
-$ git clone https://github.com/cloudfoundry-incubator/nfs-volume-release.git
+$ git clone http<span>s</span>://github.com/cloudfoundry-incubator/nfs-volume-release.git
 </pre>
 
-Run the following script to generate a deployment manifest based on your stubs:
-
+1. Change directories into the repo you just cloned:
 <pre class="terminal">
-$ ./scripts/generate\_manifest.sh cf.yml director-uuid.yml iaas.yml creds.yml
+$ cd nfs-volume-release
 </pre>
 
-###<a id="broker"></a>Step 4: Create NFS Broker VM - Deploy the Broker
+1. Run the following script to generate a deployment manifest based on your stubs:
+<pre class="terminal">
+$ ./scripts/generate_manifest.sh cf.yml director-uuid.yml iaas.yml creds.yml
+</pre>
+
+###<a id="broker"></a>Step 4: Deploy the NFS Broker
 
 1. Deploy the broker using the generated manifest:
 	<pre class="terminal">
 	$ bosh -d nfsvolume-aws-manifest.yml deploy
 	</pre>
 
-1. Register the broker using the credentials specified in the `creds.yml` and grant access to it's service with the following commands
+1. Register the broker using the credentials specified in the `creds.yml` stub:
 
 	<pre class="terminal">
-	$ cf create-service-broker nfsbroker <BROKER_USERNAME> <BROKER_PASSWORD> http://nfs-broker.YOUR.DOMAIN.com
+	$ cf create-service-broker nfsbroker BROKER_USERNAME BROKER_PASSWORD http://nfs-broker.YOUR-SYSTEM-DOMAIN
+	</pre>
+
+1. Grant access to the service of the broker:
+
+	<pre class="terminal">
 	$ cf enable-service-access nfs
 	</pre>
 
-	CF Developers can now create an NFS service and bind instances to their apps as outlined in [Using Volume Services](../volume-services-v2.10.html)
+
+	CF Developers can now create an NFS service and bind instances to their apps as outlined in [Using an External File System (Volume Services)](../volume-services-v2.10.html)
