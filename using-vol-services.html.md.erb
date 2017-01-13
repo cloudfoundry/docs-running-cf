@@ -3,32 +3,46 @@ title: Using an External File System (Volume Services)
 owner: Core Services
 ---
 
-This topic describes how Cloud Foundry (CF) app developers can read and write to a mounted filesystem from their apps. In CF, a volume service provides volumes so your app can read and/or write to a reliable, non-ephemeral file system.
+This topic describes how Cloud Foundry (CF) app developers can read and write to a mounted filesystem from their apps. In CF, a volume service provides a volume so your app can read and/or write to a reliable, non-ephemeral file system.
 
 ## <a id="pre"></a> Prerequisite
 
 Before you can use a volume service with your app, your CF operator must [add a volume service to your deployment](./deploy-vol-services.html).
 
-You can run `cf marketplace` from the Cloud Foundry Command Line Interface (cf CLI). The below is an example output of the NFS volume service. If there is no volume service that fits your requirements contact your CF operator.
+You can run `cf marketplace` from the Cloud Foundry Command Line Interface (cf CLI) to see if any volume services are available. See the following example output of the NFS volume service:
 
-```
+<pre class="terminal">
+$ cf marketplace
 service   plans      description
 nfs       Existing   Service for connecting to NFS volumes
-```
+</pre>
 
-## <a id="create"></a> Create and bind a Service Instance
 
-To use a volume service deployed by your operator, you must first create an instance of the specific volume service needed service. Follow the procedures below:
 
-1. <a href="../devguide/services/managing-services.html#marketplace">Create a service instance.</a>
+If there is no volume service that fits your requirements, contact your CF operator.
 
-<p class="note"><strong>Note</strong>: When using the NFS volume service, an extra parameter `share` is required by using the `-c` flag and a JSON. This parameter forwards what NFS server and share is needed for the service to the broker.
-  E.G.: `cf create-service nfs Existing nfs_service_instance -c '{"share": "10.10.10.10/export/myshare"}'
+## <a id="create"></a> Create and Bind a Service Instance
 
-1. <a href="../devguide/services/managing-services.html#bind">Bind the service to an app.</a>
+To use a volume service deployed by your operator, you must first create an instance of the specific volume service that you need:
 
-<p class="note"><strong>Note</strong>: When using the NFS volume service, two extra parameters are needed `gid` and `uid`. This again can be specified by the `-c` flag and a JSON. This parameter specifies what `gid` and `uid` should be used when mounting the share to the application.
-  E.G.: ` cf bind-service my-app nfs_service_instance -c '{"uid":"1000","gid":"1000"}'
+1. Create a service instance by running the following command and replacing the indicated values:
+<pre class="terminal">$ cf create-service SERVICE-NAME PLAN SERVICE_INSTANCE -c SHARE-JSON</pre>
+  * `SERVICE`: The name of the volume service that you want to use.
+  * `PLAN`: The name of the service plan. Service plans are a way for providers to offer varying levels of resources or features for the same service.
+  * `SERVICE_INSTANCE`:  A name you provide for your service instance. Use any series of alpha-numeric characters, hyphens, and underscores. You can rename the instance at any time.
+  * `SHARE JSON` (NFS Only): If you create an instance of the NFS volume service, you must supply an extra parameter, `share`, by using the `-c` flag and a JSON. This parameter forwards information to the broker about the NFS server and share required for the service. See the following example: 
+  <pre class="terminal">cf create-service nfs Existing nfs\_service\_instance -c '{"share": "10.10.10.10/export/myshare"}'</pre>
+
+1. Bind your service instance to an app by running the following command and replacing the indicated values:
+<pre class="terminal">$ cf bind-service YOUR-APP SERVICE-NAME -c GID\_AND\_UID\_JSON</pre>
+  * `YOUR-APP`: The name of the CF app for which you want to use the volume service. 
+  * `SERVICE-NAME`: The name of the volume service instance you created in the previous step.
+  * `GID_AND_UID_JSON` (NFS only): If you bind an instance of the NFS volume service, you must supply two extra parameters, `gid` and `uid`. You can specify these parameters with the `-c` flag and a JSON. This parameter specifies the `gid` and `uid` to use when mounting the share to the app. See the following example: 
+  <pre class="terminal">cf bind-service my-app nfs\_service\_instance -c '{"uid":"1000","gid":"1000"}'.</pre>
+
+1. Complete the service binding by restaging your app: 
+  <pre class="terminal">$ cf restage YOUR-APP</pre>
+
 ## <a id='app'></a> Access the Volume Service from your App
 
 To access the volume service from your app, you must know which file path to use in your code. You can view the file path in the details of the service binding, which are available from the [VCAP_SERVICES](../deploy-apps/environment-variable.html#view-env) environment variable. Follow the steps below.
@@ -41,17 +55,17 @@ To access the volume service from your app, you must know which file path to use
     {
      "credentials": {},
      "label": "nfs",
-     "name": "nfs_service_instance",
+     "name": "nfs\_service\_instance",
      "plan": "Existing",
      "provider": null,
-     "syslog_drain_url": null,
+     "syslog\_drain\_url": null,
      "tags": [
       "nfs"
      ],
-     "volume_mounts": [
+     "volume\_mounts": [
       {
-       "container_dir": "/var/vcap/data/153e3c4b-1151-4cf7-b311-948dd77fce64",
-       "device_type": "shared",
+       "container\_dir": "/var/vcap/data/153e3c4b-1151-4cf7-b311-948dd77fce64",
+       "device\_type": "shared",
        "mode": "rw"
       }
      ]
@@ -60,8 +74,26 @@ To access the volume service from your app, you must know which file path to use
   }
   </pre>
 
-2. Utilize the properties under `volume_mounts` for any information your application may need as outlined below.
-
-`container_dir` --> String containing the path to where the volume you have bound to your application is mounted in the environment.
-`device_type` --> Currently only `shared` devices are supported. A `shared` device represents a distributed file system which can be mounted on all app instances simultaneously.
-`mode` --> Determines if your app will have the ability to only read `ro`, or read and write `rw`.
+2. Use the properties under `volume_mounts` for any information your app needs. Refer to the following table:
+  <table>
+    <tr>
+      <th>
+        Property
+      </th>
+      <th>
+        Description
+      </th>
+    </tr>
+    <tr>
+      <td><code>container\_dir</code></td>
+      <td>String containing the path to the mounted volume that you bound to your app.</td>
+    </tr>
+    <tr>
+      <td><code>device\_type</code></td>
+      <td>The NFS volume release Currently only supports `shared` devices. A `shared` device represents a distributed file system that can mount on all app instances simultaneously.</td>
+    </tr>
+    <tr>
+      <td><code>mode</code></td>
+      <td>String that informs what type of access your app has to NFS, either read-only `ro`, or read and write `rw`.</td>
+    </tr>
+  </table>
