@@ -22,12 +22,14 @@ Use this table to understand the rate limit header.
  </tr>
  <tr>
  	<td>X-RateLimit-Remaining</td>
- 	<td>The number of attempts remaining.</td>
+ 	<td>The number of attempts remaining. Customize this value with <pre>cc.rate_limiter.reset_interval_in_minutes</pre>.</td>
  </tr>
  <tr>
  	<td>X-RateLimit-Reset</td>
- 	<td>The time remaining before the rate limit counter resets, in UTC <a href="https://en.wikipedia.org/wiki/Unix_time">epoch seconds</a>.</td>
+ 	<td>The time at which the rate limit resets, in UTC <a href="https://en.wikipedia.org/wiki/Unix_time">epoch seconds</a>. Customize this value with <pre>cc.rate_limiter.reset_interval_in_minutes</pre>.</td>
  </tr>
 </table>
 
 When requests exceed the rate limit value, the Cloud Controller API returns a `429: Too Many Requests` error code.
+
+For more information on setting custom rate limits, read [Setting the Rate Limit for the Cloud Controller API](./setting-rate-limit-cloud-api.html).
