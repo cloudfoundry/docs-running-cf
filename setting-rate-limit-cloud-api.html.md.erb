@@ -1,0 +1,15 @@
+---
+title: Setting the Rate Limit for the Cloud Controller API
+owner: CAPI
+---
+
+Cloud Foundry lets you set rate limits on the number of requests third parties can make to the Cloud Controller API. You can set different rate limits for authenticated and unauthenticated users.
+
+Use the following properties in the cloud_controller BOSH job to define rate limits:
+
+```
+cc.rate_limiter.enabled
+cc.rate_limiter.general_limit
+cc.rate_limiter.unauthenticated_limit
+cc.rate_limiter.reset_interval_in_minutes
+```
