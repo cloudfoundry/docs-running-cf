@@ -236,8 +236,8 @@ There are other ways to check whether the process is running. For example, given
 $ ps auxf | less
 ... [ search for 16io51f6jri:] /16io51f6jri
 root      5291  0.0  0.0  14564   496 ?        S    06:43   0:00 wshd: 16io51f6jri
-10000     5351  0.0  0.0  17708  1220 ?        Ss   06:43   0:00  \_ /bin/bash
-10000     5353  0.1  0.0  36220  1772 ?        Sl   06:43   0:12      \_ /var/vcap/packages/redis26/bin/redis-server /var/vcap/store/redis/instances/9407af2c-0628-484b-a5f8-5c8634421a35/redis.conf
+10000     5351  0.0  0.0  17708  1220 ?        Ss   06:43   0:00  _ /bin/bash
+10000     5353  0.1  0.0  36220  1772 ?        Sl   06:43   0:12  _ /var/vcap/packages/redis26/bin/redis-server /var/vcap/store/redis/instances/9407af2c-0628-484b-a5f8-5c8634421a35/redis.conf
 ...
 </pre>
 
@@ -269,12 +269,12 @@ vcap@18fglrqcs23:~$ ps aux --cols=2000
 USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
 root         1  0.0  0.0   1124   292 ?        S s  Feb20   0:00 wshd: 18fglrqcs23
 vcap        35  0.0  0.0  17712  1180 ?        S s  Feb20   0:00 /bin/bash
-vcap        36  0.8  1.0  68568 44316 ?        S l  Feb20  36:05  \_ /var/vcap/packages/erlang/lib/erlang/erts-6.2/bin/beam -W w -K true -A30 -P 1048576 -- -root /var/vcap/packages/erlang/lib/erlang -progname erl -- -home /home/vcap -- -pa /var/vcap/packages/rabbitmq-3.0/sbin/../ebin -noshell -noinput -s rabbit boot -sname f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost -boot start_sasl -config /var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/config/rabbitmq -kernel inet_default_connect_options [{nodelay,true}] -rabbit tcp_listeners [{"auto",10001}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit error_logger {file,"/var/vcap/sys/service-log/rabbit/f80a348e-e937-4e4d-96c9-d65ef35ed960/f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost.log"} -rabbit sasl_error_logger {file,"/var/vcap/sys/service-log/rabbit/f80a348e-e937-4e4d-96c9-d65ef35ed960/f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost-sasl.log"} -rabbit enabled_plugins_file "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/config/enabled_plugins" -rabbit plugins_dir "/var/vcap/packages/rabbitmq-3.0/sbin/../plugins" -rabbit plugins_expand_dir "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/plugins" -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/mnesia" -smp disable
-vcap       117  0.0  0.0  10792   356 ?        S s  Feb20   0:00      \_ inet_gethost 4
-vcap       118  0.0  0.0  17112   800 ?        S    Feb20   0:00          \_ inet_gethost 4
+vcap        36  0.8  1.0  68568 44316 ?        S l  Feb20  36:05  _ /var/vcap/packages/erlang/lib/erlang/erts-6.2/bin/beam -W w -K true -A30 -P 1048576 -- -root /var/vcap/packages/erlang/lib/erlang -progname erl -- -home /home/vcap -- -pa /var/vcap/packages/rabbitmq-3.0/sbin/../ebin -noshell -noinput -s rabbit boot -sname f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost -boot start_sasl -config /var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/config/rabbitmq -kernel inet_default_connect_options [{nodelay,true}] -rabbit tcp_listeners [{"auto",10001}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit error_logger {file,"/var/vcap/sys/service-log/rabbit/f80a348e-e937-4e4d-96c9-d65ef35ed960/f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost.log"} -rabbit sasl_error_logger {file,"/var/vcap/sys/service-log/rabbit/f80a348e-e937-4e4d-96c9-d65ef35ed960/f80a348e-e937-4e4d-96c9-d65ef35ed960@localhost-sasl.log"} -rabbit enabled_plugins_file "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/config/enabled_plugins" -rabbit plugins_dir "/var/vcap/packages/rabbitmq-3.0/sbin/../plugins" -rabbit plugins_expand_dir "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/plugins" -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir "/var/vcap/store/rabbit/instances/f80a348e-e937-4e4d-96c9-d65ef35ed960/mnesia" -smp disable
+vcap       117  0.0  0.0  10792   356 ?        S s  Feb20   0:00      _ inet_gethost 4
+vcap       118  0.0  0.0  17112   800 ?        S    Feb20   0:00          _ inet_gethost 4
 vcap        55  0.0  0.0  10824   332 ?        S    Feb20   0:01 /var/vcap/packages/erlang/lib/erlang/erts-6.2/bin/epmd -daemon
 vcap     14969  0.0  0.0  17892  1804 pts/0    S s  13:36   0:00 /bin/bash
-vcap     14993  0.0  0.0  15036  1004 pts/0    R +  13:36   0:00  \_ ps auxf --cols=2000
+vcap     14993  0.0  0.0  15036  1004 pts/0    R +  13:36   0:00  _ ps auxf --cols=2000
 
 </pre>
 
