@@ -1,0 +1,38 @@
+---
+title: Cloud Foundry Component Metrics
+owner: Logging and Metrics
+---
+
+<strong><%= modified_date %></strong>
+
+<a id='top'></a>This topic lists and describes the metrics available for <%=vars.first_product_name%> system components. These metrics are streamed from the Loggregator [Firehose](./architecture.html).
+
+<%= vars.dea_metrics %> 
+
+##<a id='cc'></a>Cloud Controller
+<%= partial './metrics/cloud_controller' %>
+
+##<a id='diego'></a>Diego
+<%= partial './metrics/diego' %>
+
+##<a id='doppler'></a>DopplerServer
+<%= partial './metrics/doppler' %>
+
+##<a id='etcd'></a>Etcd
+<%= partial './metrics/etcd' %>
+
+##<a id='metron'></a>Metron Agent
+<%= partial './metrics/metron_agent' %>
+
+##<a id='routing'></a>Routing
+<%= partial './metrics/routing' %>
+
+##<a id='syslog'></a>Syslog Drain Binder
+<%= partial './metrics/syslog_drain_binder' %>
+
+##<a id='traffic'></a>Traffic Controller
+<%= partial './metrics/traffic_controller' %>
+
+##<a id='uaa'></a>User Account and Authentication (UAA)
+<%= partial './metrics/uaa' %>
+

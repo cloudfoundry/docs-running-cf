@@ -1,0 +1,49 @@
+Default Origin Name: MetronAgent
+
+Metric Name                                    | Description
+-----------------------------------------------|----------------------------------------------------------------------------------------------------------------
+ MessageAggregator.counterEventReceived        | Lifetime number of CounterEvents aggregated in Metron.
+ MessageBuffer.droppedMessageCount             | Lifetime number of intentionally dropped messages from Metron's batch writer buffer. Batch writing is performed over TCP/TLS only.
+ DopplerForwarder.sentMessages                 | Lifetime number of messages sent to Doppler regardless of protocol. Emitted every 30 seconds.
+ dropsondeAgentListener.currentBufferCount     | Instantaneous number of Dropsonde messages read by UDP socket  but not yet unmarshalled.
+ dropsondeAgentListener.receivedByteCount      | Lifetime number of bytes of Dropsonde messages read by UDP socket.
+ dropsondeAgentListener.receivedMessageCount   | Lifetime number of Dropsonde messages read by UDP socket.
+ dropsondeMarshaller.containerMetricMarshalled | Lifetime number of ContainerMetric messages marshalled.
+ dropsondeMarshaller.counterEventMarshalled    | Lifetime number of CounterEvent messages marshalled.
+ dropsondeMarshaller.errorMarshalled           | Lifetime number of Error messages marshalled.
+ dropsondeMarshaller.heartbeatMarshalled       | Lifetime number of Heartbeat messages marshalled.
+ dropsondeMarshaller.httpStartStopMarshalled   | Lifetime number of HttpStartStop messages marshalled.
+ dropsondeMarshaller.logMessageMarshalled      | Lifetime number of LogMessage messages marshalled.
+ dropsondeMarshaller.marshalErrors             | Lifetime number of errors when marshalling messages.
+ dropsondeMarshaller.valueMetricMarshalled     | Lifetime number of ValueMetric messages marshalled.
+ dropsondeUnmarshaller.containerMetricReceived | Lifetime number of ContainerMetric messages unmarshalled.
+ dropsondeUnmarshaller.counterEventReceived    | Lifetime number of CounterEvent messages unmarshalled.
+ dropsondeUnmarshaller.errorReceived           | Lifetime number of Error messages unmarshalled.
+ dropsondeUnmarshaller.heartbeatReceived       | DEPRECATED
+ dropsondeUnmarshaller.httpStartStopReceived   | Lifetime number of HttpStartStop messages unmarshalled.
+ dropsondeUnmarshaller.logMessageTotal         | Lifetime number of LogMessage messages unmarshalled.
+ dropsondeUnmarshaller.unmarshalErrors         | Lifetime number of errors when unmarshalling messages.
+ dropsondeUnmarshaller.valueMetricReceived     | Lifetime number of ValueMetric messages unmarshalled.
+ legacyAgentListener.currentBufferCount        | Instantaneous number of Legacy messages read by UDP socket but not yet unmarshalled.
+ legacyAgentListener.receivedByteCount         | Lifetime number of bytes of Legacy messages read by UDP socket.
+ legacyAgentListener.receivedMessageCount      | Lifetime number of Legacy messages read by UDP socket.
+ memoryStats.lastGCPauseTimeNS                 | Duration of the last Garbage Collector pause in nanoseconds.
+ memoryStats.numBytesAllocated                 | Instantaneous count of bytes allocated and still in use.
+ memoryStats.numBytesAllocatedHeap             | Instantaneous count of bytes allocated on the main heap and still in use.
+ memoryStats.numBytesAllocatedStack            | Instantaneous count of bytes used by the stack allocator.
+ memoryStats.numFrees                          | Lifetime number of memory deallocations.
+ memoryStats.numMallocs                        | Lifetime number of memory allocations.
+ numCpus                                       | Number of CPUs on the machine.
+ numGoRoutines                                 | Instantaneous number of active goroutines in the Doppler process.
+ tcp.sendErrorCount                            | Lifetime number of errors if writing to Doppler over TCP fails.
+ tcp.sentByteCount                             | Lifetime number of sent bytes to Doppler over TCP.
+ tcp.sentMessageCount                          | Lifetime number of sent messages to Doppler over TCP.
+ tls.sendErrorCount                            | Lifetime number of errors if writing to Doppler over TLS fails.
+ tls.sentByteCount                             | Lifetime number of sent bytes to Doppler over TLS. Emitted every 30 seconds.
+ tls.sentMessageCount                          | Lifetime number of sent messages to Doppler over TLS. Emitted every 30 seconds.
+ udp.sendErrorCount                            | Lifetime number of errors if writing to Doppler over UDP fails.
+ udp.sentByteCount                             | Lifetime number of sent bytes to Doppler over UDP.
+ udp.sentMessageCount                          | Lifetime number of sent messages to Doppler over UDP.
+
+
+[Top](#top)

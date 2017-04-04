@@ -1,0 +1,18 @@
+Default Origin Name: LoggregatorTrafficController
+
+Metric Name                            | Description
+---------------------------------------|-----------------------------------------------------------------------------------------
+ dopplerProxy.containermetricsLatency  | Duration for serving container metrics via the containermetrics endpoint (milliseconds). Emitted every 30 seconds.
+ dopplerProxy.recentlogsLatency        | Duration for serving recent logs via the recentLogs endpoint (milliseconds). Emitted every 30 seconds.
+ memoryStats.lastGCPauseTimeNS         | Duration of the last Garbage Collector pause in nanoseconds.
+ memoryStats.numBytesAllocated         | Instantaneous count of bytes allocated and still in use.
+ memoryStats.numBytesAllocatedHeap     | Instantaneous count of bytes allocated on the main heap and still in use.
+ memoryStats.numBytesAllocatedStack    | Instantaneous count of bytes used by the stack allocator.
+ memoryStats.numFrees                  | Lifetime number of memory deallocations.
+ memoryStats.numMallocs                | Lifetime number of memory allocations.
+ numCPUS                               | Number of CPUs on the machine.
+ numGoRoutines                         | Instantaneous number of active goroutines in the Doppler process.
+ Uptime                                | Uptime for the Traffic Controller's process. Emitted every 30 seconds.
+ LinuxFileDescriptor                   | Number of file handles for the TrafficController's process.
+
+[Top](#top)

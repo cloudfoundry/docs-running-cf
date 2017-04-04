@@ -1,0 +1,45 @@
+Default Origin Name: cc
+
+Metric Name                                         | Description
+----------------------------------------------------|--------------------------------------------------------------------------------------------------
+failed\_job\_count.\<VM\_NAME\>-\<VM\_INDEX\>         | Number of failed jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue. This is the number of delayed jobs where the `failed at` column is populated with the time of the most recently failed attempt at the job. The failed job count is not specific to the jobs run by the Cloud Controller worker. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
+failed\_job\_count.cc-generic                       | Number of failed jobs in the cc-generic queue. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
+failed\_job\_count.total                            | Number of failed jobs in all queues. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
+http\_status.1XX                                    | Number of HTTP response status codes of type 1xx (informational). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle.
+http\_status.2XX                                    | Number of HTTP response status codes of type 2xx (success). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle. Emitted for each Cloud Controller request.
+http\_status.3XX                                    | Number of HTTP response status codes of type 3xx (redirection). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle. Emitted for each Cloud Controller request.
+http\_status.4XX                                    | Number of HTTP response status codes of type 4xx (client error). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle. Emitted for each Cloud Controller request.
+http\_status.5XX                                    | Number of HTTP response status codes of type 5xx (server error). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle.
+job\_queue\_length.cc-\<VM\_NAME\>-\<VM\_INDEX\>      | Number of background jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue that have yet to run for the first time. Emitted every 30 seconds per VM.
+job\_queue\_length.cc-generic                       | Number of background jobs in the cc-generic queue that have yet to run for the first time. Emitted every 30 seconds per VM.
+job\_queue\_length.total                            | Total number of background jobs in the queues that have yet to run for the first time. Emitted every 30 seconds per VM.
+log\_count.all                                      | Total number of log messages, sum of messages of all severity levels. The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
+log\_count.debug                                    | Number of log messages of severity "debug." The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
+log\_count.debug1                                   | Not used.
+log\_count.debug2                                   | Number of log messages of severity "debug2." The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
+log\_count.error                                    | Number of log messages of severity "error." Error is the most severe level. It is used for failures and during error handling. Most errors can be found under this log level, eg. failed unbinding a service, failed to cancel a task, Diego app crashed error, staging completion errors, staging errors, and resource not found. The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
+log\_count.fatal                                    | Number of log messages of severity "fatal." The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
+log\_count.info                                     | Number of log messages of severity "info." Examples of info messages are droplet created, copying package, uploading package, access denied due to insufficient scope, job logging, blobstore actions, staging requests, and app running requests. The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
+log\_count.off                                      | Number of log messages of severity "off." The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
+log\_count.warn                                     | Number of log messages of severity "warn."  Warn is also used for failures and during error handling, eg. diagnostics written to file, failed to capture diagnostics, app rollback failed, service broker already deleted, and UAA token problems. The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
+requests.completed                                  | Number of requests that have been processed. Emitted for each Cloud Controller request.
+requests.outstanding                                | Number of request that are currently being processed. Emitted for each Cloud Controller request.
+tasks\_running.count                                | Number of currently running tasks. Emitted every 30 seconds per VM. This metric is only seen in version 3 of the Cloud Foundry API.
+tasks\_running.memory\_in\_mb                       | Memory being consumed by all currently running tasks. Emitted every 30 seconds per VM. This metric is only seen in version 3 of the Cloud Foundry API.
+thread\_info.event\_machine.connection\_count       | Number of open connections to event machine. Emitted every 30 seconds per VM.
+thread\_info.event\_machine.resultqueue.num\_waiting | Number of scheduled tasks in the result. Emitted every 30 seconds per VM.
+thread\_info.event\_machine.resultqueue.size        | Number of unscheduled tasks in the result. Emitted every 30 seconds per VM.
+thread\_info.event\_machine.threadqueue.num\_waiting | Number of scheduled tasks in the threadqueue. Emitted every 30 seconds per VM.
+thread\_info.event\_machine.threadqueue.size        | Number of unscheduled tasks in the threadqueue. Emitted every 30 seconds per VM.
+thread\_info.thread\_count                          | Total number of threads that are either runnable or stopped. Emitted every 30 seconds per VM.
+total\_users                                        | Total number of users ever created, including inactive users. Emitted every 10 minutes per VM.
+vcap\_sinatra.recent\_errors                        | 50 most recent errors. DEPRECATED
+vitals.cpu                                          | Percentage of CPU used by the Cloud Controller process. Emitted every 30 seconds per VM.
+vitals.cpu\_load\_avg                               | System CPU load averaged over the last 1 minute according to the OS. Emitted every 30 seconds per VM.
+vitals.mem\_bytes                                   | The RSS bytes (resident set size) or real memory of the Cloud Controller process. Emitted every 30 seconds per VM.
+vitals.mem\_free\_bytes                             | Total memory available according to the OS. Emitted every 30 seconds per VM.
+vitals.mem\_used\_bytes                             | Total memory used (active + wired) according to the OS. Emitted every 30 seconds per VM.
+vitals.num\_cores                                   | The number of CPUs of a host machine. Emitted every 30 seconds per VM.
+vitals.uptime                                       | The uptime of the Cloud Controller process in seconds. Emitted every 30 seconds per VM.
+
+[Top](#top)

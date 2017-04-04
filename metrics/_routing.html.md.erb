@@ -1,0 +1,98 @@
+Routing Release metrics have following origin names:
+
+
++ [gorouter](#gorouter)
++ [routing_api] (#routing_api)
++ [tcp_emitter] (#tcp_emitter)
++ [tcp_router] (#tcp_router)
+
+
+<a id="gorouter"></a>Default Origin Name: gorouter
+
+ Metric Name                        | Description
+------------------------------------|----------------------------------------------------------------------------------------------------------------
+ memoryStats.lastGCPauseTimeNS      | Duration of the last Garbage Collector pause in nanoseconds. Emitted every 10 seconds.
+ memoryStats.numBytesAllocated      | Instantaneous count of bytes allocated and still in use. Emitted every 10 seconds.
+ memoryStats.numBytesAllocatedHeap  | Instantaneous count of bytes allocated on the main heap and still in use. Emitted every 10 seconds.
+ memoryStats.numBytesAllocatedStack | Instantaneous count of bytes used by the stack allocator. Emitted every 10 seconds.
+ memoryStats.numFrees               | Lifetime number of memory deallocations. Emitted every 10 seconds.
+ memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
+ numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
+ numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
+ logSenderTotalMessagesRead         | Lifetime number of application log messages. Emitted every 5 seconds.
+ bad\_gateways                      | Lifetime number of bad gateways. Emitted every 5 seconds.
+ latency                            | Time in milliseconds that the Gorouter took to handle requests to its application endpoints. Emitted per router request.
+ latency.{component}                | Time in milliseconds that the Gorouter took to handle requests from each component to its endpoints. Emitted per router request.
+ registry\_message.{component}      | Lifetime number of route register messages received for each component. Emitted per route-register message.
+ unregistry\_message.{component}    | Lifetime number of route unregister messages received for each component. Emitted per route-unregister message.
+ rejected\_requests                 | Lifetime number of bad requests received on Gorouter. Emitted every 5 seconds.
+ requests.{component}               | Lifetime number of requests received for each component. Emitted every 5 seconds.
+ responses                          | Lifetime number of HTTP responses. Emitted every 5 seconds.
+ responses.2xx                      | Lifetime number of 2xx HTTP responses. Emitted every 5 seconds.
+ responses.3xx                      | Lifetime number of 3xx HTTP response. Emitted every 5 seconds.
+ responses.4xx                      | Lifetime number of 4xx HTTP response. Emitted every 5 seconds.
+ responses.5xx                      | Lifetime number of 5xx HTTP response. Emitted every 5 seconds.
+ responses.xxx                      | Lifetime number of other(non-(2xx-5xx)) HTTP response. Emitted every 5 seconds.
+ route\_lookup\_time	               | Time in nanoseconds to look up a request URL in the route table. Emitted per router request.
+ websocket_upgrades                 | Lifetime number of WebSocket upgrades. Emitted every 5 seconds.
+ websocket_failures                 | Lifetime number of WebSocket failures. Emitted every 5 seconds.
+ routed\_app\_requests              | The collector sums up requests for all dea-{index} components for its output metrics. Emitted every 5 seconds.
+ total\_requests                    | Lifetime number of requests received. Emitted every 5 seconds.
+ ms\_since\_last\_registry\_update  | Time in millisecond since the last route register has been been received. Emitted every 30 seconds.
+ total\_routes                      | Current number of routes registered. Emitted every 30 seconds.
+ uptime                             | Uptime for router. Emitted every second.
+
+<a id="routing_api"></a>Default Origin Name: routing_api
+
+ Metric Name                        | Description
+------------------------------------|----------------------------------------------------------------------------------------------------------------
+ memoryStats.lastGCPauseTimeNS      | Duration of the last Garbage Collector pause in nanoseconds. Emitted every 10 seconds.
+ memoryStats.numBytesAllocated      | Instantaneous count of bytes allocated and still in use. Emitted every 10 seconds.
+ memoryStats.numBytesAllocatedHeap  | Instantaneous count of bytes allocated on the main heap and still in use. Emitted every 10 seconds.
+ memoryStats.numBytesAllocatedStack | Instantaneous count of bytes used by the stack allocator. Emitted every 10 seconds.
+ memoryStats.numFrees               | Lifetime number of memory deallocations. Emitted every 10 seconds.
+ memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
+ numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
+ numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
+ key\_refresh\_events               | Total number of events when fresh token was fetched from UAA. Emitted every 30 seconds.
+ total\_http\_routes                | Number of HTTP routes in the routing table. Emitted every 30 seconds, or when there is a new HTTP route added. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
+ total\_http\_subscriptions         | Number of HTTP routes subscriptions. Emitted every 30 seconds. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
+ total\_tcp\_routes                 | Number of TCP routes in the routing table. Emitted every 30 seconds, or when there is a new TCP route added. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
+ total\_tcp\_subscriptions          | Number of TCP routes subscriptions. Emitted every 30 seconds. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
+ total\_token\_errors               | Total number of UAA token errors. Emitted every 30 seconds. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
+
+<a id="tcp_emitter"></a>Default Origin Name: tcp_emitter
+
+ Metric Name                        | Description
+------------------------------------|----------------------------------------------------------------------------------------------------------------
+ memoryStats.lastGCPauseTimeNS      | Duration of the last Garbage Collector pause in nanoseconds. Emitted every 10 seconds.
+ memoryStats.numBytesAllocated      | Instantaneous count of bytes allocated and still in use. Emitted every 10 seconds.
+ memoryStats.numBytesAllocatedHeap  | Instantaneous count of bytes allocated on the main heap and still in use. Emitted every 10 seconds.
+ memoryStats.numBytesAllocatedStack | Instantaneous count of bytes used by the stack allocator. Emitted every 10 seconds.
+ memoryStats.numFrees               | Lifetime number of memory deallocations. Emitted every 10 seconds.
+ memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
+ numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
+ numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
+
+
+<a id="tcp_router"></a>Default Origin Name: tcp-router
+
+ Metric Name                        | Description
+------------------------------------|----------------------------------------------------------------------------------------------------------------
+ memoryStats.lastGCPauseTimeNS      | Duration of the last Garbage Collector pause in nanoseconds. Emitted every 10 seconds.
+ memoryStats.numBytesAllocated      | Instantaneous count of bytes allocated and still in use. Emitted every 10 seconds.
+ memoryStats.numBytesAllocatedHeap  | Instantaneous count of bytes allocated on the main heap and still in use. Emitted every 10 seconds.
+ memoryStats.numBytesAllocatedStack | Instantaneous count of bytes used by the stack allocator. Emitted every 10 seconds.
+ memoryStats.numFrees               | Lifetime number of memory deallocations. Emitted every 10 seconds.
+ memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
+ numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
+ numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
+ {session_id}.ConnectionTime        | Average connection time to backend in current session. Emitted every 60 seconds per session ID. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+ {session_id}.CurrentSessions       | Total number of current sessions. Emitted every 60 seconds per session ID. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+ AverageConnectTimeMs               | Average backend response time (in ms). Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+ AverageQueueTimeMs                 | Average time spent in queue (in ms). Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+ TotalBackendConnectionErrors       | Total number of backend connection errors. Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+ TotalCurrentQueuedRequests         | Total number of requests unassigned in queue. Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+
+
+ [Top](#top)
