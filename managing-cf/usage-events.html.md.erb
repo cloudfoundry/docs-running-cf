@@ -23,11 +23,13 @@ App Usage Events expire after 31 days by default. This is configurable using the
 For documentation on the response information, see the [api docs](http://apidocs.cloudfoundry.org/latest-release/app_usage_events/list_all_app_usage_events.html).
 
 #### Event States
-App Usage Events have the following valid states: 'STARTED', 'STOPPED', and 'BUILDPACK_SET'.
+App Usage Events have the following valid states: 'STARTED', 'STOPPED', 'TASK\_STARTED', 'TASK\_STOPPED', and 'BUILDPACK_SET'.
 
 Multiple 'STARTED' events can occur in a row, so as to indicate updates to the app. You can parse the response to determine the specific difference.
 
 Multiple 'STOPPED' events cannot occur without 'STARTED' events between them.
+
+The usage events for 'TASK_*' events do not indicate application state, instead they indicate that a one-off task was executed.
 
 The App Usage Events with the 'BUILDPACK_SET' state do not represent an actual application state. Instead, they signify that a buildpack has been used for the application. This can be used by operators who wish to charge for buildpack usage.
 
