@@ -44,34 +44,6 @@ Replace `YOUR-TRANSPORT-PROTOCOL` with one of the following transport protocols:
 
 You can customize each Loggregator component by changing its properties in the CF deployment manifest. The following details some of the most commonly used changes.
 
-### DEA Logging Agent ###
-
-<p class="note"><strong>Note</strong>: The DEA Logging Agent only exists in versions of Cloud Foundry that use the older Droplet Execution Agent (DEA) architecture, instead of the newer Diego architecture. For more information, see the <a href="../../concepts/diego/dea-vs-diego.html">Differences Between DEA and Diego Architectures</a> topic.</p>
-
-<table>
-  <tr>
-    <th><strong>Property</strong></th>
-    <th><strong>Description</strong></th>
-    <th><strong>Default</strong></th>
-  </tr>
-  <tr>
-    <td>dea_logging_agent.debug</td>
-      <td>Boolean value to enable verbose mode</td>
-      <td><code>false</code>
-    </td>
-  </tr>
-  <tr>
-    <td>metron_endpoint.host</td>
-    <td>Host used to emit messages to the Metron agent</td>
-    <td><code>127.0.0.1</code></td>
-  </tr>
-  <tr>
-    <td>metron_endpoint.dropsonde_port</td>
-    <td>Port used to emit dropsonde messages to the Metron agent</td>
-    <td><code>3457</code></td>
-  </tr>
-</table>
-
 ### Doppler ###
 
 <table>
@@ -87,7 +59,7 @@ You can customize each Loggregator component by changing its properties in the C
   </tr>
   <tr>
     <td>doppler.debug</td>
-    <td>Boolean value to enable verbose logging for DEA agent and Doppler server (the Doppler system)</td>
+    <td>Boolean value to enable verbose logging for Diego and Doppler server (the Doppler system)</td>
     <td><code>false</code></td>
   </tr>
   <tr>
@@ -236,7 +208,7 @@ You can customize each Loggregator component by changing its properties in the C
     <th><strong>Default</strong></th>
   <tr>
     <td>traffic_controller.debug</td>
-    <td>Boolean value to enable verbose logging for DEA agent and Loggregator server (the Loggregator system)</td>
+    <td>Boolean value to enable verbose logging for Diego and Loggregator server (the Loggregator system)</td>
     <td><code>false</code></td>
   </tr>
   <tr>
