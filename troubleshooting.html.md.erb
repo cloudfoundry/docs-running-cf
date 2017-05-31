@@ -471,39 +471,3 @@ task.
     . . .
     </pre>
 
-###<a id="scale-deas"></a>Scale Droplet Execution Agents ###
-
-In older versions of Cloud Foundry that use the Droplet Execution Agent (DEA) architecture, DEAs stage and run applications.
-Follow the steps below to increase the resource pool for DEAs and the number of
-DEAs available in your deployment.
-
-1. Run `bosh download manifest YOUR-DEPLOYMENT-NAME prod-current.yml` to
-download a copy of your existing deployment manifest.
-1. Run `bosh deployment prod-current.yml` to instruct BOSH to reference the
-downloaded deployment manifest.
-1. Edit `prod-current.yml`, increasing the resource pool for DEAs and the number
-of DEAs.
-1. Run `bosh deploy` to update your deployment.
-
-###<a id="hm9000"></a>Recover from HM9000 Failure ###
-
-In older versions of Cloud Foundry that use the Droplet Execution Agent (DEA) architecture, the Cloud Foundry Health Manager, HM9000, reconciles the expected states of applications and VMs in a deployment with their actual states.
-To do this, the HM9000 uses state information kept in
-[etcd](https://github.com/coreos/etcd), a high-availability data store
-distributed across multiple nodes.
-
-If etcd enters a bad state and becomes unable to write data, the HM9000 cannot
-operate correctly.
-To resolve this issue, delete the contents of the etcd data store.
-Doing so forces Cloud Foundry to rebuild the etcd data store from current data
-and allows the HM9000 to recover.
-
-To delete the contents of the etcd data store:
-
-1. Run `bosh vms` to identify the etcd nodes in your deployment.
-1. Run `bosh ssh` to open a secure shell into each etcd node.
-1. Run `monit stop etcd` on each etcd node.
-1. Delete or move the etcd storage directory, `/var/vcap/store/etcd`, on each etcd
-node.
-1. Run the script `/var/vcap/jobs/etcd/bin/pre-start` to re-create the storage directory.
-1. Run `monit start etcd` on each etcd node.
