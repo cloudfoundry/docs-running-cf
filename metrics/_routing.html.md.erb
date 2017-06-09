@@ -23,7 +23,7 @@ Routing Release metrics have following origin names:
  bad\_gateways                      | Lifetime number of bad gateways. Emitted every 5 seconds.
  latency                            | Time in milliseconds that the Gorouter took to handle requests to its application endpoints. Emitted per router request.
  latency.{component}                | Time in milliseconds that the Gorouter took to handle requests from each component to its endpoints. Emitted per router request.
- registry\_message.{component}      | Lifetime number of route register messages received for each component. Emitted per route-register message.
+ registry\_message.{component}      | Lifetime number of route register messages received for each component. Emitted every 5 seconds.
  unregistry\_message.{component}    | Lifetime number of route unregister messages received for each component. Emitted per route-unregister message.
  rejected\_requests                 | Lifetime number of bad requests received on Gorouter. Emitted every 5 seconds.
  requests.{component}               | Lifetime number of requests received for each component. Emitted every 5 seconds.
