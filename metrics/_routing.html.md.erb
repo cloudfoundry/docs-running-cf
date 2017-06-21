@@ -33,7 +33,7 @@ Routing Release metrics have following origin names:
  responses.4xx                      | Lifetime number of 4xx HTTP response. Emitted every 5 seconds.
  responses.5xx                      | Lifetime number of 5xx HTTP response. Emitted every 5 seconds.
  responses.xxx                      | Lifetime number of other(non-(2xx-5xx)) HTTP response. Emitted every 5 seconds.
- route\_lookup\_time	               | Time in nanoseconds to look up a request URL in the route table. Emitted per router request.
+ route\_lookup\_time                | Time in nanoseconds to look up a request URL in the route table. Emitted per router request.
  websocket_upgrades                 | Lifetime number of WebSocket upgrades. Emitted every 5 seconds.
  websocket_failures                 | Lifetime number of WebSocket failures. Emitted every 5 seconds.
  routed\_app\_requests              | The collector sums up requests for all dea-{index} components for its output metrics. Emitted every 5 seconds.
@@ -41,6 +41,7 @@ Routing Release metrics have following origin names:
  ms\_since\_last\_registry\_update  | Time in millisecond since the last route register has been been received. Emitted every 30 seconds.
  total\_routes                      | Current number of routes registered. Emitted every 30 seconds.
  uptime                             | Uptime for router. Emitted every second.
+ file_descriptors                   | Number of file descriptors currently used by gorouter. Emitted every 5 seconds.
 
 <a id="routing_api"></a>Default Origin Name: routing_api
 
