@@ -2,7 +2,8 @@ Default Origin Name: cc
 
 Metric Name                                         | Description
 ----------------------------------------------------|--------------------------------------------------------------------------------------------------
-failed\_job\_count.\<VM\_NAME\>-\<VM\_INDEX\>         | Number of failed jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue. This is the number of delayed jobs where the `failed at` column is populated with the time of the most recently failed attempt at the job. The failed job count is not specific to the jobs run by the Cloud Controller worker. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
+diego_sync.invalid_desired_lrps                     | Number of invalid DesiredLRPs found during CF apps and Diego DesiredLRPs periodic synchronization. Emitted every 30 seconds.
+failed\_job\_count.\<VM\_NAME\>-\<VM\_INDEX\>       | Number of failed jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue. This is the number of delayed jobs where the `failed at` column is populated with the time of the most recently failed attempt at the job. The failed job count is not specific to the jobs run by the Cloud Controller worker. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
 failed\_job\_count.cc-generic                       | Number of failed jobs in the cc-generic queue. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
 failed\_job\_count.total                            | Number of failed jobs in all queues. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
 http\_status.1XX                                    | Number of HTTP response status codes of type 1xx (informational). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle.
@@ -10,7 +11,7 @@ http\_status.2XX                                    | Number of HTTP response st
 http\_status.3XX                                    | Number of HTTP response status codes of type 3xx (redirection). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle. Emitted for each Cloud Controller request.
 http\_status.4XX                                    | Number of HTTP response status codes of type 4xx (client error). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle. Emitted for each Cloud Controller request.
 http\_status.5XX                                    | Number of HTTP response status codes of type 5xx (server error). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle.
-job\_queue\_length.cc-\<VM\_NAME\>-\<VM\_INDEX\>      | Number of background jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue that have yet to run for the first time. Emitted every 30 seconds per VM.
+job\_queue\_length.cc-\<VM\_NAME\>-\<VM\_INDEX\>    | Number of background jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue that have yet to run for the first time. Emitted every 30 seconds per VM.
 job\_queue\_length.cc-generic                       | Number of background jobs in the cc-generic queue that have yet to run for the first time. Emitted every 30 seconds per VM.
 job\_queue\_length.total                            | Total number of background jobs in the queues that have yet to run for the first time. Emitted every 30 seconds per VM.
 log\_count.all                                      | Total number of log messages, sum of messages of all severity levels. The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
