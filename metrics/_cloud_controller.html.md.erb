@@ -4,6 +4,7 @@ Metric Name                                         | Description
 ----------------------------------------------------|--------------------------------------------------------------------------------------------------
 diego_sync.invalid_desired_lrps                     | Number of invalid DesiredLRPs found during CF apps and Diego DesiredLRPs periodic synchronization. Emitted every 30 seconds.
 failed\_job\_count.\<VM\_NAME\>-\<VM\_INDEX\>       | Number of failed jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue. This is the number of delayed jobs where the `failed at` column is populated with the time of the most recently failed attempt at the job. The failed job count is not specific to the jobs run by the Cloud Controller worker. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
+diego\_sync.duration                                | Time in milliseconds that it took to synchronize CF apps and Diego DesiredLRPs. Emitted every 30 seconds.
 failed\_job\_count.cc-generic                       | Number of failed jobs in the cc-generic queue. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
 failed\_job\_count.total                            | Number of failed jobs in all queues. By default, Cloud Controller deletes failed jobs after 31 days. Emitted every 30 seconds per VM.
 http\_status.1XX                                    | Number of HTTP response status codes of type 1xx (informational). This resets when the Cloud Controller process is restarted and is incremented at the end of each request cycle.
@@ -25,6 +26,11 @@ log\_count.off                                      | Number of log messages of 
 log\_count.warn                                     | Number of log messages of severity "warn."  Warn is also used for failures and during error handling, eg. diagnostics written to file, failed to capture diagnostics, app rollback failed, service broker already deleted, and UAA token problems. The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
 requests.completed                                  | Number of requests that have been processed. Emitted for each Cloud Controller request.
 requests.outstanding                                | Number of request that are currently being processed. Emitted for each Cloud Controller request.
+staging.requested                                   | Cumulative number of requests to start a staging task handled by each Cloud Controller.
+staging.succeeded                                   | Cumulative number of successful staging tasks handled by each Cloud Controller. Emitted every time a staging task completes successfully.
+staging.succeeded_duration                          | Time in milliseconds that the successful staging task took to run. Emitted each time a staging task completes successfully.
+staging.failed                                      | Cumulative number of failed staging tasks handled by each Cloud Controller. Emitted every time a staging task fails.
+staging.failed_duration                             | Time in milliseconds that the failed staging task took to run. Emitted each time a staging task fails.
 tasks\_running.count                                | Number of currently running tasks. Emitted every 30 seconds per VM. This metric is only seen in version 3 of the Cloud Foundry API.
 tasks\_running.memory\_in\_mb                       | Memory being consumed by all currently running tasks. Emitted every 30 seconds per VM. This metric is only seen in version 3 of the Cloud Foundry API.
 thread\_info.event\_machine.connection\_count       | Number of open connections to event machine. Emitted every 30 seconds per VM.
