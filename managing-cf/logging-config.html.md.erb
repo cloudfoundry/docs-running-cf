@@ -23,22 +23,8 @@ You can increase the number of Doppler servers by increasing the `instances` pro
 
 ## <a id='syslog-forward'></a> Enabling System Log Forwarding ##
 
-Cloud Foundry can forward syslog data to an external aggregator service instead of routing it to the Loggregator Firehose.
+Cloud Foundry can forward syslog data to an external aggregator using the [syslog-release](https://github.com/cloudfoundry/syslog-release).
 
-To do this, add the following properties to the `properties` hash in your CF deployment manifest:
-
-```
-properties:
-  syslog_daemon_config:
-      address: YOUR-SYSLOG-AGGREGATOR-IP
-      port: YOUR-SYSLOG-AGGREGATOR-TCP-PORT
-      transport: YOUR-TRANSPORT-PROTOCOL
-```
-Replace `YOUR-TRANSPORT-PROTOCOL` with one of the following transport protocols:
-
-- `tcp`
-- `udp`
-- `relp`
 
 ## <a id='customizing'></a>Customizing Loggregator Components ##
 
