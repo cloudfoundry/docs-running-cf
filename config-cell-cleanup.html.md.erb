@@ -1,18 +1,17 @@
 ---
-title: Configuring Cell Disk-Cleanup Scheduling
+title: Configuring Cell Disk Cleanup Scheduling
 owner: GrootFS
 ---
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to configure Disk-Cleanup scheduling
-on Diego Cell Virtual Machines (VMs)
-in Cloud Foundry (CF).
+This topic describes how to configure disk cleanup scheduling
+on Diego cells in Cloud Foundry (CF).
 
-## <a id='what'></a> What is Disk-Cleanup
+## <a id='what'></a> What is Disk Cleanup
 
 CF isolates application instances (AIs) from each other
-using containers that run inside Cells.
+using containers that run inside Diego cells.
 Containers enforce a set of isolation layers
 including file system isolation.
 A CF container file system can either be
@@ -20,51 +19,53 @@ a CF stack
 or the result of pulling a Docker image.
 
 For performance reasons,
-the Cells cache the Docker image layers and the CF stacks
+the cells cache the Docker image layers and the CF stacks
 that running AIs use.
 When CF destroys an AI (e.g.: as a result of `cf delete`)
-or when CF reschedules an AI to a different Cell,
+or when CF reschedules an AI to a different cell,
 there is a chance that certain Docker image layers,
 or an old CF stack
 will become unused.
 If CF does not clean these unused layers
-the Cell ephemeral Disk will slowily fill.
+the cell ephemeral disk will slowly fill.
 
-Disk-Cleanup is the process of removing unused layers
-from the Cell Disk.
-The Disk-Cleanup process will remove all unused Docker image layers
+Disk cleanup is the process of removing unused layers
+from the cell disk.
+The disk cleanup process will remove all unused Docker image layers
 and old CF Stacks,
 regardless of their size or age.
 
-## <a id='options'></a> Options for Disk-Cleanup
+## <a id='options'></a> Options for Disk Cleanup
 
 CF provides the following options
-for scheduling the Disk-Cleanup process
-on Cells: 
+for scheduling the disk cleanup process
+on Diego cells: 
 
 * **Never clean up the Cell Disk**:
   We do not recommend using this option
   for production environments.
 * **Routinely clean up the Cell Disk**:
-  This option makes the Cell schedule a Disk-Cleanup
+  This option makes the cell schedule a disk cleanup
   every time a container gets created.
-  Running the Disk-Cleanup process so frequently
-  may have a negative impact on the Cell performance.
+  Running the disk cleanup process so frequently
+  may have a negative impact on the cell performance.
 * **Clean up Disk space once a threshold is reached**:
-  Choosing this option makes the Cell schedule the Disk-Cleanup process
-  only when a configurable Disk space threshold is reached or exceeded.
+  Choosing this option makes the cell schedule the disk cleanup process
+  only when a configurable disk space threshold is reached or exceeded.
+
+See the [Configure Disk Cleanup Scheduling](#applying-configuration) section for how to choose one these options.
 
 ### <a id='recommendations'></a> Recommendations
 
-Choosing the best option for Disk-Cleanup depends
-on the workload that the Cells run:
-Docker images or buildpack-based apps.
+Choosing the best option for disk cleanup depends
+on the workload that the Diego cells run:
+Docker images or Cloud Foundry buildpack-based apps.
 
 For CF installations that mainly run **buildpack-based applications**
 we recommend using the second option:
 **Routinely clean up Cell Disk space**. 
 The **Routinely clean up Cell Disk space** option ensures
-that when a new stack becomes available on a Cell,
+that when a new stack becomes available on a cell,
 the old stack is dropped immediately from the cache.
 
 For CF installations that mainly run **Docker images**,
@@ -77,7 +78,7 @@ Choosing a threshold is described in
 
 ### <a id='choosing-a-threshold'></a> Choosing a Threshold
 
-To choose a realistic value when configuring the Disk-Cleanup threshold,
+To choose a realistic value when configuring the disk cleanup threshold,
 you must identify some of the most frequently used Docker images
 in your CF installation.
 Docker images tend to be constructed
@@ -85,7 +86,7 @@ by creating layers over existing, base, images.
 In some cases, you may find it easier
 to identify which base Docker images are most frequently used.  
 
-Follow the steps below to configure the Disk-Cleanup threshold:
+Follow the steps below to configure the disk cleanup threshold:
 
 1. Identify the most frequently used Docker images or base Docker images. 
 <br><br>Example: The most frequently used images in a test deployment are `openjdk:7`, `nginx:1.13`, and `php:7-apache`.
@@ -112,16 +113,13 @@ Example:
 <br><br>
 Example: Using the output above, the sample threshold calculation is (&nbsp;391&nbsp;MB&nbsp;+&nbsp;586&nbsp;MB&nbsp;+&nbsp;109&nbsp;MB&nbsp;)&nbsp;*&nbsp;1.2&nbsp;=&nbsp;1303.2&nbsp;MB
 
-## <a id='applying-configuration'></a> Applying the Disk-Cleanup Scheduling confiuration
+## <a id='applying-configuration'></a> Configure Disk Cleanup Scheduling
 
-There is a single BOSH property that controls the Disk-Cleanup scheduling:
-`garden.graph_cleanup_threshold_in_mb`.
-It receives the following values:
+To control how Diego cells schedule their disk cleanup, set the BOSH property `garden.graph_cleanup_threshold_in_mb` to one of the following [options](#options):
 
-* `-1` to **Never clean up the Cell Disk**.
-* `0` to **Routinely clean up the Cell Disk**.
-* A positive number to **Clean up Disk space once a threshold is reached**.
-  The provided number is the threshold.
+* `-1`: the cell never runs disk cleanup.
+* `0`: the cell runs disk cleanup whenever it creates a new container.
+* A positive number: the cell runs disk cleanup whenever its total disk usage exceeds the number, in MB. The number acts as the threshold.
   <br><br>
   Example: As calculated in the previous step,
   you would set the BOSH property to **1303**.
