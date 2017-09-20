@@ -7,6 +7,8 @@ owner:
 
 <strong><%= modified_date %></strong>
 
+_This topic assumes you are using [BOSH CLI v2](https://bosh.io/docs/cli-v2.html)._
+
 This guide provides help with diagnosing and resolving issues encountered when
 installing and running Cloud Foundry.
 
@@ -37,10 +39,10 @@ Error 450002: Timed out pinging to 1da06ba3de2f after 600 seconds
 
 Perform the following steps to determine the cause of the time out:
 
-* Use your IaaS console to make sure the timed-out virtual machine (VM) is booting correctly
-* Check the Agent log on the VM that timed out for a "handshake" connection
+* [Use your IaaS console](#boot-check) to make sure the timed-out virtual machine (VM) is booting correctly
+* [Check the Agent log](#handshake) on the VM that timed out for a "handshake" connection
 between the BOSH Director and the Agent
-* Use the [Netcat](http://nmap.org/ncat/) networking utility to test for routing
+* [Use the Netcat networking utility](#netcat) to test for routing
 issues to the NATS IP and port from the VM that timed out
 
 ####<a id="boot-check"></a>Use your IaaS console to make sure the timed-out VM is booting correctly ####
@@ -107,56 +109,54 @@ affected computer manually or by rebooting.
 
 ##<a id="issues-running"></a>Troubleshoot Cloud Foundry Operation Issues ##
 
+If you have not done so already, set an alias for the BOSH Director of the environment you are
+troubleshooting. You need this alias to run the BOSH CLI commands in this section.
+
+Run the following command to create a local alias for the BOSH Director using the BOSH CLI:
+
+<pre>bosh alias-env MY-ENV -e DIRECTOR-IP-ADDRESS --ca-cert PATH/TO/CERT</pre>
+
+Replace the placeholder text with the following:
+
+* `MY-ENV`: Enter an alias for the BOSH Director, such as `dev` or `prod`.
+* `DIRECTOR-IP-ADDRESS`: Enter the IP address of your BOSH Director VM.
+* `PATH/TO/CERT`: Enter the path to the Director CA certificate.
+
+For example:
+<pre class="terminal">
+$ bosh alias-env dev -e 10.0.0.3 --ca-cert /var/workspaces/default/ca_certificate
+</pre>
+
 ###<a id="bosh-cli"></a>Use the BOSH CLI for Troubleshooting ###
 
-1. Run `bosh target DIRECTOR-IP-ADDRESS` and provide your credentials to log
-into the BOSH Director.
+1. Run `bosh -e MY-ENV login` and provide your credentials to log in to the BOSH Director.
+Replace `MY-ENV` with the alias you set for your BOSH Director.
 
     <pre class="terminal">
-    $ bosh target 192.0.2.10
-    Target set to 'bosh'
-    Your username: admin
-    Enter password: *****
-    Logged in as 'admin'
+    $ bosh -e dev login
+    User ():
+    Password ():
     </pre>
 
 1. Use the following BOSH commands to troubleshoot your deployment:
 
-* [VMS](#vms): Lists all VMs in a deployment
-* [Cloudcheck](#cloudcheck): Cloud consistency check and interactive repair
-* [SSH](#ssh): Start an interactive session or execute commands with a
-VM
+  * [VMs](#vms): Lists all VMs in a deployment
+  * [Cloud check](#cloudcheck): Cloud consistency check and interactive repair
+  * [SSH](#ssh): Start an interactive session or execute commands with a VM
 
-####<a id="vms"></a>BOSH VMS ####
+####<a id="vms"></a>BOSH VMs ####
 
 `bosh vms` provides an overview of the virtual machines (VMs) BOSH is managing as part of the current deployment.
 
-<pre class="terminal">
-$ bosh vms
+To use this command, run `bosh -e MY-ENV -d MY-DEPLOYMENT vms`.
+Replace `MY-ENV` with your environment, and `MY-DEPLOYMENT` with a deployment. `-d MY-DEPLOYMENT` is optional.
 
-+-----------------------------------+---------+---------------------------------+---------------+
-| Job/index                         | State   | Resource Pool                      | IPs           |
-+-----------------------------------+---------+---------------------------------+---------------+
-| unknown/unknown                   | running | smoke-tests                        | 192.0.2.14 |
-| cloud_controller/0                | running | cloud_controller                   | 192.0.2.23 |
-| collector/0                       | running | collector                          | 192.0.2.25 |
-| consoledb/0                       | running | consoledb                          | 192.0.2.29 |
-| dea/0                             | running | dea                                | 192.0.2.47 |
-| health_manager/0                  | running | health_manager                  | 192.0.2.20 |
-| loggregator/0                     | running | loggregator                     | 192.0.2.31 |
-| loggregator_trafficcontroller/0   | running | loggregator_trafficcontroller   | 192.0.2.32 |
-| nats/0                            | running | nats                               | 192.0.2.19 |
-| nfs_server/0                      | running | nfs_server                         | 192.0.2.21 |
-| router/0                          | running | router                             | 192.0.2.16 |
-| saml_login/0                      | running | saml_login                         | 192.0.2.28 |
-| syslog/0                          | running | syslog                             | 192.0.2.24 |
-| uaa/0                             | running | uaa                                | 192.0.2.27 |
-| uaadb/0                           | running | uaadb                              | 192.0.2.26 |
-+-----------------------------------+---------+---------------------------------+---------------+
+<pre class="terminal">
+$ bosh -e prod -d cf vms
 </pre>
 
 `bosh vms` may show a VM in an <strong>unknown</strong> state.
-Run `bosh cloudcheck` on VMs in an unknown state to have BOSH attempt to
+Run `bosh cloud-check` on VMs in an unknown state to have BOSH attempt to
 diagnose the problem.
 
 You can also use `bosh vms` to identify VMs in your deployment, then use
@@ -164,23 +164,30 @@ You can also use `bosh vms` to identify VMs in your deployment, then use
 
 `bosh vms` supports the following arguments:
 
-* <strong>--details</strong>: Overview also includes Cloud ID, Agent ID, and
-whether or not the BOSH Resurrector has been enabled for each VM
-* <strong>--vitals</strong>: Overview also includes load, CPU, memory usage,
+* `--vitals`: Overview also includes load, CPU, memory usage,
 swap usage, system disk usage, ephemeral disk usage, and persistent disk usage
 for each VM
-* <strong>--dns</strong>: Overview also includes the DNS A record for each VM
+* `--dns`: Overview also includes the DNS A record for each VM
 
-####<a id="cloudcheck"></a>BOSH Cloudcheck ####
+####<a id="cloudcheck"></a>BOSH Cloud Check ####
 
-`bosh cloudcheck` attempts to detect differences between the VM state database
+`bosh cloud-check` attempts to detect differences between the VM state database
 that the BOSH Director maintains and the actual state of the VMs.
-For each difference detected, `bosh cloudcheck` offers repair options:
+
+To use this command, run `bosh -e MY -d MY-DEPLOYMENT cloud-check`.
+You can also use the alias `bosh cck`.
+Replace `MY-ENV` with your environment, and `MY-DEPLOYMENT` with a deployment. `-d MY-DEPLOYMENT` is optional.
+
+<pre class="terminal">
+$ bosh -e dev -d mysql cck
+</pre>
+
+For each difference detected, `bosh cloud-check` offers repair options:
 
 * `Reboot VM`: Instructs BOSH to reboot a VM. Rebooting can resolve many
 transient errors.
-* `Ignore problem`: Instructs `bosh cloudcheck` to do nothing.
-You might want to instruct `bosh cloudcheck` to ignore a problem in order to run
+* `Ignore problem`: Instructs `bosh cloud-check` to do nothing.
+You might want to instruct `bosh cloud-check` to ignore a problem in order to run
 `bosh ssh` and attempt troubleshooting directly on the machine.
 * `Reassociate VM with corresponding instance`: Updates the BOSH Director state
 database.
@@ -200,7 +207,7 @@ Once you delete the VM reference, BOSH can no longer control the VM.
 
 <strong>Unresponsive Agent</strong>
 <pre class="terminal">
-$ bosh cloudcheck
+$ bosh -e prod -d example-deployment cck
 ccdb/0 (vm-3e37133c-bc33-450e-98b1-f86d5b63502a) is not responding:
 - Ignore problem
 - Reboot VM
@@ -210,7 +217,7 @@ ccdb/0 (vm-3e37133c-bc33-450e-98b1-f86d5b63502a) is not responding:
 
 <strong>Missing VM</strong>
 <pre class="terminal">
-$ bosh cloudcheck
+$ bosh -e prod -d example-deployment cck
 VM with cloud ID `vm-3e37133c-bc33-450e-98b1-f86d5b63502a' missing:
 - Ignore problem
 - Recreate VM using last known apply spec
@@ -219,7 +226,7 @@ VM with cloud ID `vm-3e37133c-bc33-450e-98b1-f86d5b63502a' missing:
 
 <strong>Unbound Instance VM</strong>
 <pre class="terminal">
-$ bosh cloudcheck
+$ bosh -e prod -d example-deployment cck
 VM `vm-3e37133c-bc33-450e-98b1-f86d5b63502a' reports itself as `ccdb/0' but does not have a bound instance:
 - Ignore problem
 - Delete VM (unless it has persistent disk)
@@ -228,7 +235,7 @@ VM `vm-3e37133c-bc33-450e-98b1-f86d5b63502a' reports itself as `ccdb/0' but does
 
 <strong>Out of Sync VM</strong>
 <pre class="terminal">
-$ bosh cloudcheck
+$ bosh -e prod -d example-deployment cck
 VM `vm-3e37133c-bc33-450e-98b1-f86d5b63502a' is out of sync: expected `cf-d7293430724a2c421061: ccdb/0', got `cf-d7293430724a2c421061: nats/0':
 - Ignore problem
 - Delete VM (unless it has persistent disk)
@@ -242,41 +249,9 @@ To use `bosh ssh`:
 
 1. Run `ssh-keygen -t rsa` to provide BOSH with the correct public key.
 1. Accept the defaults.
-1. Run `bosh ssh`.
-1. Select a VM to access.
-1. Create a password for the temporary user the `bosh ssh` command creates.
-Use this password if you need sudo access in this session.
-
-  <pre class="terminal">
-  $ bosh ssh
-  1. ha\_proxy/0
-  2. nats/0
-  3. etcd\_and\_metrics/0
-  4. etcd\_and\_metrics/1
-  5. etcd\_and\_metrics/2
-  6. health\_manager/0
-  7. nfs\_server/0
-  8. ccdb/0
-  9. cloud\_controller/0
-  10. clock\_global/0
-  11. cloud\_controller\_worker/0
-  12. router/0
-  13. uaadb/0
-  14. uaa/0
-  15. login/0
-  16. consoledb/0
-  17. dea/0
-  18. loggregator/0
-  19. loggregator\_trafficcontroller/0
-  20. smoke-tests/0
-
-  Choose an instance: 17
-  Enter password (use it to sudo on remote host): *******
-  Target deployment `cf_services-2c3c918a135ab5f91ee1'
-
-  Setting up ssh artifacts
-  Starting interactive shell on job loggregator_trafficcontroller/0
-  </pre>
+1. Identify a VM to SSH into. Run `bosh -e MY-ENV -d MY-DEPLOYMENT vms` to list the VMs in the given deployment. Replace `MY-ENV` with your environment alias and `MY-DEPLOYMENT` with the deployment name.
+1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT ssh VM-NAME/GUID`. For example:
+  <pre class="terminal">$ bosh -e dev -d cf-deployment ssh diego-cell/abcd0123-a012-b345-c678-9def01234567</pre>
 
 ###<a id="viewing-logs"></a>View BOSH Logs ###
 
@@ -295,8 +270,9 @@ To use `bosh ssh`:
 
 1. Run `ssh-keygen -t rsa` to provide BOSH with the correct public key.
 1. Accept the defaults.
-1. Run `bosh ssh`.
-1. Select a VM to access.
+1. Identify a VM to SSH into. Run `bosh -e MY-ENV -d MY-DEPLOYMENT vms` to list the VMs in the given deployment. Replace `MY-ENV` with your environment alias and `MY-DEPLOYMENT` with the deployment name.
+1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT ssh VM-NAME/GUID`. For example:
+  <pre class="terminal">$ bosh -e dev -d cf-deployment ssh diego-cell/abcd0123-a012-b345-c678-9def01234567</pre>
 1. Review the `/var/vcap/bosh/log/current` log file.
 
 ####<a id="view-logs"></a>Using the BOSH Logs Command ####
@@ -305,31 +281,22 @@ Use `bosh logs` to output BOSH logs to standard output or to a file.
 
 To use `bosh logs`:
 
-1. Run `bosh vms` to identify VMs in your deployment by job name and index.
-1. Run `bosh logs JOB-NAME INDEX` to view the logs from the identified VM.
+1. Identify a VM. Run `bosh -e MY-ENV -d MY-DEPLOYMENT vms` to list the VMs in the given deployment. Replace `MY-ENV` with your environment alias and `MY-DEPLOYMENT` with the deployment name.
+1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT logs VM-NAME/GUID` to view the logs from the identified VM. For example:
+  <pre class="terminal">$ bosh -e dev -d cf-deployment logs diego-cell/abcd0123-a012-b345-c678-9def01234567</pre>
 
-###<a id="non-responsive"></a>Log into a Non-Responsive BOSH VM ###
+###<a id="non-responsive"></a>Log in to a Non-Responsive BOSH VM ###
 
 A VM under heavy system load can stop responding to some commands but still
 function in a limited way.
 If the VM does not respond to `bosh ssh`, use the following steps to open a
 secure shell in a more direct manner:
 
-1. Run `bosh vms` and note the IP address of the non-responsive VM.
+1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT vms` and note the IP address of the non-responsive VM.
+    <pre class="terminal">$ bosh -e prod -d cf-deployment vms</pre>
 1. Run `ssh -t vcap@IP-ADDRESS 'sh'` where IP-ADDRESS is the IP address of the
 non-responsive VM.
-
-    <pre class="terminal">
-    $ bosh vms
-
-    +---------------+---------+----------------+---------------+
-    | Job/index     | State   | Resource Pool  | IPs           |
-    +---------------+---------+----------------+---------------+
-    | mysql_node/0  | unknown | mysql_node     | 192.0.2.53 |
-    +---------------+---------+----------------+---------------+
-
-    $ ssh -t vcap@192.0.2.53 'sh'
-    </pre>
+    <pre class="terminal">$ ssh -t vcap<span>@</span>192.0.2.53 'sh'</pre>
 
 ###<a id="terminate"></a>Terminate a BOSH SSH Session ###
 
@@ -343,9 +310,9 @@ remaining `~.` command to the inner `ssh` session.
 
 ###<a id="failing-job"></a>Debug a Failing Job ###
 
-1. Run `bosh vms` to determine which job VMs in your deployment are failing.
+1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT vms` to determine which job VMs in your deployment are failing.
 Note the job name and index of the failing VM.
-1. Run `bosh ssh JOB-NAME/INDEX` to open a secure shell into the failing VM.
+1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT ssh VM-NAME/GUID` to open a secure shell into the failing VM.
 1. Run `sudo su -` to enter the root environment with root privileges.
 1. Run `monit summary` to determine which processes are not running.
 1. Review the log files found in `/var/vcap/sys/log/` to determine the root
@@ -386,9 +353,7 @@ $ ssh-keygen -t rsa
 </pre>
 1. Accept the defaults.
 1. Begin an SSH session to the deployment.
-<pre class="terminal">
-$ bosh ssh
-</pre>
+<pre class="terminal">$ bosh -e prod -d cf-deployment ssh diego-cell/abcd0123-a012-b345-c678-9def01234567</pre>
 1. Enter the number corresponding to the <code>cloud_controller</code> from the list of VMs.
 1. Retrieve the PID of the CC process.
 <pre class="terminal">$ cat /var/vcap/sys/run/cloud\_controller\_ng/cloud\_controller\_ng.pid </pre>
@@ -445,29 +410,16 @@ To resolve this issue:
 1. SSH into the VM and use the `sv stop agent` command to kill the BOSH Agent.
 
     <pre class="terminal">
-    $ bosh ssh myVM
+    $ bosh -e dev -d cf-deployment ssh diego-cell/abcd0123-a012-b345-c678-9def01234567
     $ sv stop agent
     </pre>
 
 1. Let the BOSH Health Monitor automatically restart the VM.
 To follow the status of this process:
 
-* Run `bosh tasks --no-filter` to determine the task ID of the "scan and fix"
-task.
-* Run `bosh task TASK-ID` with the task ID of the "scan and fix" task.
-
-    <pre class="terminal">
-    $ bosh tasks --no-filter
-    +----+---------+--------------------+-------+--------------+--------+
-    | #  | State   | Timestamp          | User  | Description  | Result |
-    +----+---------+--------------------+-------+--------------+--------+
-    | 83 | running | 01-21 12:07:34 UTC | admin | scan and fix | active |
-    +----+---------+--------------------+-------+--------------+--------+
-
-    $ bosh task 83
-
-    Director task 83
-      Started scanning 1 vms
-    . . .
-    </pre>
+* Run `bosh -e MY-ENV tasks` to determine the task ID of the "scan and fix" task.
+Add `-d MY-DEPLOYMENT` to view tasks for a specific deployment.
+    <pre class="terminal">$ bosh -e dev -d cf-deployment tasks</pre>
+* Run `bosh -e MY-ENV task TASK-ID` with the task ID of the "scan and fix" task.
+    <pre class="terminal">$ bosh -e dev task 83</pre>
 
