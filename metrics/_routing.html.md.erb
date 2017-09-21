@@ -20,7 +20,7 @@ Routing Release metrics have following origin names:
  numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
  numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
  logSenderTotalMessagesRead         | Lifetime number of application log messages. Emitted every 5 seconds.
- backend\_exhausted\_conns          | Lifetime number of requests that have been limited due to the maximum number of connections per backend. Emitted every 5 seconds.
+ backend\_exhausted\_conns          | Lifetime number of requests that have been rejected due to the limit on number of connections per backend having been reached for all backends tried. Emitted every 5 seconds.
  bad\_gateways                      | Lifetime number of bad gateways. Emitted every 5 seconds.
  latency                            | Time in milliseconds that the Gorouter took to handle requests to its application endpoints. Emitted per router request.
  latency.{component}                | Time in milliseconds that the Gorouter took to handle requests from each component to its endpoints. Emitted per router request.
