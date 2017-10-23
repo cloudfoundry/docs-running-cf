@@ -1,0 +1,88 @@
+---
+title: Using Docker Registries
+owner: Ops Manager
+---
+
+<strong><%= modified_date %></strong>
+
+This topic describes how to configure Pivotal Cloud Foundry (PCF) to access Docker registries such as [Docker Hub](http://hub.docker.com), by using either a root certificate authority (CA) certificate or by adding its IP address to a whitelist. It also explains how to configure PCF to access Docker registries through a proxy.
+
+Docker registries store Docker container images. PCF uses these images to create the Docker containers that it runs apps in.
+
+## <a id='prerequisite'></a> Prerequisite: Enable Docker Support
+
+PCF can only access Docker registries if an operator has enabled Docker support with the `cf enable-feature-flag diego_docker` command, as described in the [Using Docker in Cloud Foundry](../adminguide/docker.html#enable) topic.
+
+With Docker enabled, developers can push an app with a Docker image using the Cloud Foundry Command Line Interface (cf CLI). For more information, see the [Deploy an App with Docker](../devguide/deploy-apps/push-docker.html) topic.
+
+## <a id='ops-man'></a> Use a CA Certificate
+
+If you provide your root CA certificate in the Ops Manager configuration, follow this procedure:
+
+1. In the Ops Manager Installation Dashboard, click the **Ops Manager Director** tile.
+
+1. Click **Security**.
+
+    <%= image_tag("images/docker-registry-ops-man.png") %>
+
+1. In the **Trusted Certificates** field, paste one or more root CA certificates.
+The Docker registry does not use the CA certificate itself but uses a certificate that is signed by the CA certificate.
+
+1. Click **Save**.
+
+1. Choose one of the following:
+  - If you are configuring Ops Manager for the first time, return to your specific IaaS installation instructions ([AWS](../customizing/aws.html), [Azure](../customizing/azure.html), [GCP](../customizing/gcp.html), [OpenStack](../customizing/openstack.html), [vSphere](../customizing/vsphere.html)) to continue the installation process.
+  - If you are modifying an existing Ops Manager installation, return to the Ops Manager Installation Dashboard and click **Apply Changes**.
+
+After configuration, BOSH propagates your CA certificate to all application containers in your deployment. You can then push and pull images from your Docker registries.
+
+## <a id='ert'></a> Use an IP Address Whitelist
+
+If you choose not to provide a CA certificate, you must provide the IP address of your Docker registry.
+
+<p class="note"><strong>Note</strong>: Using a whitelist skips SSL validation. 
+If you want to enforce SSL validation, enter the IP address of the Docker registry in the <strong>No proxy</strong> field described <a href='#proxy'>below</a>.</p>
+
+1. Navigate to the Ops Manager Installation Dashboard.
+
+1. Click the **Pivotal Elastic Runtime** tile, and navigate to the **Application Containers** tab.
+  <%= image_tag("images/docker-registry-ert.png") %>
+
+1. Select **Enable Custom Buildpacks** to enable custom-built application runtime buildpacks.
+
+1. Select **Allow SSH access to app containers** to enable app containers to accept SSH connections. If you use a load balancer instead of HAProxy, you must open port 2222 on your load balancer to enable SSH traffic. To open an SSH connection to an app, a user must have Space Developer privileges for the space where the app is deployed. Operators can grant those privileges in Apps Manager or using the cf CLI.
+
+1. For **Private Docker Insecure Registry Whitelist**, provide the hostname or IP address and port that point to your private Docker registry. For example, enter `198.51.100.1:80` or `mydockerregistry.com:80`. Enter multiple entries in a comma-delimited sequence. SSL validation is ignored for private Docker image registries secured with self-signed certificates at these locations.
+
+1. Under **Docker Images Disk-Cleanup Scheduling on Cell VMs**, choose one of the options listed below. For more information about these options, see [Configuring Docker Images Disk-Cleanup Scheduling](./config-cell-cleanup.html).	
+	* **Never clean up Cell disk-space**
+	* **Routinely clean up Cell disk-space**
+	* **Clean up disk-space once threshold is reached**. If you choose this option, enter the amount of disk space limit the Cell must reach before disk cleanup initiates under **Threshold of Disk-Used&nbsp;(MB)**.
+<br><br>
+
+1. Click **Save**.
+
+1. Choose one of the following:
+	- If you are configuring Elastic Runtime for the first time, return to your specific IaaS installation instructions ([AWS](../customizing/aws.html), [Azure](../customizing/azure.html), [GCP](../customizing/gcp.html), [OpenStack](../customizing/openstack.html), [vSphere](../customizing/vsphere.html)) to continue the installation process.
+	- If you are modifying an existing Elastic Runtime installation, return to the Ops Manager Installation Dashboard and click **Apply Changes**.
+
+After configuration, Elastic Runtime allows Docker images to pass through the specified IP address without checking certificates.
+
+## <a id='proxy'></a>Set Proxies for Docker Registries
+
+To configure PCF to access a Docker registry through a proxy, do the following:
+
+1. On the Installation Dashboard, navigate to USERNAME > **Settings** > **Proxy Settings**.
+  <%= image_tag("install-dash-settings.png") %>
+
+2. On the **Update Proxy Settings** pane, complete one of the following fields:
+    + **HTTP proxy**: If you have an HTTP proxy server for your Docker registry, enter its IP address.  
+    + **HTTPS proxy**: If you have an HTTPS proxy server for your Docker registry, enter its IP address.  
+    + **No proxy**: If you do not use a proxy server, enter the IP address for the Docker registry. This field may already contain proxy settings for the BOSH Director.
+
+    Enter multiple IP addresses as a comma-separated list.
+
+     <%= image_tag("update-proxy-settings.png") %>
+
+3. Click **Update**.
+
