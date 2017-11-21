@@ -58,9 +58,9 @@ Your manifest for Diego should include the following properties:
   <pre><code>properties:
     ssh\_proxy:
       host\_key: |
-        -----BEGIN RSA PRIVATE KEY-----
-        YOUR\_PRIVATE\_KEY
-        -----END RSA PRIVATE KEY-----
+        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+        YOUR-PRIVATE-KEY
+        -----END EXAMPLE RSA PRIVATE KEY-----
       enable\_cf\_auth: true
       enable\_diego\_auth: false
       diego\_credentials: ""
@@ -77,7 +77,7 @@ Your manifest for Diego should include the following properties:
 
 ### <a id="ha-proxy"></a>Using HAProxy
 
-If you are using the HAproxy job as the gorouter load balancer and you set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `true`, HAproxy serves as the load balancer for Diego's SSH proxies. This configuration relies on the presence of the same consul server cluster that Diego components use for service discovery. Use this configuration for deployments where all traffic on the system domain and its subdomains is directed towards the HAproxy job, as is the case for a BOSH-Lite Cloud Foundry deployment on the default `bosh-lite.com` domain.
+If you are using the HAProxy job as the Gorouter load balancer and you set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `true`, HAProxy serves as the load balancer for Diego's SSH proxies. This configuration relies on the presence of the same consul server cluster that Diego components use for service discovery. Use this configuration for deployments where all traffic on the system domain and its subdomains is directed towards the HAProxy job, as is the case for a BOSH-Lite Cloud Foundry deployment on the default `bosh-lite.com` domain.
 
 ### <a id="aws"></a>Using Elastic Load Balancers (ELBs) on Amazon Web Services (AWS)
 
