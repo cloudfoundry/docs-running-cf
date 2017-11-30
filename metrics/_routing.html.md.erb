@@ -26,7 +26,7 @@ Routing Release metrics have following origin names:
  latency.{component}                | Time in milliseconds that the Gorouter took to handle requests from each component to its endpoints. Emitted per router request.
  registry\_message.{component}      | Lifetime number of route register messages received for each component. Emitted per route-register message.
  unregistry\_message.{component}    | Lifetime number of route unregister messages received for each component. Emitted per route-unregister message.
- rejected\_requests                 | Lifetime number of bad requests received on Gorouter. Emitted every 5 seconds.
+ rejected\_requests                 | Lifetime number of bad requests received on the Gorouter. Emitted every 5 seconds.
  requests.{component}               | Lifetime number of requests received for each component. Emitted per router request.
  responses                          | Lifetime number of HTTP responses. Emitted every 5 seconds.
  responses.2xx                      | Lifetime number of 2xx HTTP responses. Emitted every 5 seconds.
@@ -42,11 +42,11 @@ Routing Release metrics have following origin names:
  ms\_since\_last\_registry\_update  | Time in millisecond since the last route register has been been received. Emitted every 30 seconds.
  total\_routes                      | Current number of routes registered. Emitted every 30 seconds.
  uptime                             | Uptime for router. Emitted every second.
- file_descriptors                   | Number of file descriptors currently used by Gorouter. Emitted every 5 seconds.
- routes_pruned                      | Lifetime number of stale routes that have been automatically pruned by Gorouter. Emitted every 5 seconds.
- backend_tls_handshake_failed       | Lifetime number of failed TLS handshakes when connecting to a backend registered with TLS port. Corresponds to HTTP 525 error response from Gorouter. Emitted every 5 seconds.
- backend_invalid_id                 | Lifetime number of requests that were rejected because the backend presents a certificate with an invalid id. Corresponds to HTTP 503 error response from Gorouter. Emitted every 5 seconds.
- backend_invalid_tls_cert           | Lifetime number of requests that were rejected because the backend presents a certificate that is not trusted by Gorouter. Corresponds to HTTP 526 error response from Gorouter. Emitted every 5 seconds.
+ file_descriptors                   | Number of file descriptors currently used by the Gorouter. Emitted every 5 seconds.
+ routes_pruned                      | Lifetime number of stale routes that have been automatically pruned by the Gorouter. Emitted every 5 seconds.
+ backend_tls_handshake_failed       | Lifetime number of failed TLS handshakes when connecting to a backend registered with TLS port. Corresponds to HTTP 525 error response from the Gorouter. Emitted every 5 seconds.
+ backend_invalid_id                 | Lifetime number of requests that were rejected because the backend presents a certificate with an invalid id. Corresponds to HTTP 503 error response from the Gorouter. Emitted every 5 seconds.
+ backend_invalid_tls_cert           | Lifetime number of requests that were rejected because the backend presents a certificate that is not trusted by the Gorouter. Corresponds to HTTP 526 error response from Gorouter. Emitted every 5 seconds.
 
 <a id="routing_api"></a>Default Origin Name: routing_api
 
