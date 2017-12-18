@@ -47,6 +47,8 @@ Routing Release metrics have following origin names:
  backend_tls_handshake_failed       | Lifetime number of failed TLS handshakes when connecting to a backend registered with TLS port. Corresponds to HTTP 525 error response from the Gorouter. Emitted every 5 seconds.
  backend_invalid_id                 | Lifetime number of requests that were rejected because the backend presents a certificate with an invalid id. Corresponds to HTTP 503 error response from the Gorouter. Emitted every 5 seconds.
  backend_invalid_tls_cert           | Lifetime number of requests that were rejected because the backend presents a certificate that is not trusted by the Gorouter. Corresponds to HTTP 526 error response from Gorouter. Emitted every 5 seconds.
+ buffered_messages                  | Current number of messages in the Gorouter's NATS client's buffer. Emitted every 5 seconds.
+ total_dropped_messages             | Lifetime number of messages that have been dropped by the Gorouter's NATS client due to a full buffer. Emitted every 5 seconds.
 
 <a id="routing_api"></a>Default Origin Name: routing_api
 
