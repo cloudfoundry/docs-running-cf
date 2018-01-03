@@ -258,7 +258,7 @@ $ ./scripts/generate_manifest.sh cf.yml director-uuid.yml iaas.yml creds.yml
 
 1. Run `bosh -e MY-ENV -d MY-CF-DEPLOYMENT-NAME deploy  nfsvolume-aws-manifest.yml` to deploy the broker using the generated manifest.
   <pre class="terminal">
-  $ bosh -d nfsvolume-aws-manifest.yml deploy
+  $ bosh -e my-env -d my-dep deploy nfsvolume-aws-manifest.yml
   </pre>
 
 1. Register the broker using the credentials specified in the `creds.yml` stub.
