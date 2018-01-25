@@ -21,7 +21,7 @@ properties:
 
 - You can also present trusted certificates to all application instances, including those based on Docker images and those on Windows. 
 <br><br>
-To do so, provide the concatenated PEM-encoded CA certificates in the `diego.rep.trusted_certs` BOSH propert on `rep` and `rep_windows` jobs for the Diego release, or in the global properties section of the deployment manifest. 
+To do so, provide the concatenated PEM-encoded CA certificates in the `diego.rep.trusted_ca_certificates` BOSH properties on `rep` and `rep_windows` jobs for the Diego release, or in the global properties section of the deployment manifest. 
 <br><br>
 The individual certificates in this property appear as separate files in the `/etc/cf-system-certificates` directory. 
 <br><br>
@@ -30,11 +30,13 @@ For example:
 properties:
   diego:
     rep:
-      trusted_certs: |
-        -----BEGIN CERTIFICATE-----
-        (contents of certificate #1)
-        -----END CERTIFICATE-----
-        -----BEGIN CERTIFICATE-----
-        (contents of certificate #2)
-        -----END CERTIFICATE-----
+      trusted_ca_certificates:
+        - |
+          -----BEGIN CERTIFICATE-----
+          (contents of certificate #1)
+          -----END CERTIFICATE-----
+        - |
+          -----BEGIN CERTIFICATE-----
+          (contents of certificate #2)
+          -----END CERTIFICATE-----
 </pre>
