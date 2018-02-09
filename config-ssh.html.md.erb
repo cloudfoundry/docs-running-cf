@@ -55,7 +55,7 @@ Your manifest for Cloud Foundry should include the following properties:
 
 1. Change `HOST-KEY-FINGERPRINT` to the public key fingerprint of the RSA key pair that you generated. It should be located in your `ssh-proxy-host-key-fingerprint` file.
 
-1. Replace `SSH-ACCESS-FOR-NEW-APPS` with `true` to enable SSH access for new apps by default in spaces that allow SSH. If you set this property to `false`, developers can still enable SSH after pushing their apps by running `cf enable-ssh APP-NAME`.
+1. Replace `SSH-ACCESS-FOR-NEW-APPS` with `true` to enable SSH access for new apps by default in spaces that allow SSH. If you set this property to `false`, developers can still enable SSH after pushing their apps by running `cf enable-ssh APP-NAME`. If the app is already deployed and running, the developer will need to restart the app before being able to ssh into it.
 
 1. For `SSH-PROXY-SECRET`, provide a client secret that Diego will use to register the `ssh-proxy` client with your User Account and Authentication (UAA) server.
 
