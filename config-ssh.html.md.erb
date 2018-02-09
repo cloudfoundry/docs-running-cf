@@ -35,7 +35,7 @@ $ ssh-keygen -E md5 -lf ssh-proxy-host-key.pem.pub | sed 's/MD5://' | cut -d ' '
 
 Your manifest for Cloud Foundry should include the following properties:
 
-  <pre><code>properties:
+  <pre>properties:
     app\_ssh:
       host\_key\_fingerprint: HOST-KEY-FINGERPRINT
       oauth\_client\_id: ssh-proxy
@@ -51,11 +51,11 @@ Your manifest for Cloud Foundry should include the following properties:
           redirect-uri: /login
           scope: openid,cloud\_controller.read,cloud\_controller.write,cloud\_controller.admin
           secret: SSH-PROXY-SECRET
-  </code></pre>
+  </pre>
 
 1. Change `HOST-KEY-FINGERPRINT` to the public key fingerprint of the RSA key pair that you generated. It should be located in your `ssh-proxy-host-key-fingerprint` file.
 
-1. Replace `SSH-ACCESS-FOR-NEW-APPS` with `true` to enable SSH access for new apps by default in spaces that allow SSH. If you set this property to `false`, developers can still enable SSH after pushing their apps by running `cf enable-ssh APP-NAME`. If the app is already deployed and running, the developer will need to restart the app before being able to ssh into it.
+1. Replace `SSH-ACCESS-FOR-NEW-APPS` with `true` to enable SSH access for new apps by default in spaces that allow SSH. If you set this property to `false`, developers can still enable SSH after pushing their apps by running `cf enable-ssh APP-NAME`. If an app is already deployed and running, the developer must restart the app before being able to SSH into it.
 
 1. For `SSH-PROXY-SECRET`, provide a client secret that Diego will use to register the `ssh-proxy` client with your User Account and Authentication (UAA) server.
 
@@ -63,7 +63,7 @@ Your manifest for Cloud Foundry should include the following properties:
 
 Your manifest for Diego should include the following properties:
 
-  <pre><code>properties:
+  <pre>properties:
     ssh\_proxy:
       host\_key: |
         -----BEGIN EXAMPLE RSA PRIVATE KEY-----
@@ -74,7 +74,7 @@ Your manifest for Diego should include the following properties:
       diego\_credentials: ""
       uaa\_secret: SSH-PROXY-SECRET
       uaa\_token_url: <span>https</span>://uaa.YOUR-SYSTEM-DOMAIN/oauth/token
-  </code></pre>
+  </pre>
 
 1. `ssh_proxy.host_key`: Supply the PEM-encoded private key from the RSA key pair that you originally generated for your deployment. This key secures the SSH proxy that brokers connections to individual app containers.
 1. Specify CF Authentication only by setting `enable_cf_auth` to `true` and `enable_diego_auth` to `false`, as in the example above.
