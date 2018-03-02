@@ -40,26 +40,26 @@ This procedure requires the following:
 
 ###<a id="redeploy"></a>Redeploy CF with NFS enabled
 
-1. You should have it already after deploying CF, but if not clone the cf-deployment repository from git:
+1. Clone the cf-deployment repository from git, if you do not already have it:
   <pre class="terminal">
   $ cd ~/workspace
   $ git clone https://github.com/cloudfoundry/cf-deployment.git
   $ cd ~/workspace/cf-deployment</pre>
 
-1. Now redeploy your cf-deployment while including the nfs ops file:
+1. Redeploy your cf-deployment while including the nfs ops file:
   <pre class="terminal">
   $ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
 		-o operations/enable-nfs-volume-service.yml</pre>
 
-<p class="note"><strong>Note</strong>: The above command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a `-o operations/enable-nfs-volume-service.yml` option.</p>
+<p class="note"><strong>Note</strong>: The above command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o operations/enable-nfs-volume-service.yml</code> option.</p>
 
-Your CF deployment will now have a running service broker and volume drivers, ready to mount nfs volumes.  Unless you have explicitly defined a variable for your nfsbroker password, BOSH will generate one for you.  You can find the password for use in broker registration via the `bosh interpolate` command:
+Your CF deployment will now have a running service broker and volume drivers, ready to mount nfs volumes.  BOSH generates a variable for your nfsbroker password, unless you have explicitly defined one.  You can find the broker registration password with the `bosh interpolate` command:
   <pre class="terminal">
   $ bosh int deployment-vars.yml --path /nfs-broker-password</pre>
 
 ####<a id="server"></a>Deploying the NFS Test Server
 
-If you wish to also deploy the NFS test server, you can fetch the operations file from the [persi-ci github repository](https://github.com/cloudfoundry/persi-ci/blob/master/operations/enable-nfs-test-server.yml) and include that operation with a `-o` flag also.  That will create a separate VM with nfs exports that you can use to experiment with volume mounts.
+To deploy the NFS test server, you can fetch the operations file from the [persi-ci github repository](https://github.com/cloudfoundry/persi-ci/blob/master/operations/enable-nfs-test-server.yml) and include that operation with a `-o` flag. This creates a separate VM with nfs exports you can use to experiment with volume mounts.
 
 <p class="note"><strong>Note</strong>: By default, the nfs test server expects that your CF deployment is deployed to a 10.x.x.x subnet.  If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x) then you will need to override the "export_cidr" property.<br/>
  Edit the operations file, and replace this line:<br/>
