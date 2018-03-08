@@ -43,7 +43,7 @@ This procedure requires the following:
 1. Clone the cf-deployment repository from git, if you do not already have it:
   <pre class="terminal">
   $ cd ~/workspace
-  $ git clone https://github.com/cloudfoundry/cf-deployment.git
+  $ git clone https<span>:</span>//github.com/cloudfoundry/cf-deployment.git
   $ cd ~/workspace/cf-deployment</pre>
 
 1. Redeploy your cf-deployment while including the nfs ops file:
@@ -53,7 +53,7 @@ This procedure requires the following:
 
 <p class="note"><strong>Note</strong>: The above command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o operations/enable-nfs-volume-service.yml</code> option.</p>
 
-Your CF deployment will now have a running service broker and volume drivers, ready to mount nfs volumes.  BOSH generates a variable for your nfsbroker password, unless you have explicitly defined one.  You can find the broker registration password with the `bosh interpolate` command:
+Your CF deployment now has a running service broker and volume drivers and is ready to mount nfs volumes. BOSH generates a variable for your nfsbroker password, unless you have explicitly defined one.  You can find the broker registration password with the `bosh interpolate` command:
   <pre class="terminal">
   $ bosh int deployment-vars.yml --path /nfs-broker-password</pre>
 
