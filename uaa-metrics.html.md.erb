@@ -1,0 +1,304 @@
+---
+title: UAA Performance Metrics
+owner: UAA
+---
+
+## <a id="intro"></a> Introduction
+
+User Account and Authentication (UAA) emits metrics constantly. These metrics can help you understand performance over time, troubleshoot problems, and asses the health of your installation in real-time.
+
+These metrics are emitted through Loggregator.
+
+IMAGE HERE
+
+This topic describes different metrics that UAA, virtual machines (VMs), and Java Virtual Machines (JVMs) emit.
+
+## <a id="performance"></a>Understanding UAA Performance
+
+These tables explain different types of UAA and UAA-related metrics you can view. There are three different metric areas discussed in the following tables:
+
+* <a href="#global">Global metrics</a> are metric values UAA emits.
+* <a href="#vm-vitals">Virtual machine (VM) vitals</a> are metric values UAA reads from the VM.
+* <a href="#jvm-vitals">Java Virtual Machine (JVM) vitals</a> are metric values UAA reads from the JVM.
+
+Each table depicts the following information:
+
+* **Name**: The name of the metric.
+* **Type**: How the metric is displayed (for example, counters, gauges, or timers).
+* **Description**: An explanation of what values this metric displays.
+* **Example**: A code sample of this metric's output.
+* **Indicator**: A discussion of what changes in the metric's value may indicate over time.
+* **Status**: **Active** metrics may change between metrics emissions, whereas **static** metrics are fixed and do not change.
+
+
+### <a id="global"></a>Global Performance Metrics
+
+This section describes metrics that UAA emits.
+
+<table class="nice">
+	<th>Name</th>
+	<th>Type</th>
+	<th>Description</th>
+	<th>Example</th>
+	<th>Indicator</th>
+	<th>Status</th>
+	<tr>
+		<td>requests.global.completed.count</td>
+		<td>Counter</td>
+		<td>Number of HTTP requests the server has processed since last metric emission. This metric includes all requests sent to the server, including health checks.</td>
+		<td><code>uaa.requests.global.completed.count:1|c</code></td>
+		<td>You can use this metric to calculate request load and throughput.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>requests.global.completed.time</td>
+		<td>Gauge.</td>
+		<td>Average time in milliseconds spent per HTTP request. This metric is calculated as an average across all completed requests, including health checks.</td>
+		<td><code>uaa.requests.global.completed.time:60|g</code></td>
+		<td>A rise may indicate problems with server or database.</td>
+		<td>Active.</td>
+	</tr>	
+	<tr>
+		<td>server.inflight.count</td>
+		<td>Gauge.</td>
+		<td>Number of requests the server is currently processing (also known as in flight requests).</td>
+		<td><code>uaa.server.inflight.count:1|g</code></td>
+		<td>If this number climbs continuously, it can indicate that servers are getting saturated and are unable to handle the incoming load.</td>
+		<td>Active.</td>
+	</tr>		
+	<tr>
+		<td>requests.global.unhealthy.count</td>
+		<td>Counter (gauge in 4.9.0).</td>
+		<td>Number of completed requests that exceeded the tolerable response time since last metric emission. Each <a href="https://github.com/cloudfoundry/uaa/blob/master/metrics-data/src/main/resources/performance-url-groups.yml">URL group</a> can have a different tolerable completion time, which is preconfigured in each UAA release. These values are currently not configurable.</td>
+		<td><code>uaa.requests.global.unhealthy.count:1|c</code></td>
+		<td>If the number of requests not meeting tolerable completion time is growing, than either the tolerable request time needs to be fine tuned for false negatives or the server does not have enough capacity to handle the request load. The actual cause for this can be the need for an increase in server or database resources and further metrics are needed to actually make a scaling decision.</td>
+		<td>Active.</td>
+	</tr>	
+	<tr>
+		<td>requests.global.unhealthy.time</td>
+		<td>Gauge.</td>
+		<td>Average time in milliseconds per completed HTTP request that did not finish within the set tolerable time since startup.</td>
+		<td><code>uaa.requests.global.unhealthy.time:250|g</code></td>
+		<td>It can be useful to compare this metric to <code>uaa.requests.global.completed.time</code>.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>requests.global.status_4xx.count</td>
+		<td>Counter.</td>
+		<td>Number of HTTP requests that returned 400 codes (client error) since last metrics emission. These do not indicate server errors. A 400 code may indicate an invalid request to the server.</td>
+		<td><code>uaa.requests.global.status_4xx.count:1|c</code></td>
+		<td>This metric gives the client the ability calculate error rates. It is often used to detect faulty applications that may be causing unnecessary processing on the server.</td>
+		<td>Active.</td>
+	</tr>	
+	<tr>
+		<td>requests.global.status_5xx.count</td>
+		<td>Counter.</td>
+		<td>Number of HTTP requests that returned 500 codes (server errors) since last meetrics emission.</td>
+		<td><code>uaa.requests.global.status_5xx.count:1|c</code></td>
+		<td>This metric gives the client the ability calculate error rates and determine if further investigation is needed.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>server.up.time</td>
+		<td>Timer.</td>
+		<td>The number of milliseconds that have elapsed since this server instance started.</td>
+		<td><code>uaa.server.up.time:42346751|g</code></td>
+		<td>This metric indicates the time since last startup.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>server.idle.time</td>
+		<td>Timer.</td>
+		<td>The number of milliseconds that the server has spent in an idle state, when no requests were being processed. This allows a client to calculate the amount of actual, rather than cumulative, time the server has spent processing requests with <code>up.time-idle.time</code>.</td>
+		<td><code>uaa.server.idle.time:2346751|g</code></td>
+		<td>This metric allows the client to calculate when the server is receiving load time.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>database.global.completed.count</td>
+		<td>Counter.</td>
+		<td>Number of database queries the server has processed since last metrics emission.</td>
+		<td><code>uaa.database.global.completed.count:1|c</code></td>
+		<td>This metric allows you to track the number of queries that have reached and been processed by the server over a period of time.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>database.global.completed.time</td>
+		<td>Gauge.</td>
+		<td>The average amount of time in milliseconds per database query.</td>
+		<td><code>uaa.database.global.completed.time:248|g</code></td>
+		<td>This metric allows you to track the time to complete a database query on average.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>database.global.unhealthy.count</td>
+		<td>Counter.</td>
+		<td>Number of database queries that failed or didn’t meet tolerated response time since last metrics emission. The response time is not configurable during runtime. By default, it is currently <a href="https://github.com/cloudfoundry/uaa/blob/9c80e26e6f4015edf0ed92e06e8d40c732428f1d/server/src/main/resources/spring/data-source.xml#L44">set to 3 seconds.</td>
+		<td><code>uaa.database.global.unhealthy.count:1|c</code></td>
+		<td>This metric allows you to monitor database query success and failure over time.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>database.global.unhealthy.time</td>
+		<td>Timer.</td>
+		<td>The average amount of time in milliseconds per database query that was not within the tolerated response time.</td>
+		<td><code>uaa.database.global.unhealthy.time:4678623|g</code></td>
+		<td>This metric allows you to monitor database response time.</td>
+		<td>Active.</td>
+	</tr>	
+</table>
+
+## <a id="vitals"></a>Understanding UAA Vitals
+
+This section describes metrics that the UAA VM and JVM emit.
+
+### <a id="vm-vitals"></a>Virtual Machine Vitals
+
+<table class="nice">
+	<th>Name</th>
+	<th>Type</th>
+	<th>Description</th>
+	<th>Example</th>
+	<th>Indicator</th>
+	<th>Status</th>
+	<tr>
+		<td>vitals.vm.cpu.count</td>
+		<td>Gauge.</td>
+		<td>How many CPUs are on this VM as reported by the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/OperatingSystemMXBean.html#getAvailableProcessors--">Java VM</a>. This metric is useful when you want to read system load average. The number reported by load average must be correlated to the number of CPUs.</td>
+		<td><code>uaa.vitals.vm.cpu.count:4|g</code></td>
+		<td>This metric is required for a proper CPU load calculation.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>	
+		<td>vitals.vm.cpu.load</td>
+		<td>Gauge.</td>
+		<td>Average system CPU load as reported by the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/OperatingSystemMXBean.html#getSystemLoadAverage--">Java VM</a>. The value is reported as a whole number multiplied by .01. For example, a value of 163 is read as 1.63.</td>
+		<td><code>uaa.vitals.vm.cpu.load:50|g</code></td>
+		<td>If the value of <code>(cpu.load / 100.0 / cpu count)</code> is more than 2.0, this is an indicator that the system may be overloaded and processing data slowly.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.vm.memory.total</td>
+		<td>Gauge.</td>
+		<td>Total OS memory, in bytes, as reported by <a href="https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/OperatingSystemMXBean.html#getTotalPhysicalMemorySize--">Java VM</a>.</td>
+		<td><code>uaa.vitals.vm.memory.total:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.vm.memory.total</td>
+		<td>Gauge.</td>
+		<td>Total OS memory, in bytes, as reported by <a href="https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/OperatingSystemMXBean.html#getCommittedVirtualMemorySize--">Java VM</a>.</td>
+		<td><code>uaa.vitals.vm.memory.total:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.vm.memory.committed</td>
+		<td>Gauge.</td>
+		<td>OS memory, in bytes, committed to UAA processes, as reported by <a href="https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/OperatingSystemMXBean.html#getFreePhysicalMemorySize--">Java VM</a>.</td>
+		<td><code>uaa.vitals.vm.memory.committed:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.vm.memory.free</td>
+		<td>Gauge.</td>
+		<td>Free OS memory, in bytes, as reported by <a href="https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/OperatingSystemMXBean.html#getProcessCpuLoad--">Java VM</a>.</td>
+		<td><code>uaa.vitals.vm.memory.free:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+</table>
+
+### <a id="jvm-vitals"></a>Java Virtual Machine Vitals
+
+<table class="nice">
+	<th>Name</th>
+	<th>Type</th>
+	<th>Description</th>
+	<th>Example</th>
+	<th>Indicator</th>
+	<th>Status</th>
+	<tr>
+		<td>vitals.jvm.cpu.load</td>
+		<td>Gauge.</td>
+		<td>The UAA Process CPU load average as reported by <a href="https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/OperatingSystemMXBean.html#getProcessCpuLoad--">Java VM</a>. This value will be multiplied by 100 and reported as a whole number representing the CPU load on the VM incurred by the UAA process, excluding any other processes on the VM.</td>
+		<td><code>uaa.vitals.jvm.cpu.load:25|g</code></td>
+		<td>Health/Scaling. If CPU load is showing high, this metric can be used to confirm that it is indeed the UAA using up the CPU and not other jobs on the same VM.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.thread.count</td>
+		<td>Gauge.</td>
+		<td>Number of threads running inside the UAA process, as reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html?is-external=true#getThreadCount--">Java VM</a>.</td>
+		<td><code>uaa.vitals.jvm.thread.count:53|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.heap.init</td>
+		<td>Gauge.</td>
+		<td>Minimum amount of OS memory, in bytes, requested by the UAA JVM process to be used as part of the Java heap memory, as reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryUsage.html#getInit--">Java VM</a>. To learn more about JVM memory, see the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/management/MemoryUsage.html">Oracle documentation</a>.</td>
+		<td><code>uaa.vitals.jvm.heap.init:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Static. This value does not change.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.heap.committed</td>
+		<td>Gauge.</td>
+		<td>Guaranteed amount of Java heap memory, in bytes, committed to the UAA JVM process, as reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryUsage.html#getCommitted--">Java VM</a>. To learn more about JVM memory, see the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/management/MemoryUsage.html">Oracle documentation</a>.</td>
+		<td><code>uaa.vitals.jvm.heap.committed:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.heap.used</td>
+		<td>Gauge.</td>
+		<td>Java heap memory, in bytes, currently in use by the UAA process as reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryUsage.html#getUsed--">Java VM</a>. To learn more about JVM memory, see the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/management/MemoryUsage.html">Oracle documentation</a>.</td>
+		<td><code>uaa.vitals.jvm.heap.used:1073741824|g
+</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Static. This value does not change.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.heap.max</td>
+		<td>Gauge.</td>
+		<td>Java heap memory, in bytes, that is the upper limit for the UAA processes reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryUsage.html#getMax--">Java VM</a>. To learn more about JVM memory, see the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/management/MemoryUsage.html">Oracle documentation</a>.</td>
+		<td><code>uaa.vitals.jvm.heap.max:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Static. This value does not change.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.non-heap.init</td>
+		<td>Gauge.</td>
+		<td>Minimum non Java memory, in bytes, acquired by the UAA process as reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryUsage.html#getInit--">Java VM</a>. To learn more about JVM memory, see the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/management/MemoryUsage.html">Oracle documentation</a>.</td>
+		<td><code>uaa.vitals.jvm.non-heap.init:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.non-heap.committed</td>
+		<td>Gauge.</td>
+		<td>Guaranteed non Java memory, in bytes, committed by the UAA process as reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryUsage.html#getCommitted--">Java VM</a>. To learn more about JVM memory, see the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/management/MemoryUsage.html">Oracle documentation</a>.</td>
+		<td><code>uaa.vitals.jvm.non-heap.committed:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.non-heap.used</td>
+		<td>Gauge.</td>
+		<td>Current non Java memory, in bytes, that the UAA process can use, as reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryUsage.html#getUsed--">Java VM</a>. To learn more about JVM memory, see the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/management/MemoryUsage.html">Oracle documentation</a>.</td>
+		<td><code>uaa.vitals.jvm.non-heap.used:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>
+	<tr>
+		<td>vitals.jvm.non-heap.max</td>
+		<td>Gauge.</td>
+		<td>Upper limit of non Java memory, in bytes, that the UAA process can use, as reported by <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryUsage.html#getMax--">Java VM</a>. To learn more about JVM memory, see the <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/management/MemoryUsage.html">Oracle documentation</a>.</td>
+		<td><code>uaa.vitals.jvm.non-heap.max:1073741824|g</code></td>
+		<td>Use this metric in conjunction with other performance metrics to assess system health.</td>
+		<td>Active.</td>
+	</tr>	
+</table>
