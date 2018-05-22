@@ -28,12 +28,8 @@ Default Origin Name: auctioneer
  LockHeld.v1-locks-auctioneer\_lock                          | Whether an auctioneer holds the auctioneer lock: `1` means the lock is held, and `0` means the lock was lost. Emitted every 30 seconds by the active auctioneer.
  LockHeldDuration.v1-locks-auctioneer\_lock                  | Time in nanoseconds that the active auctioneer has held the auctioneer lock. Emitted every 30 seconds by the active auctioneer.
  memoryStats.lastGCPauseTimeNS                               | Duration in nanoseconds of the last garbage collector pause.
- memoryStats.numBytesAllocated                               | Instantaneous count of bytes allocated and still in use.
  memoryStats.numBytesAllocatedHeap                           | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                          | Instantaneous count of bytes used by the stack allocator.
- memoryStats.numFrees                                        | Lifetime number of memory deallocations.
- memoryStats.numMallocs                                      | Lifetime number of memory allocations.
- numCPUS                                                     | Number of CPUs on the machine.
  numGoRoutines                                               | Instantaneous number of active goroutines in the process<a id="bbs"></a>.
 
 Default Origin Name: bbs
@@ -70,14 +66,10 @@ Default Origin Name: bbs
  LRPsRunning                                             | Total number of LRP instances that are running on cells. Emitted every 30 seconds.
  LRPsUnclaimed                                           | Total number of LRP instances that have not yet been claimed by a cell. Emitted every 30 seconds.
  memoryStats.lastGCPauseTimeNS                           | Duration in nanoseconds of the last garbage collector pause.
- memoryStats.numBytesAllocated                           | Instantaneous count of bytes allocated and still in use.
  memoryStats.numBytesAllocatedHeap                       | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                      | Instantaneous count of bytes used by the stack allocator.
- memoryStats.numFrees                                    | Lifetime number of memory deallocations.
- memoryStats.numMallocs                                  | Lifetime number of memory allocations.
  MetricsReportingDuration                                | Time in nanoseconds that the BBS took to emit metrics about etcd. Emitted every 30 seconds.
  MigrationDuration                                       | Time in nanoseconds that the BBS took to run migrations against its persistence store. Emitted each time a BBS becomes the active master.
- numCPUS                                                 | Number of CPUs on the machine.
  numGoRoutines                                           | Instantaneous number of active goroutines in the process.
  RequestCount                                            | Cumulative number of requests the BBS has handled through its API. Emitted for each BBS request.
  RequestLatency                                          | Time in nanoseconds that the BBS took to handle requests to its API endpoints. Emitted when the BBS API handles requests.
@@ -105,12 +97,8 @@ Default Origin Name: file\_server
  Metric Name                                     | Description
 -------------------------------------------------|----------------------------------------------------------------------------------------------
  memoryStats.lastGCPauseTimeNS                   | Duration in nanoseconds of the last garbage collector pause.
- memoryStats.numBytesAllocated                   | Instantaneous count of bytes allocated and still in use.
  memoryStats.numBytesAllocatedHeap               | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack              | Instantaneous count of bytes used by the stack allocator.
- memoryStats.numFrees                            | Lifetime number of memory deallocations.
- memoryStats.numMallocs                          | Lifetime number of memory allocations.
- numCPUS                                         | Number of CPUs on the machine.
  numGoRoutines                                   | Instantaneous number of active goroutines in the process<a id="gardenlinux"></a>.
 
 Default Origin Name: garden_linux
@@ -177,12 +165,8 @@ Default Origin Name: rep
  LogMessage                                              | Emitted every 30 seconds.
  logSenderTotalMessagesRead                              | Count of application log messages sent by Diego Executor. Emitted every 30 seconds.
  memoryStats.lastGCPauseTimeNS                           | Duration in nanoseconds of the last garbage collector pause.
- memoryStats.numBytesAllocated                           | Instantaneous count of bytes allocated and still in use.
  memoryStats.numBytesAllocatedHeap                       | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                      | Instantaneous count of bytes used by the stack allocator.
- memoryStats.numFrees                                    | Lifetime number of memory deallocations.
- memoryStats.numMallocs                                  | Lifetime number of memory allocations.
- numCPUS                                                 | Number of CPUs on the machine.
  numGoRoutines                                           | Instantaneous number of active goroutines in the process.
  RepBulkSyncDuration                                     | Time in nanoseconds that the cell rep took to synchronize the ActualLRPs it has claimed with its actual garden containers. Emitted every 30 seconds by each rep.
  UnhealthyCell                                           | Whether the cell has failed to pass its healthcheck against the garden backend. `0` signifies healthy, and `1` signifies unhealthy. Emitted every 30 seconds<a id="routeemitter"></a>.
@@ -194,13 +178,9 @@ Default Origin Name: route_emitter
  LockHeld.v1-locks-route\_emitter\_lock        | Whether a route-emitter holds the route-emitter lock: `1` means the lock is held, and `0` means the lock was lost. Emitted every 30 seconds by the active route-emitter.
  LockHeldDuration.v1-locks-route\_emitter\_lock | Time in nanoseconds that the active route-emitter has held the route-emitter lock. Emitted every 30 seconds by the active route-emitter.
  memoryStats.lastGCPauseTimeNS                 | Duration in nanoseconds of the last garbage collector pause.
- memoryStats.numBytesAllocated                 | Instantaneous count of bytes allocated and still in use.
  memoryStats.numBytesAllocatedHeap             | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack            | Instantaneous count of bytes used by the stack allocator.
- memoryStats.numFrees                          | Lifetime number of memory deallocations.
- memoryStats.numMallocs                        | Lifetime number of memory allocations.
  MessagesEmitted                               | The cumulative number of registration messages that this process has sent. Emitted every 30 seconds.
- numCPUS                                       | Number of CPUs on the machine.
  numGoRoutines                                 | Instantaneous number of active goroutines in the process.
  RouteEmitterSyncDuration                      | Time in nanoseconds that the active route-emitter took to perform its synchronization pass. Emitted every 60 seconds.
  RoutesRegistered                              | Cumulative number of route registrations emitted from the route-emitter as it reacts to changes to LRPs. Emitted every 30 seconds.
@@ -213,12 +193,8 @@ Default Origin Name: ssh_proxy
  Metric Name                                       | Description
 ---------------------------------------------------|----------------------------------------------------------------------------------------------
  memoryStats.lastGCPauseTimeNS                     | Duration in nanoseconds of the last garbage collector pause.
- memoryStats.numBytesAllocated                     | Instantaneous count of bytes allocated and still in use.
  memoryStats.numBytesAllocatedHeap                 | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                | Instantaneous count of bytes used by the stack allocator.
- memoryStats.numFrees                              | Lifetime number of memory deallocations.
- memoryStats.numMallocs                            | Lifetime number of memory allocations.
- numCPUS                                           | Number of CPUs on the machine.
  numGoRoutines                                     | Instantaneous number of active goroutines in the process <a id="stager"></a>.
 
 Default Origin Name: stager
