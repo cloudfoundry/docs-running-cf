@@ -21,35 +21,35 @@ Routing Release metrics have following origin names:
  numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
  logSenderTotalMessagesRead         | Lifetime number of application log messages. Emitted every 5 seconds.
  backend\_exhausted\_conns          | Lifetime number of requests that have been rejected due to the limit on number of connections per backend having been reached for all backends tried. Emitted every 5 seconds.
- bad\_gateways                      | Lifetime number of bad gateways. Emitted every 5 seconds.
+ bad\_gateways                      | Lifetime number of bad gateways at the Gorouter. Emitted every 5 seconds.
  latency                            | Total round trip time, in milliseconds, for requests through the Gorouter. This includes time spent by backend application to process requests. Emitted per router request.
  latency.{component}                | Time in milliseconds that the Gorouter took to handle requests from each component to its endpoints. Emitted per router request.
- route_registration_latency         | Time in milliseconds between when an actual LRP is started and when the app is routable via Gorouter. Emitted per route-register message of new LRPs. This metric might be a negative value up to ~30 ms due to clock skew between the machines this metric is derived from.
+ route\_registration\_latency         | Time in milliseconds between when an actual LRP is started and when the app is routable via Gorouter. Emitted per route-register message of new LRPs. This metric might be a negative value up to ~30 ms due to clock skew between the machines this metric is derived from.
  registry\_message.{component}      | Lifetime number of route register messages received for each component. Emitted per route-register message.
  unregistry\_message.{component}    | Lifetime number of route unregister messages received for each component. Emitted per route-unregister message.
  rejected\_requests                 | Lifetime number of bad requests received on the Gorouter. Emitted every 5 seconds.
  requests.{component}               | Lifetime number of requests received for each component. Emitted per router request.
- responses                          | Lifetime number of HTTP responses. Emitted every 5 seconds.
- responses.2xx                      | Lifetime number of 2xx HTTP responses. Emitted every 5 seconds.
- responses.3xx                      | Lifetime number of 3xx HTTP response. Emitted every 5 seconds.
- responses.4xx                      | Lifetime number of 4xx HTTP response. Emitted every 5 seconds.
- responses.5xx                      | Lifetime number of 5xx HTTP response. Emitted every 5 seconds.
- responses.xxx                      | Lifetime number of other(non-(2xx-5xx)) HTTP response. Emitted every 5 seconds.
+ responses                          | Lifetime number of HTTP responses returned by the backend application. Emitted every 5 seconds.
+ responses.2xx                      | Lifetime number of 2xx HTTP responses returned by the backend application. Emitted every 5 seconds.
+ responses.3xx                      | Lifetime number of 3xx HTTP responses returned by the backend application. Emitted every 5 seconds.
+ responses.4xx                      | Lifetime number of 4xx HTTP responses returned by the backend application. Emitted every 5 seconds.
+ responses.5xx                      | Lifetime number of 5xx HTTP responses returned by the backend application. Emitted every 5 seconds.
+ responses.xxx                      | Lifetime number of other(non-(2xx-5xx)) HTTP responses returned by the backend application. Emitted every 5 seconds.
  route\_lookup\_time                | Time in nanoseconds to look up a request URL in the route table. Emitted per router request.
  websocket_upgrades                 | Lifetime number of WebSocket upgrades. Emitted every 5 seconds.
  websocket_failures                 | Lifetime number of WebSocket failures. Emitted every 5 seconds.
  routed\_app\_requests              | The collector sums up requests for all dea-{index} components for its output metrics. Emitted every 5 seconds.
  total\_requests                    | Lifetime number of requests received. Emitted every 5 seconds.
  ms\_since\_last\_registry\_update  | Time in millisecond since the last route register has been been received. Emitted every 30 seconds.
- total\_routes                      | Current number of routes registered. Emitted every 30 seconds.
+ total_routes                      | Current number of routes registered. Emitted every 30 seconds.
  uptime                             | Uptime for router. Emitted every second.
  file_descriptors                   | Number of file descriptors currently used by the Gorouter. Emitted every 5 seconds.
  routes_pruned                      | Lifetime number of stale routes that have been automatically pruned by the Gorouter. Emitted every 5 seconds.
- backend_tls_handshake_failed       | Lifetime number of failed TLS handshakes when connecting to a backend registered with TLS port. Corresponds to HTTP 525 error response from the Gorouter. Emitted every 5 seconds.
- backend_invalid_id                 | Lifetime number of requests that were rejected because the backend presents a certificate with an invalid id. Corresponds to HTTP 503 error response from the Gorouter. Emitted every 5 seconds.
- backend_invalid_tls_cert           | Lifetime number of requests that were rejected because the backend presents a certificate that is not trusted by the Gorouter. Corresponds to HTTP 526 error response from Gorouter. Emitted every 5 seconds.
+ backend\_tls\_handshake_failed       | Lifetime number of failed TLS handshakes when connecting to a backend registered with TLS port. Corresponds to HTTP 525 error response from the Gorouter. Emitted every 5 seconds.
+ backend\_invalid_id                 | Lifetime number of requests that were rejected because the backend presents a certificate with an invalid id. Corresponds to HTTP 503 error response from the Gorouter. Emitted every 5 seconds.
+ backend\_invalid\_tls_cert           | Lifetime number of requests that were rejected because the backend presents a certificate that is not trusted by the Gorouter. Corresponds to HTTP 526 error response from Gorouter. Emitted every 5 seconds.
  buffered_messages                  | Current number of messages in the Gorouter's NATS client's buffer. Emitted every 5 seconds.
- total_dropped_messages             | Lifetime number of messages that have been dropped by the Gorouter's NATS client due to a full buffer. Emitted every 5 seconds.
+ total\_dropped_messages             | Lifetime number of messages that have been dropped by the Gorouter's NATS client due to a full buffer. Emitted every 5 seconds.
 
 <a id="routing_api"></a>Default Origin Name: routing_api
 
