@@ -6,23 +6,25 @@ owner: CAPI
 <strong><%= modified_date %></strong>
 
 ## Overview
+
 Audit events help Cloud Foundry operators monitor actions taken against resources (such as applications) via
 user or system actions.
 
-### Differences from other types of events
+### Differences from Other Types of Events
+
 Despite being similar in name, audit events are different from [Cloud Foundry Usage Events](./usage-events.html).
-Unlike usage events, audit events are **not** suitable for application and service billing.
+Unlike usage events, audit events are not suitable for application and service billing.
 
 Another tool to help administrators monitor user actions on Cloud Foundry is [Security Event Logging](../../loggregator/cc-uaa-logging.html).
-Unlike Security Event Logs, audit events do **not** cover all API endpoints, but provide more details about a user's actions.
+Unlike Security Event Logs, audit events do not cover all API endpoints, but provide more details about a user's actions.
 
-### Viewing Events
+### View Events
 
 The easiest way to view events for an application is to use the [Cloud Foundry CLI](../../cf-cli/index.html):
 
 `cf events APP_NAME`
 
-This will result in the following output:
+This results in the following output:
 
 ```
 time                          event                      actor   description
@@ -34,7 +36,7 @@ time                          event                      actor   description
 2018-09-04T17:03:24.00-0700   audit.app.create           admin   instances: 1, state: STOPPED, environment_json: [PRIVATE DATA HIDDEN]
 ```
 
-This command will show the 50 most recent events for that application.
+This command shows the 50 most recent events for that application.
 To see more events, or events that are not attributed to an application, use the following Cloud Foundry API endpoint:
 
 `GET /v2/events`
@@ -44,10 +46,9 @@ For documentation about using this endpoint, see the [API documentation](https:/
 Events are currently only viewable via the v2 api, but user actions in the [Cloud Foundry v3 API](https://v3-apidocs.cloudfoundry.org/) will still
 result in audit event creation.
 
-
 ## Using Audit Events
 
-The following describe some of the intended use cases of audit events.
+The following describes some of the intended use cases of audit events.
 
 ### Resource History
 
@@ -58,6 +59,7 @@ information such as when it was last updated, if it has crashed recently, etc.
 
 A user is able to query the events endpoint with various filters.  For example, a user could query for all events of a given type, or all events associated with a
 resource since a given timestamp.
+
 Allowed filters are enumerated on the [API documentation](https://apidocs.cloudfoundry.org/latest-release/events/list_all_events.html).
 
 ### External Auditing Warehouse
@@ -67,6 +69,7 @@ and may be purged during a deploy, these operators must maintain an external dat
 and conform to their own compliance requirements.
 
 ## Types of Audit Events
+
 ### App Lifecycle (audit.app.*)
 
 - audit.app.copy-bits
@@ -190,24 +193,26 @@ and conform to their own compliance requirements.
 ## When are events created?
 
 Most events are created when a user acts upon a resource.
-For example, a user issuing a `cf stop APP_NAME` command will cause an `audit.app.stop` event to be created and associated with that user.
+For example, a user issuing a `cf stop APP_NAME` command causes an `audit.app.stop` event to be created and associated with that user.
 
-Service Events (`audit.service*`) are created after the service broker has approved an interaction.
+* **Service events** (`audit.service*`) are created after the service broker has approved an interaction.
 
-Crash events (`audit.app.crash`) are created when Diego marks an application instance as crashed.
+* **Crash events** (`audit.app.crash`) are created when Diego marks an application instance as crashed.
 
-Blob events (`blob.remove_orphan`) are created by a daily clean up job and do not represent user action.
+* **Blob events** (`blob.remove_orphan`) are created by a daily clean up job and do not represent user action.
 
 ## Considerations
-Audit events can be created at any point during the execution of the action they describe. This means the action associated with the event is **not** guaranteed
+
+Audit events can be created at any point during the execution of the action they describe. This means the action associated with the event is not guaranteed
 to have succeeded.
 
 The audit events table can grow to be very large. So, for performance considerations, certain database migrations may result in the truncation of this table.
 In other words, this means that a deployment with such a migration will result in a loss of events.
+
 These migrations are exceedingly rare and any release of capi-release that includes one will note this behavior prominently in its [release notes](https://github.com/cloudfoundry/capi-release/releases).
 
-The order of audit events returned from the API is **not** guaranteed to match the sequence of events that occurred in the system.
+The order of audit events returned from the API may not match the sequence of events that occurred in the system.
 
-The timestamps on events should not be relied on to sequence events - they may come from different Cloud Controller instances whose time could be slightly mismatched.
+Do not rely on timestamps to sequence events; they may come from different Cloud Controller instances whose times could be slightly mismatched.
 
 Audit events expire after 31 days by default. This is configurable using the capi-release manifest property `cc.audit_events.cutoff_age_in_days`.
