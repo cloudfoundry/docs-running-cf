@@ -41,8 +41,6 @@ Stacks exist in a subdirectory on their host machine, typically under `/var/vcap
     cell:
      &#45; name: rep
         release: diego
-      &#45; name: consul_agent
-        release: cf
       &#45; name: garden
         release: garden-runc
       &#45; name: rootfses
@@ -59,8 +57,6 @@ Stacks exist in a subdirectory on their host machine, typically under `/var/vcap
     access:
      &#45; name: ssh_proxy
        release: diego
-     &#45; name: consul_agent
-       release: cf
      &#45; name: metron_agent
        release: cf
      &#45; name: file_server

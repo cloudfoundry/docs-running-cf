@@ -85,7 +85,7 @@ Your manifest for Diego should include the following properties:
 
 ### <a id="ha-proxy"></a>Using HAProxy
 
-If you are using the HAProxy job as the Gorouter load balancer and you set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `true`, HAProxy serves as the load balancer for Diego's SSH proxies. This configuration relies on the presence of the same consul server cluster that Diego components use for service discovery. Use this configuration for deployments where all traffic on the system domain and its subdomains is directed towards the HAProxy job, as is the case for a BOSH-Lite Cloud Foundry deployment on the default `bosh-lite.com` domain.
+If you are using the HAProxy job as the Gorouter load balancer and you set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `true`, HAProxy serves as the load balancer for Diego's SSH proxies. Use this configuration for deployments where all traffic on the system domain and its subdomains is directed towards the HAProxy job, as is the case for a BOSH-Lite Cloud Foundry deployment on the default `bosh-lite.com` domain.
 
 ### <a id="aws"></a>Using Elastic Load Balancers on Amazon Web Services
 
