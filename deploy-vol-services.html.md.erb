@@ -70,13 +70,7 @@ To deploy the NFS test server, you can fetch the operations file from the [persi
 	<span style="font-family:monospace">  nfstestserver: {export_cidr: 192.168.0.0/16}</span>
 </p>
 
-###<a id="broker"></a>Register the NFS Broker
-
-1. Register the broker using the credentials specified in the `creds.yml` stub.
-  <pre class="terminal">
-$ cf create-service-broker nfsbroker nfs-broker BROKER-PASSWORD \
-		http://nfs-broker.YOUR-SYSTEM-DOMAIN
-  </pre>
+###<a id="broker"></a>Grant access to the NFS Broker
 
 1. Grant access to the services of the broker.
   <pre class="terminal">
