@@ -53,9 +53,7 @@ This procedure requires the following:
 
 <p class="note"><strong>Note</strong>: The above command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o operations/enable-nfs-volume-service.yml</code> option.</p>
 
-Your CF deployment now has a running service broker and volume drivers and is ready to mount nfs volumes. BOSH generates a variable for your nfsbroker password, unless you have explicitly defined one.  You can find the broker registration password with the `bosh interpolate` command:
-  <pre class="terminal">
-  $ bosh int deployment-vars.yml --path /nfs-broker-password</pre>
+Your CF deployment now has a running service broker and volume drivers and is ready to mount nfs volumes.
 
 ####<a id="server"></a>Deploying the NFS Test Server
 
