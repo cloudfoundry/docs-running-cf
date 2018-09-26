@@ -51,7 +51,11 @@ This procedure requires the following:
   $ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
 		-o operations/enable-nfs-volume-service.yml</pre>
 
-<p class="note"><strong>Note</strong>: The above command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o operations/enable-nfs-volume-service.yml</code> option.</p>
+1. Run the `nfsbrokerpush` errand to deploy the NFS service broker application:
+  <pre class="terminal">
+  $ bosh -e my-env -d cf run-errand nfsbrokerpush</pre>
+
+<p class="note"><strong>Note</strong>: The above <code>bosh deploy</code> command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o operations/enable-nfs-volume-service.yml</code> option.</p>
 
 Your CF deployment now has a running service broker and volume drivers and is ready to mount nfs volumes.
 
