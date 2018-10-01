@@ -38,7 +38,7 @@ This procedure requires the following:
 * A BOSH v2 CLI.
 * An NFS Server. If you require it, a test server can be deployed following the instructions [below](#server).
 
-###<a id="redeploy"></a>Redeploy CF with NFS enabled
+###<a id="redeploy"></a>Redeploy CF with NFS Enabled
 
 1. Clone the cf-deployment repository from git, if you do not already have it:
   <pre class="terminal">
@@ -50,14 +50,13 @@ This procedure requires the following:
   <pre class="terminal">
   $ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
 		-o operations/enable-nfs-volume-service.yml</pre>
+    <p class="note"><strong>Note</strong>: The above <code>bosh deploy</code> command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o operations/enable-nfs-volume-service.yml</code> option.</p>
 
 1. Run the `nfsbrokerpush` errand to deploy the NFS service broker application:
   <pre class="terminal">
   $ bosh -e my-env -d cf run-errand nfsbrokerpush</pre>
 
-<p class="note"><strong>Note</strong>: The above <code>bosh deploy</code> command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o operations/enable-nfs-volume-service.yml</code> option.</p>
-
-Your CF deployment now has a running service broker and volume drivers and is ready to mount nfs volumes.
+Your CF deployment now has a running service broker and volume drivers and is ready to mount NFS volumes.
 
 ####<a id="server"></a>Deploying the NFS Test Server
 
@@ -70,14 +69,16 @@ To deploy the NFS test server, you can fetch the operations file from the [persi
 	<span style="font-family:monospace">  nfstestserver: {export_cidr: 192.168.0.0/16}</span>
 </p>
 
-###<a id="broker"></a>Grant access to the NFS Broker
+###<a id="broker"></a>Grant Access to the NFS Broker
 
-1. Grant access to the services of the broker.
-  <pre class="terminal">
-  $ cf enable-service-access nfs
-  $ cf enable-service-access nfs-experimental
-  </pre>
-  CF Developers can now create an NFS service and bind instances to their apps as outlined in the [Using an External File System (Volume Services)](../devguide/services/using-vol-services.html) topic.
+Grant access to the services of the broker.
+  
+<pre class="terminal">
+$ cf enable-service-access nfs
+$ cf enable-service-access nfs-experimental
+</pre>
+
+CF Developers can now create an NFS service and bind instances to their apps as outlined in the [Using an External File System (Volume Services)](../devguide/services/using-vol-services.html) topic.
 
 ###<a id="ldap"></a>(Optional) LDAP Support
 
