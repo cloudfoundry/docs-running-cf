@@ -209,11 +209,11 @@ Default Origin Name: stager
  memoryStats.numMallocs                               | Lifetime number of memory allocations.
  numCPUS                                              | Number of CPUs on the machine.
  numGoRoutines                                        | Instantaneous number of active goroutines in the process.
- StagingRequestFailedDuration                         | Time in nanoseconds that the failed staging task took to run. Emitted each time a staging task fails.
- StagingRequestsFailed                                | Cumulative number of failed staging tasks handled by each stager. Emitted every time a staging task fails.
- StagingRequestsSucceeded                             | Cumulative number of successful staging tasks handled by each stager. Emitted every time a staging task completes successfully.
- StagingRequestSucceededDuration                      | Time in nanoseconds that the successful staging task took to run. Emitted each time a staging task completes successfully.
- StagingStartRequestsReceived                         | Cumulative number of requests to start a staging task. Emitted by a stager each time it handles a request<a id="tpslistener"></a>.
+ cc.staging.failed_duration                           | Time in nanoseconds that the failed staging task took to run. Emitted each time a staging task fails.
+ cc.staging.failed                                    | Cumulative number of failed staging tasks handled by each stager. Emitted every time a staging task fails.
+ cc.staging.succeeded                                 | Cumulative number of successful staging tasks handled by each stager. Emitted every time a staging task completes successfully.
+ cc.staging.succeeded_duration                        | Time in nanoseconds that the successful staging task took to run. Emitted each time a staging task completes successfully.
+ cc.staging.requested                                 | Cumulative number of requests to start a staging task. Emitted by a stager each time it handles a request<a id="tpslistener"></a>.
 
 Default Origin Name: tps_listener
 
