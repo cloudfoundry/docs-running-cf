@@ -60,7 +60,7 @@ Your CF deployment now has a running service broker and volume drivers and is re
 
 ####<a id="server"></a>Deploying the NFS Test Server
 
-To deploy the NFS test server, you can fetch the operations file from the [persi-ci github repository](https://github.com/cloudfoundry/persi-ci/blob/master/operations/enable-nfs-test-server.yml) and include that operation with a `-o` flag. This creates a separate VM with nfs exports you can use to experiment with volume mounts.
+To deploy the NFS test server, you can fetch the operations file from the [persi-ci github repository](https://github.com/cloudfoundry/nfs-volume-release/blob/master/operations/enable-nfs-test-server.yml) and include that operation with a `-o` flag. This creates a separate VM with nfs exports you can use to experiment with volume mounts.
 
 <p class="note"><strong>Note</strong>: By default, the nfs test server expects that your CF deployment is deployed to a 10.x.x.x subnet.  If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x) then you will need to override the "export_cidr" property.<br/>
  Edit the operations file, and replace this line:<br/>
