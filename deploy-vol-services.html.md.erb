@@ -5,14 +5,15 @@ owner: Diego Persistence
 
 This topic describes how Cloud Foundry (CF) operators can deploy volume services. 
 
-##<a id="overview"></a> Overview
+
+## <a id="overview"></a> Overview
 
 A volume service gives apps access to a remote filesystem, such as NFS. To provide a volume service for CF developers to use with their apps, you must deploy a driver and broker pair.
 For current versions of CF that have been been deployed with cf-deployment, deploying brokers and drivers is typically accomplished using operations files as outlined below in [Example: Deploy NFS to CF](#example).
 
-### Additional Information
+### <a id='additional-info'></a> Additional Information
 
-For more information about volume services and the drivers and brokers available to CF, see the following links:
+For more information about volume services and the drivers and brokers available to CF, see the following:
 
 * [Volume Services Google Doc](https://docs.google.com/document/d/1YtPMY9EjxlgJPa4SVVwIinfid_fshCF48xRhzyoZhrQ/edit?usp=sharing)
 * [NFS volume release repository](https://github.com/cloudfoundry/nfs-volume-release)
@@ -20,33 +21,34 @@ For more information about volume services and the drivers and brokers available
 * [EFS volume release repository](https://github.com/cloudfoundry-incubator/efs-volume-release)
 * [CEPHFS release repository](https://github.com/cloudfoundry-incubator/cephfs-bosh-release)
 
-<p class="note"><strong>Note</strong>: For test purposes, you can deploy the <a href="https://github.com/cloudfoundry/local-volume-release.git">Local Volume Release</a> if running a single Diego Cell CF deployment. This is not intended for production deployments.</p>
+<p class="note"><strong>Note:</strong> For test purposes, you can deploy the <a href="https://github.com/cloudfoundry/local-volume-release.git">Local Volume Release</a> if running a single Diego Cell CF deployment. This is not intended for production deployments.</p>
 
-### Contact
+### <a id='contact'></a> Contact
 
 If you have any questions, you can contact the team that develops volume services for CF on the **#persi** channel in the [Cloud Foundry (Open Source)](https://cloudfoundry.slack.com) Slack organization.
 
-##<a id="example"></a> Example: Deploy NFS Volume Service to CF
+
+## <a id="example"></a> Example: Deploy NFS Volume Service to CF
 
 The following procedure provides an example of how to deploy the NFS broker and corresponding driver to an existing CF deployment.
 
-###<a id="pre"></a>Prerequisites
+### <a id="pre"></a> Prerequisites
 
 This procedure requires the following:
 
 * A current version of Cloud Foundry deployed [as described here](/deploying/index.html).
 * A BOSH v2 CLI.
-* An NFS Server. If you require it, a test server can be deployed following the instructions [below](#server).
+* An NFS Server. If you require it, a test server can be deployed following the instructions in [Deploying the NFS Test Server](#server).
 
-###<a id="redeploy"></a>Redeploy CF with NFS Enabled
+### <a id="redeploy"></a> Redeploy CF with NFS Enabled
 
-1. Clone the cf-deployment repository from git, if you do not already have it:
+1. Clone the cf-deployment repository from Git, if you do not already have it:
   <pre class="terminal">
   $ cd ~/workspace
   $ git clone https<span>:</span>//github.com/cloudfoundry/cf-deployment.git
   $ cd ~/workspace/cf-deployment</pre>
 
-1. Redeploy your cf-deployment while including the nfs ops file:
+1. Redeploy your cf-deployment while including the NFS ops file:
   <pre class="terminal">
   $ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
 		-o operations/enable-nfs-volume-service.yml</pre>
@@ -58,18 +60,18 @@ This procedure requires the following:
 
 Your CF deployment now has a running service broker and volume drivers and is ready to mount NFS volumes.
 
-####<a id="server"></a>Deploying the NFS Test Server
+#### <a id="server"></a> Deploying the NFS Test Server
 
-To deploy the NFS test server, you can fetch the operations file from the [persi-ci github repository](https://github.com/cloudfoundry/persi-ci/blob/master/operations/enable-nfs-test-server.yml) and include that operation with a `-o` flag. This creates a separate VM with nfs exports you can use to experiment with volume mounts.
+To deploy the NFS test server, you can fetch the operations file from the [persi-ci GitHub repository](https://github.com/cloudfoundry/persi-ci/blob/master/operations/enable-nfs-test-server.yml) and include that operation with a `-o` flag. This creates a separate VM with nfs exports you can use to experiment with volume mounts.
 
-<p class="note"><strong>Note</strong>: By default, the nfs test server expects that your CF deployment is deployed to a 10.x.x.x subnet.  If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x) then you will need to override the "export_cidr" property.<br/>
+<p class="note"><strong>Note:</strong> By default, the NFS test server expects that your CF deployment is deployed to a 10.x.x.x subnet. If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x), you will need to override the "export_cidr" property.<br/>
  Edit the operations file, and replace this line:<br/>
  <span style="font-family:monospace">  nfstestserver: {}</span><br/>
  with something like this:<br/>
 	<span style="font-family:monospace">  nfstestserver: {export_cidr: 192.168.0.0/16}</span>
 </p>
 
-###<a id="broker"></a>Grant Access to the NFS Broker
+### <a id="broker"></a> Grant Access to the NFS Broker
 
 Grant access to the services of the broker.
   
@@ -80,6 +82,6 @@ $ cf enable-service-access nfs-experimental
 
 CF Developers can now create an NFS service and bind instances to their apps as outlined in the [Using an External File System (Volume Services)](../devguide/services/using-vol-services.html) topic.
 
-###<a id="ldap"></a>(Optional) LDAP Support
+### <a id="ldap"></a> (Optional) LDAP Support
 
-  For better security, it is recommended to configure your deployment of nfs-volume-release to connect to an external LDAP server to resolve user credentials into uids.  See [this note](https://github.com/cloudfoundry/nfs-volume-release/USING_LDAP.md) for more details.
+For better security, Pivotal recommends configuring your deployment of nfs-volume-release to connect to an external LDAP server to resolve user credentials into UIDs. For more information, see [this note](https://github.com/cloudfoundry/nfs-volume-release/USING_LDAP.md).
