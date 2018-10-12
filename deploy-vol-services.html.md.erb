@@ -64,7 +64,7 @@ Your CF deployment now has a running service broker and volume drivers and is re
 
 To deploy the NFS test server, you can fetch the operations file from the [persi-ci GitHub repository](https://github.com/cloudfoundry/persi-ci/blob/master/operations/enable-nfs-test-server.yml) and include that operation with a `-o` flag. This creates a separate VM with nfs exports you can use to experiment with volume mounts.
 
-<p class="note"><strong>Note:</strong> By default, the NFS test server expects that your CF deployment is deployed to a 10.x.x.x subnet. If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x), you will need to override the "export_cidr" property.<br/>
+<p class="note"><strong>Note:</strong> By default, the NFS test server expects that your CF deployment is deployed to a 10.x.x.x subnet. If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x), you must override the "export_cidr" property.<br/>
  Edit the operations file, and replace this line:<br/>
  <span style="font-family:monospace">  nfstestserver: {}</span><br/>
  with something like this:<br/>
@@ -74,7 +74,7 @@ To deploy the NFS test server, you can fetch the operations file from the [persi
 ### <a id="broker"></a> Grant Access to the NFS Broker
 
 Grant access to the services of the broker.
-  
+
 <pre class="terminal">
 $ cf enable-service-access nfs
 $ cf enable-service-access nfs-experimental
@@ -85,3 +85,55 @@ CF Developers can now create an NFS service and bind instances to their apps as 
 ### <a id="ldap"></a> (Optional) LDAP Support
 
 For better security, Pivotal recommends configuring your deployment of nfs-volume-release to connect to an external LDAP server to resolve user credentials into UIDs. For more information, see [this note](https://github.com/cloudfoundry/nfs-volume-release/USING_LDAP.md).
+
+
+## <a id="smb-example"></a> Example 2: Deploy SMB Volume Service to CF
+
+The following procedure provides an example of how to deploy the SMB broker and corresponding driver to an existing CF deployment.
+
+### <a id="smb-pre"></a> Prerequisites
+
+This procedure requires the following:
+
+* A current version of Cloud Foundry deployed [as described here](/deploying/index.html).
+* A BOSH v2 CLI.
+* An SMB Server. If you require it, a test server can be deployed following the instructions in [Deploying the SMB Test Server](#smb-server).
+
+### <a id="smb-redeploy"></a> Redeploy CF with SMB Enabled
+
+1. Clone the cf-deployment repository from Git, if you do not already have it:
+  <pre class="terminal">
+  $ cd ~/workspace
+  $ git clone https<span>:</span>//github.com/cloudfoundry/cf-deployment.git
+  $ cd ~/workspace/cf-deployment</pre>
+
+1. Redeploy your cf-deployment while including the SMB ops file:
+  <pre class="terminal">
+  $ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
+		-o operations/experimental/enable-smb-volume-service.yml</pre>
+    <p class="note"><strong>Note:</strong> The above <code>bosh deploy</code> command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o operations/experimental/enable-smb-volume-service.yml</code> option.</p>
+
+1. Run the `smbbrokerpush` errand to deploy the SMB service broker application:
+  <pre class="terminal">
+  $ bosh -e my-env -d cf run-errand smbbrokerpush</pre>
+
+Your CF deployment now has a running service broker and volume drivers and is ready to mount existing SMB shares.
+
+#### <a id="smb-server"></a> Deploying the SMB Test Server
+
+To deploy the SMB test server, you can fetch the operations file from the [persi-ci GitHub repository](https://github.com/cloudfoundry/smb-volume-release/blob/master/operations/enable-smb-test-server.yml) and include that operation with a `-o` flag. This creates a separate VM with SMB shares you can use to experiment with volume mounts.
+
+<p class="note"><strong>Note:</strong> By default, the SMB test server expects that your CF deployment is deployed to a 10.x.x.x subnet. If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x), you must override the `export_cidr` property.<br/>
+ Edit the operations file, and add a line in the properties section:<br/>
+	<span style="font-family:monospace">export_cidr: 192.168.0.0/16</span>
+</p>
+
+###<a id="smb-broker"></a> Grant Access to the SMB Broker
+
+Grant access to the services of the broker.
+
+<pre class="terminal">
+$ cf enable-service-access smb
+</pre>
+
+CF developers can now create an SMB service and bind instances to their apps as outlined in the [Using an External File System (Volume Services)](../devguide/services/using-vol-services.html) topic.
