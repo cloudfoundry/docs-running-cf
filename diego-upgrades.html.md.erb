@@ -26,7 +26,11 @@ A potential issue arises if too many app instance replacements are slow to start
 
 If too many app instances are starting concurrently, then the load of these starts on the rest of the system can cause other applications that are already running to crash and be rescheduled. These events can result in a cascading failure.
 
-<%= partial 'diego-upgrade-limits' %>
+To prevent overload, Cloud Foundry provides two major throttle configurations:
+
+- **The maximum number of starting containers that Diego can start in Cloud Foundry**: This is a deployment-wide limit. The default value and ability to override this configuration depends on the version of Cloud Foundry deployed. 
+
+- **The `max_in_flight` setting for the Diego cell job configured in the BOSH manifest**: This configuration, expressed as a percentage or an integer, sets the maximum number of job instances that can be upgraded simultaneously. For example, if your deployment is running 10 Diego cell job instances and the configured `max_in_flight` value is `20%`, then only 2 Diego cell job instances can start up at a single time. <%= vars.max_in_flight_config %>
 
 ## <a id="max-container-starts"></a> Set a Maximum Number of Starting Containers 
 
@@ -34,6 +38,18 @@ This topic describes how to use the auctioneer job to configure the maximum numb
 
 The auctioneer only schedules a fixed number of app instances to start concurrently. This limit applies to both single and multiple Diego Cells. For example, if you set the limit to five starting instances, it does not matter if you have one Diego Cell with ten instances or five Diego Cells with two instances each. The auctioneer will not allow more than five instances to start at the same time.
 
-<% if vars.product_name == "CF" %>
-<%= partial "max-container-starts" %>
-<% end %>
+If you are using a cloud-based IaaS, rather than a smaller on-premise solution, Cloud Foundry recommends leaving the default at `0`.
+
+You can configure the maximum number of started instances by changing the `diego.auctioneer.starting_container_count_maximum` property in the Diego manifest.
+
+1. Open the Diego manifest in a text editor.
+1. Find the `diego.auctioneer.starting_container_count_maximum` property.
+1. Set the maximum number of instances the auctioneer should allow to start.
+1. Save the changes and redeploy BOSH.
+
+For example, the following Diego manifest excerpt shows the `diego.auctioneer.starting_container_count_maximum` property set to `100`.
+
+```
+diego.auctioneer.starting_container_count_maximum:
+    description: "Maximum number of inflight container starts allowed globally. Value of 0 or less indicates no limit."
+    default: 100
