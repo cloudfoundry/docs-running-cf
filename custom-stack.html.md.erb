@@ -11,7 +11,9 @@ owner:
 
 This topic outlines how to add a custom stack under the Diego architecture. To add a stack, you first build a BOSH job template that installs the stack on the host machine. Then you configure your deployment manifests so that Cloud Foundry can run the job when it creates cells.
 
-The [Cloud Foundry cflinuxfs2](http://github.com/cloudfoundry/cflinuxfs2) repository contains scripts for building your own custom stacks, as well as the available Cloud Foundry stacks.
+The [Cloud Foundry cflinuxfs3](http://github.com/cloudfoundry/cflinuxfs3) repository
+contains scripts for building your own custom stacks, as well as the available Cloud
+Foundry stacks.
 
 The following example adds a new Linux-based `pancakes` stack for use with the [Garden-runC](https://github.com/cloudfoundry/garden-runc-release) operating system. This `pancakes` stack could, for example, support applications that require an old version of CentOS or Ubuntu.
 
@@ -19,7 +21,7 @@ The following example adds a new Linux-based `pancakes` stack for use with the [
 
 Stacks exist in a subdirectory on their host machine, typically under `/var/vcap/packages` or `/var/vcap/data`. Your BOSH job template must deploy the stack onto a host machine, and provide lifecycle binaries that work with your stack. The lifecycle binaries for your stack are helper programs that stage and run apps on the stack file system. To create a `pancakes-release` job template that deploys a custom stack, follow these steps:
 
-1. [Create a BOSH release](http://bosh.io/docs/create-release.html) `pancakes-release` for a job template that expands a stack into place in its subdirectory. The rootfs must be packaged as a `.tar` file, for example, a `pancakes-rootfs` template might create a tarred full Linux root file system at `/var/vcap/packages/pancakes-rootfs/rootfs.tar`. See the [rootfses job template in diego-release](https://github.com/cloudfoundry/cflinuxfs2-release/tree/master/jobs/cflinuxfs2-rootfs-setup) for one way to do this.
+1. [Create a BOSH release](http://bosh.io/docs/create-release.html) `pancakes-release` for a job template that expands a stack into place in its subdirectory. The rootfs must be packaged as a `.tar` file, for example, a `pancakes-rootfs` template might create a tarred full Linux root file system at `/var/vcap/packages/pancakes-rootfs/rootfs.tar`. See the [rootfses job template in diego-release](https://github.com/cloudfoundry/cflinuxfs3-release/tree/master/jobs/cflinuxfs3-rootfs-setup) for one way to do this.
 
 1. Create lifecycle binaries for your stack. See the diego-release repository for examples of app lifecycle binary source code:
   * [Buildpack App Lifecycle](https://github.com/cloudfoundry-incubator/diego-release/tree/develop/packages/buildpack_app_lifecycle)
@@ -68,7 +70,7 @@ Stacks exist in a subdirectory on their host machine, typically under `/var/vcap
 1. The `diego.rep.preloaded_rootfses` property of the Cell Rep holds an array associating stacks with the location of their tarred rootfs in the filesystem. Add a pair to this list to associate the `pancakes` stack with its file system root location, set up on the cell by the `pancakes-rootfs` job. For example, in the `preloaded_rootfses:` property under `rep:` in your [Diego manifest](https://github.com/cloudfoundry-incubator/diego-release), set the array to the following by adding the text shown in **bold**:
 
     <pre>
-      ["cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar",
+      ["cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar",
       <b>"pancakes:/var/vcap/packages/pancakes-rootfs/rootfs.tar"</b>]
     </pre>
 
@@ -77,7 +79,7 @@ Stacks exist in a subdirectory on their host machine, typically under `/var/vcap
     <pre>
       description: "List of lifecycle bundles arguments for different stacks in form 'lifecycle-name:path/to/bundle'"
       default:
-        &#45; "buildpack/cflinuxfs2:buildpack_app_lifecycle/buildpack_app_lifecycle.tgz"
+        &#45; "buildpack/cflinuxfs3:buildpack_app_lifecycle/buildpack_app_lifecycle.tgz"
         <b>&#45; "buildpack/pancakes:pancakes-app-lifecycle/pancakes-app-lifecycle.tgz"</b>
         &#45; "buildpack/windows2012R2:windows_app_lifecycle/windows_app_lifecycle.tgz"
         &#45; "docker:docker_app_lifecycle/docker_app_lifecycle.tgz"
@@ -89,7 +91,7 @@ Stacks exist in a subdirectory on their host machine, typically under `/var/vcap
     properties:
       cc:
         stacks:
-          &#45; name: "cflinuxfs2"
+          &#45; name: "cflinuxfs3"
             description: "Cloud Foundry Linux-based filesystem"
           &#45;  name: "windows2012R2"
             description: "Windows Server 2012 R2"
