@@ -5,12 +5,11 @@ owner: CAPI
 
 <strong><%= modified_date %></strong>
 
-## Overview
+## <a id='overview'> Overview
 
-Audit events help Cloud Foundry operators monitor actions taken against resources (such as applications) via
-user or system actions.
+Audit events help Cloud Foundry operators monitor actions taken against resources (such as applications) via user or system actions.
 
-### Differences from Other Types of Events
+### <a id='differences'> Differences from Other Types of Events
 
 Despite being similar in name, audit events are different from [Cloud Foundry Usage Events](./usage-events.html).
 Unlike usage events, audit events are not suitable for application and service billing.
@@ -18,7 +17,7 @@ Unlike usage events, audit events are not suitable for application and service b
 Another tool to help administrators monitor user actions on Cloud Foundry is [Security Event Logging](../../loggregator/cc-uaa-logging.html).
 Unlike Security Event Logs, audit events do not cover all API endpoints, but provide more details about a user's actions.
 
-### View Events
+### <a id='view-events'></a> View Events
 
 The easiest way to view events for an application is to use the [Cloud Foundry CLI](../../cf-cli/index.html):
 
@@ -41,36 +40,114 @@ To see more events, or events that are not attributed to an application, use the
 
 `GET /v2/events`
 
+<pre class=‘terminal’>
+$ GET /v2/events
+{
+  "total_results": 3,
+  "total_pages": 1,
+  "prev_url": null,
+  "next_url": null,
+  "resources": [
+    {
+      "metadata": {
+        "guid": "b8ede8e1-afc8-40a1-baae-236a0a77b27b",
+        "url": "/v2/events/b8ede8e1-afc8-40a1-baae-236a0a77b27b",
+        "created_at": "2016-06-08T16:41:23Z",
+        "updated_at": "2016-06-08T16:41:26Z"
+      },
+      "entity": {
+        "type": "name-167",
+        "actor": "guid-008640fc-d316-4602-9251-c8d09bbdc750",
+        "actor_type": "name-168",
+        "actor_name": "name-169",
+        "actee": "guid-e7790fa4-be2b-4a0f-aa82-c124342b0bb4",
+        "actee_type": "name-170",
+        "actee_name": "name-171",
+        "timestamp": "2016-06-08T16:41:23Z",
+        "metadata": {
+
+        },
+        "space_guid": "3a1368e7-e3b7-46af-a98d-57b9c71445e7",
+        "organization_guid": "86aa12ee-8c4f-4b26-b391-2be6c1730dbc"
+      }
+    },
+    {
+      "metadata": {
+        "guid": "2ccf53a8-d0eb-4807-9bb9-7dd844e65267",
+        "url": "/v2/events/2ccf53a8-d0eb-4807-9bb9-7dd844e65267",
+        "created_at": "2016-06-08T16:41:23Z",
+        "updated_at": "2016-06-08T16:41:26Z"
+      },
+      "entity": {
+        "type": "name-175",
+        "actor": "guid-52cb38f4-d52d-4201-87e3-8e5650efc8c1",
+        "actor_type": "name-176",
+        "actor_name": "name-177",
+        "actee": "guid-5c4214a1-f295-42ae-bd92-38e7cb8be538",
+        "actee_type": "name-178",
+        "actee_name": "name-179",
+        "timestamp": "2016-06-08T16:41:23Z",
+        "metadata": {
+
+        },
+        "space_guid": "10f0fd9d-dd68-428e-8e93-c00bb8eff0a6",
+        "organization_guid": "aa3fdaaa-42c8-4141-bc22-9792c37aa62f"
+      }
+    },
+    {
+      "metadata": {
+        "guid": "4f9b1fef-2ce4-4877-85e1-0da9114a92cb",
+        "url": "/v2/events/4f9b1fef-2ce4-4877-85e1-0da9114a92cb",
+        "created_at": "2016-06-08T16:41:23Z",
+        "updated_at": "2016-06-08T16:41:26Z"
+      },
+      "entity": {
+        "type": "name-183",
+        "actor": "guid-d3be7ed1-1c08-43f6-a20d-5cd9287492e1",
+        "actor_type": "name-184",
+        "actor_name": "name-185",
+        "actee": "guid-9844795f-943d-47ed-a997-2c04ee611f5a",
+        "actee_type": "name-186",
+        "actee_name": "name-187",
+        "timestamp": "2016-06-08T16:41:23Z",
+        "metadata": {
+
+        },
+        "space_guid": "f9ef235c-25df-4aa1-bcb4-15eec6f92146",
+        "organization_guid": "24a920db-f551-46af-bf73-e1db972f652a"
+      }
+    }
+  ]
+}
+</pre>
+
 For documentation about using this endpoint, see the [API documentation](https://apidocs.cloudfoundry.org/latest-release/events/list_all_events.html).
 
-Events are currently only viewable via the v2 api, but user actions in the [Cloud Foundry v3 API](https://v3-apidocs.cloudfoundry.org/) will still
-result in audit event creation.
+Events are currently only viewable via the v2 API, but user actions in the [Cloud Foundry v3 API](https://v3-apidocs.cloudfoundry.org/) will still result in audit event creation.
 
-## Using Audit Events
+
+## <a id='using-audit-events'></a> Using Audit Events
 
 The following describes some of the intended use cases of audit events.
 
-### Resource History
+### <a id='resource-history'></a> Resource History
 
-Usage events allow users, administrators, and operators a view a resource's history. For example, by looking at usage events for an application, an operator will see
-information such as when it was last updated, if it has crashed recently, etc.
+Usage events allow users, administrators, and operators a view a resource's history. For example, by looking at usage events for an application, an operator will see information such as when it was last updated, if it has crashed recently, etc.
 
-### Querying For Events
+### <a id='querying'></a> Querying For Events
 
-A user is able to query the events endpoint with various filters.  For example, a user could query for all events of a given type, or all events associated with a
-resource since a given timestamp.
+A user is able to query the events endpoint with various filters. For example, a user could query for all events of a given type, or all events associated with a resource since a given timestamp.
 
 Allowed filters are enumerated on the [API documentation](https://apidocs.cloudfoundry.org/latest-release/events/list_all_events.html).
 
-### External Auditing Warehouse
+### <a id='ext-auditing'></a> External Auditing Warehouse
 
-For auditing and compliance reasons, some operators may wish to keep a record of all audit events that have occured. Because audit events expire
-and may be purged during a deploy, these operators must maintain an external data warehouse. This way they can store and access events across expiration events
-and conform to their own compliance requirements.
+For auditing and compliance reasons, some operators may wish to keep a record of all audit events that have occured. Because audit events expire and may be purged during a deploy, these operators must maintain an external data warehouse. This way they can store and access events across expiration events and conform to their own compliance requirements.
 
-## Types of Audit Events
 
-### App Lifecycle (audit.app.*)
+## <a id='types'></a> Types of Audit Events
+
+### <a id='app-lifecycle'></a> App Lifecycle (audit.app.*)
 
 - audit.app.copy-bits
 - audit.app.create
@@ -101,41 +178,41 @@ and conform to their own compliance requirements.
 - audit.app.update
 - audit.app.upload-bits
 
-### Organization Lifecycle (audit.organization.*)
+### <a id='org-lifecycle'></a> Organization Lifecycle (audit.organization.*)
 
 - audit.organization.create
 - audit.organization.delete-request
 - audit.organization.update
 
-### Route Lifecycle (audit.route.*)
+### <a id='route-lifecycle'></a> Route Lifecycle (audit.route.*)
 
 - audit.route.create
 - audit.route.delete-request
 - audit.route.update
 
-### Service Lifecycle (audit.service.*)
+### <a id='service-lifecycle'></a> Service Lifecycle (audit.service.*)
 
 - audit.service.create
 - audit.service.delete
 - audit.service.update
 
-### Service Binding Lifecycle (audit.service_binding.*)
+### <a id='service-bind-lifecycle'></a> Service Binding Lifecycle (audit.service_binding.*)
 
 - audit.service\_binding.create
 - audit.service\_binding.delete
 
-### Service Broker Lifecycle (audit.service\_broker.*)
+### <a id='service-broker-lifecycle'></a> Service Broker Lifecycle (audit.service\_broker.*)
 
 - audit.service\_broker.create
 - audit.service\_broker.delete
 - audit.service\_broker.update
 
-### Service Dashboard Client Lifecycle (audit.service\_dashboard\_client.*)
+### <a id='service-dashboard-lifecycle'></a> Service Dashboard Client Lifecycle (audit.service\_dashboard\_client.*)
 
 - audit.service\_dashboard\_client.create
 - audit.service\_dashboard\_client.delete
 
-### Service Instance Lifecycle (audit.service\_instance.*)
+### <a id='service-instance-lifecycle'></a> Service Instance Lifecycle (audit.service\_instance.*)
 
 - audit.service\_instance.bind\_route
 - audit.service\_instance.create
@@ -145,24 +222,24 @@ and conform to their own compliance requirements.
 - audit.service\_instance.unshare
 - audit.service\_instance.update
 
-### Service Key Lifecycle (audit.service\_key.*)
+### <a id='service-key-lifecycle'></a> Service Key Lifecycle (audit.service\_key.*)
 
 - audit.service\_key.create
 - audit.service\_key.delete
 
-### Service Plan Visibility Lifecycle (audit.service\_plan\_visibility.*)
+### <a id='service-plan-vis-lifecycle'></a> Service Plan Visibility Lifecycle (audit.service\_plan\_visibility.*)
 
 - audit.service\_plan\_visibility.create
 - audit.service\_plan\_visibility.delete
 - audit.service\_plan\_visibility.update
 
-### Space Lifecycle (audit.space.*)
+### <a id='space-lifecycle'></a> Space Lifecycle (audit.space.*)
 
 - audit.space.create
 - audit.space.delete-request
 - audit.space.update
 
-### User Lifecycle (audit.user.*)
+### <a id='user-lifecycle'></a> User Lifecycle (audit.user.*)
 
 - audit.user.organization\_auditor\_add
 - audit.user.organization\_auditor\_remove
@@ -179,18 +256,19 @@ and conform to their own compliance requirements.
 - audit.user.space\_manager\_add
 - audit.user.space\_manager\_remove
 
-### User-Provided Service Instance Lifecycle (audit.user\_provided\_service\_instance.*)
+### <a id='user-provided-lifecycle'></a> User-Provided Service Instance Lifecycle (audit.user\_provided\_service\_instance.*)
 
 - audit.user\_provided\_service\_instance.create
 - audit.user\_provided\_service\_instance.delete
 - audit.user\_provided\_service\_instance.update
 
-### Special Events
+### <a id=special-events'></a> Special Events
 
 - audit.app.crash
 - blob.remove\_orphan
 
-## When are events created?
+
+## <a id='when-are-events-created'></a> When Are Events Created?
 
 Most events are created when a user acts upon a resource.
 For example, a user issuing a `cf stop APP_NAME` command causes an `audit.app.stop` event to be created and associated with that user.
@@ -201,10 +279,10 @@ For example, a user issuing a `cf stop APP_NAME` command causes an `audit.app.st
 
 * **Blob events** (`blob.remove_orphan`) are created by a daily clean up job and do not represent user action.
 
-## Considerations
 
-Audit events can be created at any point during the execution of the action they describe. This means the action associated with the event is not guaranteed
-to have succeeded.
+## <a id='considerations'></a> Considerations
+
+Audit events can be created at any point during the execution of the action they describe. This means the action associated with the event is not guaranteed to have succeeded.
 
 The audit events table can grow to be very large. So, for performance considerations, certain database migrations may result in the truncation of this table.
 In other words, this means that a deployment with such a migration will result in a loss of events.
