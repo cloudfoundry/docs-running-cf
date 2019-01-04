@@ -7,19 +7,19 @@ owner: CAPI
 
 ## <a id='overview'> Overview
 
-Audit events help Cloud Foundry operators monitor actions taken against resources (such as applications) via user or system actions.
+Audit events help Cloud Foundry operators monitor actions taken against resources (such as apps) via user or system actions.
 
 ### <a id='differences'> Differences from Other Types of Events
 
 Despite being similar in name, audit events are different from [Cloud Foundry Usage Events](./usage-events.html).
-Unlike usage events, audit events are not suitable for application and service billing.
+Unlike usage events, audit events are not suitable for app and service billing.
 
 Another tool to help administrators monitor user actions on Cloud Foundry is [Security Event Logging](../../loggregator/cc-uaa-logging.html).
 Unlike Security Event Logs, audit events do not cover all API endpoints, but provide more details about a user's actions.
 
 ### <a id='view-events'></a> View Events
 
-The easiest way to view events for an application is to use the [Cloud Foundry CLI](../../cf-cli/index.html):
+The easiest way to view events for an app is to use the [Cloud Foundry CLI](../../cf-cli/index.html):
 
 `cf events APP_NAME`
 
@@ -35,8 +35,8 @@ time                          event                      actor   description
 2018-09-04T17:03:24.00-0700   audit.app.create           admin   instances: 1, state: STOPPED, environment_json: [PRIVATE DATA HIDDEN]
 ```
 
-This command shows the 50 most recent events for that application.
-To see more events, or events that are not attributed to an application, use the following Cloud Foundry API endpoint:
+This command shows the 50 most recent events for that app.
+To see more events, or events that are not attributed to an app, use the following Cloud Foundry API endpoint:
 
 `GET /v2/events`
 
@@ -132,7 +132,7 @@ The following describes some of the intended use cases of audit events.
 
 ### <a id='resource-history'></a> Resource History
 
-Usage events allow users, administrators, and operators a view a resource's history. For example, by looking at usage events for an application, an operator will see information such as when it was last updated, if it has crashed recently, etc.
+Usage events allow users, administrators, and operators a view a resource's history. For example, by looking at usage events for an app, an operator will see information such as when it was last updated, if it has crashed recently, etc.
 
 ### <a id='querying'></a> Querying For Events
 
@@ -275,7 +275,7 @@ For example, a user issuing a `cf stop APP_NAME` command causes an `audit.app.st
 
 * **Service events** (`audit.service*`) are created after the service broker has approved an interaction.
 
-* **Crash events** (`audit.app.crash`) are created when Diego marks an application instance as crashed.
+* **Crash events** (`audit.app.crash`) are created when Diego marks an app instance as crashed.
 
 * **Blob events** (`blob.remove_orphan`) are created by a daily clean up job and do not represent user action.
 

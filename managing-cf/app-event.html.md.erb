@@ -1,0 +1,285 @@
+---
+title: Retrieving App and Event Information
+owner: CAPI
+---
+
+<strong><%= modified_date %></strong>
+
+This topic explains how to query the Cloud Controller API (CAPI) to retrieve current information about apps and events.
+
+## <a id='target'></a> Target and Log In
+
+To perform the procedures in this topic, you must target the endpoint of your Cloud Controller and log in. If you do not have the cf CLI installed, see the [Installing the cf CLI](../cf-cli/install-go-cli.html) topic.
+
+There are two ways to target your Cloud Controller endpoint. You can run the following `curl` command to target the endpoint and log in before making each request:
+<pre class='terminal'>
+$ curl "https://app-usage.YOUR-SYSTEM-DOMAIN/system_report/app_usages" -k -v \
+-H "authorization: `cf oauth-token`"
+</pre>
+
+You can also use `cf curl` to target the endpoint, log in, and stay logged in for each request. To target the endpoint and log in using `cf curl`, do the following:
+
+ 1. Target the endpoint of your Cloud Controller:
+  <pre class='terminal'>$ cf api api.YOUR-SYSTEM-DOMAIN</pre>
+
+ 1. Log in as admin or as an Org Manager or Org Auditor for the org you want to obtain information about.
+  <pre class='terminal'>
+  $ cf login -u admin
+  API endpoint:  api.YOUR-SYSTEM-DOMAIN
+  Email: user<span>@</span>example.com
+  Password:
+  Authenticating...
+  OK
+  ...
+  Targeted org  YOUR-ORG
+  Targeted space  development
+  API endpoint:    http<span>s:</span>//api.YOUR-SYSTEM-DOMAIN (API version:  2.52.0)
+  User:            user<span>@</span>example.com
+  Org:             YOUR-ORG
+  Space:           development
+  </pre>
+
+
+## <a id='obtain_apps'></a> Obtain App Information
+
+You can obtain the following app information:
+
+* [All Apps](#all-apps)
+* [App Summary](#app-summary)
+* [Events](#events)
+* [App Usage Events](#app-usage-events)
+
+### <a id='all-apps'></a> All Apps
+
+Use the `apps` endpoint to retrieve information about all of your apps:
+
+<pre class='terminal'>
+$ cf curl /v2/apps
+{
+ "total_results": 2,
+ "total_pages": 1,
+ "prev_url": null,
+ "next_url": null,
+ "resources": [
+    {
+        "metadata": {
+           "guid": "acf2ce33-ee92-54TY-9adb-55a596a8dcba",
+           "url": "/v2/apps/acf2ce33-ee92-54TY-9adb-55a596a8dcba",
+           "created_at": "2016-02-06T17:40:31Z",
+           "updated_at": "2016-02-06T18:09:17Z"
+        },
+        "entity": {
+           "name": "YOUR-APP",
+ [...]
+           "space_url": "/v2/spaces/a0205ae0-a691-4667-92bc-0d0dd712b6d3",
+           "stack_url": "/v2/stacks/86205f38-84fc-4bc2-b2b8-af7f55669f04",
+           "routes_url": "/v2/apps/acf2ce33-ee92-54TY-9adb-55a596a8dcba/routes",
+           "events_url": "/v2/apps/acf2ce33-ee92-54TY-9adb-55a596a8dcba/events",
+           "service_bindings_url": "/v2/apps/acf2ce33-ee92-54TY-9adb-55a596a8dcba/service_bindings",
+          "route_mappings_url": "/v2/apps/acf2ce33-ee92-54TY-9adb-55a596a8dcba/route_mappings"
+           }
+        },
+    {
+        "metadata": {
+           "guid": "79bb58cc-3737-43be-ac70-39a2843b5178",
+           "url": "/v2/apps/79bb58cc-3737-4540-ac70-39a2843b5178",
+           "created_at": "2016-02-15T23:25:47Z",
+           "updated_at": "2016-03-12T21:54:59Z"
+        },
+        "entity": {
+           "name": "ANOTHER-APP",
+[...]
+           "space_url": "/v2/spaces/a0205ae0-a691-4667-92bc-0d0dd712b6d3",
+           "stack_url": "/v2/stacks/86205f38-84fc-4bc2-b2b8-af7f55669f04",
+           "routes_url": "/v2/apps/79bb58cc-3737-4540-ac70-39a2843b5178/routes",
+           "events_url": "/v2/apps/79bb58cc-3737-4540-ac70-39a2843b5178/events",
+           "service_bindings_url": "/v2/apps/79bb58cc-3737-4540-ac70-39a2843b5178/service_bindings",
+           "route_mappings_url": "/v2/apps/79bb58cc-3737-4540-ac70-39a2843b5178/route_mappings"
+         }
+      }
+   ]
+}
+</pre>
+
+The output of this command provides the URL endpoints for each app, within the `metadata: url` section. You can use these app-specific endpoints to retrieve more information about that app. In the example above, the endpoints for the two apps are `/v2/apps/acf2ce33-ee92-54TY-9adb-55a596a8dcba` and `/v2/apps/79bb58cc-3737-4540-ac70-39a2843b5178`.
+
+### <a id='app-summary'></a> App Summary
+
+Use the `summary` endpoint under each app-specific URL to retrieve the instances and any bound services for that app:
+
+<pre class='terminal'>
+$ cf curl /v2/apps/acf2ce75-ee92-4bb6-9adb-55a596a8dcba/summary
+{
+	   "guid": "acf2ce75-ee92-4bb6-9adb-55a596a8dcba",
+   "name": "YOUR-APP",
+   "routes": [
+   {
+      "guid": "7421b6af-75cb-4334-a862-bc5e1ababfe6",
+      "host": "YOUR-APP",
+      "path": "",
+      "domain": {
+         "guid": "fb6bd89f-2ed9-49d4-9ad1-97951a573135",
+         "name": "YOUR-SYSTEM-DOMAIN.io"
+     }
+  }
+],
+  "running_instances": 5,
+  "services": [
+     {
+        "guid": "b9cdr456-3c61-4f8a-a307-9b4ty836fb2e",
+        "name": "YOUR-APP-db",
+        "bound_app_count": 1,
+        "last_operation": {
+           "type": "create",
+           "state": "succeeded",
+           "description": "",
+           "updated_at": null,
+           "created_at": "2016-02-05T04:58:46Z"
+     },
+        "dashboard_url": "https://cloudfoundry.appdirect.com/api/custom/cloudfoundry/v2/sso/start?serviceUuid=b5cASDF-3c61-4f8a-a307-9bf85j45fb2e",
+        "service_plan": {
+           "guid": "fbcec3af-3e8d-4ee7-adfe-3f12a137ed66",
+           "name": "turtle",
+           "service": {
+              "guid": "34dbc753-34ed-4cf1-9a87-a255dfca5339b",
+              "label": "elephantsql",
+              "provider": null,
+              "version": null
+[...]
+</pre>
+   
+To view the `app_usages` report that covers app usage within an org during a period of time, see [Obtain Usage Information About an Org](#individual_org).
+
+### <a id='events'></a> Events
+
+Use the `events` endpoint to retrieve information about app events.
+
+<pre class='terminal'>
+$ cf curl /v2/events
+{
+  "total_results": 3,
+  "total_pages": 1,
+  "prev_url": null,
+  "next_url": null,
+  "resources": [
+    {
+      "metadata": {
+        "guid": "b8ede8e1-afc8-40a1-baae-236a0a77b27b",
+        "url": "/v2/events/b8ede8e1-afc8-40a1-baae-236a0a77b27b",
+        "created_at": "2016-06-08T16:41:23Z",
+        "updated_at": "2016-06-08T16:41:26Z"
+      },
+      "entity": {
+        "type": "name-167",
+        "actor": "guid-008640fc-d316-4602-9251-c8d09bbdc750",
+        "actor_type": "name-168",
+        "actor_name": "name-169",
+        "actee": "guid-e7790fa4-be2b-4a0f-aa82-c124342b0bb4",
+        "actee_type": "name-170",
+        "actee_name": "name-171",
+        "timestamp": "2016-06-08T16:41:23Z",
+        "metadata": {
+
+        },
+        "space_guid": "3a1368e7-e3b7-46af-a98d-57b9c71445e7",
+        "organization_guid": "86aa12ee-8c4f-4b26-b391-2be6c1730dbc"
+      }
+    },
+    {
+      "metadata": {
+        "guid": "2ccf53a8-d0eb-4807-9bb9-7dd844e65267",
+        "url": "/v2/events/2ccf53a8-d0eb-4807-9bb9-7dd844e65267",
+        "created_at": "2016-06-08T16:41:23Z",
+        "updated_at": "2016-06-08T16:41:26Z"
+      },
+      "entity": {
+        "type": "name-175",
+        "actor": "guid-52cb38f4-d52d-4201-87e3-8e5650efc8c1",
+        "actor_type": "name-176",
+        "actor_name": "name-177",
+        "actee": "guid-5c4214a1-f295-42ae-bd92-38e7cb8be538",
+        "actee_type": "name-178",
+        "actee_name": "name-179",
+        "timestamp": "2016-06-08T16:41:23Z",
+        "metadata": {
+
+        },
+        "space_guid": "10f0fd9d-dd68-428e-8e93-c00bb8eff0a6",
+        "organization_guid": "aa3fdaaa-42c8-4141-bc22-9792c37aa62f"
+      }
+    },
+    {
+      "metadata": {
+        "guid": "4f9b1fef-2ce4-4877-85e1-0da9114a92cb",
+        "url": "/v2/events/4f9b1fef-2ce4-4877-85e1-0da9114a92cb",
+        "created_at": "2016-06-08T16:41:23Z",
+        "updated_at": "2016-06-08T16:41:26Z"
+      },
+      "entity": {
+        "type": "name-183",
+        "actor": "guid-d3be7ed1-1c08-43f6-a20d-5cd9287492e1",
+        "actor_type": "name-184",
+        "actor_name": "name-185",
+        "actee": "guid-9844795f-943d-47ed-a997-2c04ee611f5a",
+        "actee_type": "name-186",
+        "actee_name": "name-187",
+        "timestamp": "2016-06-08T16:41:23Z",
+        "metadata": {
+
+        },
+        "space_guid": "f9ef235c-25df-4aa1-bcb4-15eec6f92146",
+        "organization_guid": "24a920db-f551-46af-bf73-e1db972f652a"
+      }
+    }
+  ]
+}
+</pre>
+
+For more information, see the [Audit Events](./audit-events.html) topic and [List all Events](https://apidocs.cloudfoundry.org/6.7.0/events/list_all_events.html) in the Cloud Foundry API documentation.
+
+### <a id='app-usage-events'></a> App Usage Events
+
+Use the `app-usage-events` endpoint to retrieve information about app usage events.
+
+<pre class='terminal'>
+$ cf curl /v2/app_usage_events
+{
+  "total_results": 2,
+  "total_pages": 2,
+  "prev_url": null,
+  "next_url": "/v2/app_usage_events?after_guid=5a3416b0-cf3c-425a-a14c-45a317c497ed&order-direction=asc&page=2&results-per-page=1",
+  "resources": [
+    {
+      "metadata": {
+        "guid": "b32241a5-5508-4d42-893c-360e42a300b6",
+        "url": "/v2/app_usage_events/b32241a5-5508-4d42-893c-360e42a300b6",
+        "created_at": "2016-06-08T16:41:33Z"
+      },
+      "entity": {
+        "state": "STARTED",
+        "previous_state": null,
+        "memory_in_mb_per_instance": 564,
+        "previous_memory_in_mb_per_instance": null,
+        "instance_count": 1,
+        "previous_instance_count": null,
+        "app_guid": "guid-d9fbb7f8-cba5-44a2-b720-c24f1fe5e1c4",
+        "app_name": "name-1663",
+        "space_guid": "guid-5e28f12f-9d80-473e-b826-537b148eb338",
+        "space_name": "name-1664",
+        "org_guid": "guid-036444f4-f2f5-4ea8-a353-e73330ca0f0a",
+        "buildpack_guid": "guid-df37754c-819b-4697-a523-4b457d3c83dd",
+        "buildpack_name": "name-1665",
+        "package_state": "STAGED",
+        "previous_package_state": null,
+        "parent_app_guid": null,
+        "parent_app_name": null,
+        "process_type": "web",
+        "task_name": null,
+        "task_guid": null
+      }
+    }
+  ]
+}
+</pre>
+
+For more information, see the [Usage Events and Billing](./usage-events.html) topic and [List all App Usage Events](https://apidocs.cloudfoundry.org/6.7.0/app_usage_events/list_all_app_usage_events.html) in the Cloud Foundry API documentation.

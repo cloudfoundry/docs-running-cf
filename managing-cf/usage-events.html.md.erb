@@ -72,15 +72,15 @@ Multiple 'STARTED' events can occur in a row, so as to indicate updates to the a
 
 Multiple 'STOPPED' events cannot occur without 'STARTED' events between them.
 
-The usage events for 'TASK_*' events do not indicate application state, instead they indicate that a one-off task was executed.
+The usage events for 'TASK_*' events do not indicate app state, instead they indicate that a one-off task was executed.
 
-The App Usage Events with the 'BUILDPACK_SET' state do not represent an actual application state. Instead, they signify that a buildpack has been used for the application. This can be used by operators who wish to charge for buildpack usage.
+The App Usage Events with the 'BUILDPACK_SET' state do not represent an actual app state. Instead, they signify that a buildpack has been used for the app. This can be used by operators who wish to charge for buildpack usage.
 
 ### <a id='service-usage-events'></a> Service Usage Events
 
 Service Usage Events provide information about when users create, update, and delete service instances.
 
-Service Usage Events expire after 31 days by default.  This is configurable using the cf-release manifest property `cc.service_usage_events.cutoff_age_in_days`.  Expiration of Service Usage Events was introduced in cf-release v226.
+Service Usage Events expire after 31 days by default. This is configurable using the cf-release manifest property `cc.service_usage_events.cutoff_age_in_days`. Expiration of Service Usage Events was introduced in cf-release v226.
 
 #### <a id='service-usage-events-endpoint'></a> Endpoint
 
@@ -163,7 +163,7 @@ Commonly, operators generate aggregate billing events from the raw Cloud Foundry
 
 ### <a id='creating-billing-epoch'></a> Creating Your Billing Epoch
 
-When an operator first starts billing, there may be applications or instances without start events due to event expiration or other reasons. To seed the application usage events with a start event (epoch) for all applications, use the purge endpoints.
+When an operator first starts billing, there may be apps or instances without start events due to event expiration or other reasons. To seed the app usage events with a start event (epoch) for all apps, use the purge endpoints.
 
 |Event Type| Endpoint | Documentation |
 |---|---|---|
