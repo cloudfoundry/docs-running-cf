@@ -12,13 +12,13 @@ This topic explains how to query the Cloud Controller API (CAPI) to retrieve cur
 
 To perform the procedures in this topic, you must target the endpoint of your Cloud Controller and log in. If you do not have the cf CLI installed, see the [Installing the cf CLI](../../cf-cli/install-go-cli.html) topic.
 
-There are two ways to target your Cloud Controller endpoint. You can run the following `curl` command to target the endpoint and log in before making each request:
+There are two ways to target your Cloud Controller endpoint. You can run the following `curl` command to target the endpoint and log in:
 <pre class='terminal'>
 $ curl "https://app-usage.YOUR-SYSTEM-DOMAIN/system_report/app_usages" -k -v \
 -H "authorization: `cf oauth-token`"
 </pre>
 
-You can also use `cf curl` to target the endpoint, log in, and stay logged in for each request. To target the endpoint and log in using `cf curl`, do the following:
+You can also use `cf curl` to retrieve information. To use `cf curl`, do the following:
 
  1. Target the endpoint of your Cloud Controller:
   <pre class='terminal'>$ cf api api.YOUR-SYSTEM-DOMAIN</pre>
@@ -148,6 +148,8 @@ $ cf curl /v2/apps/acf2ce75-ee92-4bb6-9adb-55a596a8dcba/summary
               "version": null
 [...]
 </pre>
+   
+To view the `app_usages` report that covers app usage within an org during a period of time, see [List all App Usage Events](https://apidocs.cloudfoundry.org/6.7.0/app_usage_events/list_all_app_usage_events.html) in the Cloud Foundry API documentation.
 
 ### <a id='events'></a> Events
 
