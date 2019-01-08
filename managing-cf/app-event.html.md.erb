@@ -7,6 +7,7 @@ owner: CAPI
 
 This topic explains how to query the Cloud Controller API (CAPI) to retrieve current information about apps and events.
 
+
 ## <a id='target'></a> Target and Log In
 
 To perform the procedures in this topic, you must target the endpoint of your Cloud Controller and log in. If you do not have the cf CLI installed, see the [Installing the cf CLI](../../cf-cli/install-go-cli.html) topic.
@@ -147,139 +148,15 @@ $ cf curl /v2/apps/acf2ce75-ee92-4bb6-9adb-55a596a8dcba/summary
               "version": null
 [...]
 </pre>
-   
-To view the `app_usages` report that covers app usage within an org during a period of time, see [Obtain Usage Information About an Org](#individual_org).
 
 ### <a id='events'></a> Events
 
 Use the `events` endpoint to retrieve information about app events.
-
-<pre class='terminal'>
-$ cf curl /v2/events
-{
-  "total_results": 3,
-  "total_pages": 1,
-  "prev_url": null,
-  "next_url": null,
-  "resources": [
-    {
-      "metadata": {
-        "guid": "b8ede8e1-afc8-40a1-baae-236a0a77b27b",
-        "url": "/v2/events/b8ede8e1-afc8-40a1-baae-236a0a77b27b",
-        "created_at": "2016-06-08T16:41:23Z",
-        "updated_at": "2016-06-08T16:41:26Z"
-      },
-      "entity": {
-        "type": "name-167",
-        "actor": "guid-008640fc-d316-4602-9251-c8d09bbdc750",
-        "actor_type": "name-168",
-        "actor_name": "name-169",
-        "actee": "guid-e7790fa4-be2b-4a0f-aa82-c124342b0bb4",
-        "actee_type": "name-170",
-        "actee_name": "name-171",
-        "timestamp": "2016-06-08T16:41:23Z",
-        "metadata": {
-
-        },
-        "space_guid": "3a1368e7-e3b7-46af-a98d-57b9c71445e7",
-        "organization_guid": "86aa12ee-8c4f-4b26-b391-2be6c1730dbc"
-      }
-    },
-    {
-      "metadata": {
-        "guid": "2ccf53a8-d0eb-4807-9bb9-7dd844e65267",
-        "url": "/v2/events/2ccf53a8-d0eb-4807-9bb9-7dd844e65267",
-        "created_at": "2016-06-08T16:41:23Z",
-        "updated_at": "2016-06-08T16:41:26Z"
-      },
-      "entity": {
-        "type": "name-175",
-        "actor": "guid-52cb38f4-d52d-4201-87e3-8e5650efc8c1",
-        "actor_type": "name-176",
-        "actor_name": "name-177",
-        "actee": "guid-5c4214a1-f295-42ae-bd92-38e7cb8be538",
-        "actee_type": "name-178",
-        "actee_name": "name-179",
-        "timestamp": "2016-06-08T16:41:23Z",
-        "metadata": {
-
-        },
-        "space_guid": "10f0fd9d-dd68-428e-8e93-c00bb8eff0a6",
-        "organization_guid": "aa3fdaaa-42c8-4141-bc22-9792c37aa62f"
-      }
-    },
-    {
-      "metadata": {
-        "guid": "4f9b1fef-2ce4-4877-85e1-0da9114a92cb",
-        "url": "/v2/events/4f9b1fef-2ce4-4877-85e1-0da9114a92cb",
-        "created_at": "2016-06-08T16:41:23Z",
-        "updated_at": "2016-06-08T16:41:26Z"
-      },
-      "entity": {
-        "type": "name-183",
-        "actor": "guid-d3be7ed1-1c08-43f6-a20d-5cd9287492e1",
-        "actor_type": "name-184",
-        "actor_name": "name-185",
-        "actee": "guid-9844795f-943d-47ed-a997-2c04ee611f5a",
-        "actee_type": "name-186",
-        "actee_name": "name-187",
-        "timestamp": "2016-06-08T16:41:23Z",
-        "metadata": {
-
-        },
-        "space_guid": "f9ef235c-25df-4aa1-bcb4-15eec6f92146",
-        "organization_guid": "24a920db-f551-46af-bf73-e1db972f652a"
-      }
-    }
-  ]
-}
-</pre>
 
 For more information, see the [Audit Events](./audit-events.html) topic and [List all Events](https://apidocs.cloudfoundry.org/6.7.0/events/list_all_events.html) in the Cloud Foundry API documentation.
 
 ### <a id='app-usage-events'></a> App Usage Events
 
 Use the `app-usage-events` endpoint to retrieve information about app usage events.
-
-<pre class='terminal'>
-$ cf curl /v2/app_usage_events
-{
-  "total_results": 2,
-  "total_pages": 2,
-  "prev_url": null,
-  "next_url": "/v2/app_usage_events?after_guid=5a3416b0-cf3c-425a-a14c-45a317c497ed&order-direction=asc&page=2&results-per-page=1",
-  "resources": [
-    {
-      "metadata": {
-        "guid": "b32241a5-5508-4d42-893c-360e42a300b6",
-        "url": "/v2/app_usage_events/b32241a5-5508-4d42-893c-360e42a300b6",
-        "created_at": "2016-06-08T16:41:33Z"
-      },
-      "entity": {
-        "state": "STARTED",
-        "previous_state": null,
-        "memory_in_mb_per_instance": 564,
-        "previous_memory_in_mb_per_instance": null,
-        "instance_count": 1,
-        "previous_instance_count": null,
-        "app_guid": "guid-d9fbb7f8-cba5-44a2-b720-c24f1fe5e1c4",
-        "app_name": "name-1663",
-        "space_guid": "guid-5e28f12f-9d80-473e-b826-537b148eb338",
-        "space_name": "name-1664",
-        "org_guid": "guid-036444f4-f2f5-4ea8-a353-e73330ca0f0a",
-        "buildpack_guid": "guid-df37754c-819b-4697-a523-4b457d3c83dd",
-        "buildpack_name": "name-1665",
-        "package_state": "STAGED",
-        "previous_package_state": null,
-        "parent_app_guid": null,
-        "parent_app_name": null,
-        "process_type": "web",
-        "task_name": null,
-        "task_guid": null
-      }
-    }
-  ]
-}
-</pre>
 
 For more information, see the [Usage Events and Billing](./usage-events.html) topic and [List all App Usage Events](https://apidocs.cloudfoundry.org/6.7.0/app_usage_events/list_all_app_usage_events.html) in the Cloud Foundry API documentation.
