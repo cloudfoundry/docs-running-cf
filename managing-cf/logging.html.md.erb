@@ -7,7 +7,8 @@ owner: Logging and Metrics
 
 This section contains information for debugging Cloud Foundry system components.
 
-##Component Logging
+
+## <a id='component-logging'></a> Component Logging
 
 The Cloud Foundry components share a common interface for configuring logs. For more information, see the [Cloud
 Controller](http://github.com/cloudfoundry/cloud_controller_ng#logs), or for
@@ -19,18 +20,19 @@ In `cf-release`, the components are all configured in a similar way:
 * The job's main logs are written to a file named `<job-name>.log`.
 * Any output written directly to the job's stdout and stderr is written to `<job-name>.stdout.log` and `<job-name>.stderr.log`, respectively.
 
-### Database Migrations
+### <a id='db-migration'></a> Database Migrations
 
 For the Cloud Controller, database migration logs are written to `db_migrate.stdout.log` and `db_migrate.stderr.log`
 in the same directory.
 
-## Log Forwarding
+
+## <a id='log-forwarding'></a> Log Forwarding
 
 Each BOSH job in `cf-release` includes a job named `metron_agent`. Metron itself acts as a forwarding agent for Doppler within the Loggregator metric system, but it also includes a [template](https://github.com/cloudfoundry/loggregator/blob/develop/jobs/metron_agent/templates/syslog_forwarder.conf.erb) for configuring the `rsyslogd` daemon to forward logs to a remote machine. The [`syslog_daemon_config`](https://github.com/cloudfoundry/loggregator/blob/develop/jobs/metron_agent/spec) properties include:
 
 * `syslog_daemon_config.address`: the IP address (or DNS name) of a remote system that should receive component logs from this VM
 * `syslog_daemon_config.port`: the port on which the log recipient is listening
-* `syslog_daemon_config.transport`: the protocol over which logs should be sent (one of `tcp`, `udp` or `relp`); defaults to `tcp`
+* `syslog_daemon_config.transport`: the protocol over which logs should be sent (one of `tcp` or `udp`); defaults to `tcp`
 
 For example, to use UDP as the syslog transport, the manifest is similar to the following:
 ```yaml
