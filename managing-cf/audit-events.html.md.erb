@@ -140,6 +140,10 @@ A user is able to query the events endpoint with various filters. For example, a
 
 Allowed filters are enumerated on the [API documentation](https://apidocs.cloudfoundry.org/latest-release/events/list_all_events.html).
 
+The following example illustrates a query with multiple filters combined: fetch `audit.app.unmap-route` events in a given period of time
+
+`cf curl '/v2/events?q=type:audit.app.unmap-route&q=timestamp>2019-02-06T01:08:24Z&q=timestamp<2019-02-08T01:08:24Z&order-by=timestamp'`
+
 ### <a id='ext-auditing'></a> External Auditing Warehouse
 
 For auditing and compliance reasons, some operators may wish to keep a record of all audit events that have occured. Because audit events expire and may be purged during a deploy, these operators must maintain an external data warehouse. This way they can store and access events across expiration events and conform to their own compliance requirements.
