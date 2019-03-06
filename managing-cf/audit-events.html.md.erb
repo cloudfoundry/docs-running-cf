@@ -141,9 +141,10 @@ A user is able to query the events endpoint with various filters. For example, a
 
 Allowed filters are enumerated on the [API documentation](https://apidocs.cloudfoundry.org/latest-release/events/list_all_events.html).
 
-The following example illustrates a query with multiple filters combined: fetch `audit.app.unmap-route` events in a given period of time
+The following example shows a query with multiple filters. The request gets `audit.app.unmap-route` events from a particular time period. 
 
-`cf curl '/v2/events?q=type:audit.app.unmap-route&q=timestamp>2019-02-06T01:08:24Z&q=timestamp<2019-02-08T01:08:24Z&order-by=timestamp'`
+<pre class="terminal">$ cf curl '/v2/events?q=type:audit.app.unmap-route&q=timestamp>2019-02-06T01:08:24Z&q=timestamp&lt;2019-02-08T01:08:24Z&order-by=timestamp'</pre>
+
 
 ### <a id='ext-auditing'></a> External Auditing Warehouse
 
