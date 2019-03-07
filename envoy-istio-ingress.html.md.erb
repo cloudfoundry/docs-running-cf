@@ -2,3 +2,36 @@
 title: Using Envoy and Istio for Ingress to Cloud Foundry
 owner: Routing
 ---
+
+## Deploying Cloud Foundry with Istio and Envoy
+
+1. After you have deployed Cloud Foundry using cf-deployment, you can use an ops file to add the Istio routing tier. The ops file is available in the Cloud Foundry istio-release repo: https://github.com/cloudfoundry/istio-release/blob/master/deploy/cf-deployment-operations/add-istio.yml. 
+
+2. Once you deploy with the ops file, you can `bosh vms` to see the new VMs in your  deployment: `istio-router`, `istio-control` and `cc-route-syncer`. 
+
+3. Follow the procedure below that corresponds to your use case:
+	* If you’ve deployed your CF on a BBL’d up BOSH director on GCP, you have the option of using a custom bbl-config to set up load balancers for GCP and don’t need to configure it manually. You can use this [bbl config](https://github.com/cloudfoundry/istio-release/tree/master/deploy/bbl-config) to re-BBL up your BOSH director. This will set up the load balancers to point to the istio-routers for you. 
+	* Follow the steps in “Manually setting up a Load Balancer for Istio Ingress.” 
+
+### Manually setting up a Load Balancer for Istio Ingress
+
+Once you’ve deployed a Cloud Foundry with the Istio routing tier, you must set up a new load balancer to communicate with the istio routers.
+
+1. Create a LB with a static IP
+1. Set up LB to have its backends configured to be the istio-router VMs. You can retrieve the IPs of the router VMs by running `bosh vms`. 
+1. Set up LB health check to port `8002` and path `/healthcheck`
+1. Set up firewall rules for the load balancer to allow HTTP port `80`, TLS on `443`, and HTTP on `8002` for the healthcheck.
+1. Create a new DNS name, such as `*.istio.CF-APPS-DOMAIN`, which resolves to the IP of a load balancer in front of the istio-router VMs.
+
+This sets up a parallel routing plane as illustrated in the diagram below:
+
+![Istio plane](istio-plane.png)
+
+### Create a new domain for Istio routes
+
+You will need to create a new domain dedicated to the Istio router. This way, routes pushed onto this domain will be handled by the Istio router, and in turn will have the capability to take advantage of Istio features, such as weighted routing. 
+
+On the CF CLI, create a new apps domain in CF matching the DNS name that was created when setting up your load balancers.
+
+`cf create-shared-domain istio.apps-domain.com`
+
