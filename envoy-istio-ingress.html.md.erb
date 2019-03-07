@@ -1,37 +1,66 @@
 ---
-title: Using Envoy and Istio for Ingress to Cloud Foundry
+title: Using Envoy and Istio for Ingress to Cloud Foundry (Beta)
 owner: Routing
 ---
 
-## Deploying Cloud Foundry with Istio and Envoy
+This topic describes how to use Envoy and Istio for ingress to Cloud Foundry. 
 
-1. After you have deployed Cloud Foundry using cf-deployment, you can use an ops file to add the Istio routing tier. The ops file is available in the Cloud Foundry istio-release repo: https://github.com/cloudfoundry/istio-release/blob/master/deploy/cf-deployment-operations/add-istio.yml. 
+This routing plane provides additional features, such as the ability to configure routing weights for apps. For more information, see [Using Weighted Routing (Beta)](../devguide/weighted-routing.html).
 
-2. Once you deploy with the ops file, you can `bosh vms` to see the new VMs in your  deployment: `istio-router`, `istio-control` and `cc-route-syncer`. 
+## <a id="overview"></a> Overview
 
-3. Follow the procedure below that corresponds to your use case:
-	* If you’ve deployed your CF on a BBL’d up BOSH director on GCP, you have the option of using a custom bbl-config to set up load balancers for GCP and don’t need to configure it manually. You can use this [bbl config](https://github.com/cloudfoundry/istio-release/tree/master/deploy/bbl-config) to re-BBL up your BOSH director. This will set up the load balancers to point to the istio-routers for you. 
-	* Follow the steps in “Manually setting up a Load Balancer for Istio Ingress.” 
-
-### Manually setting up a Load Balancer for Istio Ingress
-
-Once you’ve deployed a Cloud Foundry with the Istio routing tier, you must set up a new load balancer to communicate with the istio routers.
-
-1. Create a LB with a static IP
-1. Set up LB to have its backends configured to be the istio-router VMs. You can retrieve the IPs of the router VMs by running `bosh vms`. 
-1. Set up LB health check to port `8002` and path `/healthcheck`
-1. Set up firewall rules for the load balancer to allow HTTP port `80`, TLS on `443`, and HTTP on `8002` for the healthcheck.
-1. Create a new DNS name, such as `*.istio.CF-APPS-DOMAIN`, which resolves to the IP of a load balancer in front of the istio-router VMs.
-
-This sets up a parallel routing plane as illustrated in the diagram below:
+The procedures in this topic set up a parallel routing plane as illustrated below:
 
 ![Istio plane](istio-plane.png)
 
-### Create a new domain for Istio routes
+## <a id="prereq"></a> Prerequisite
 
-You will need to create a new domain dedicated to the Istio router. This way, routes pushed onto this domain will be handled by the Istio router, and in turn will have the capability to take advantage of Istio features, such as weighted routing. 
+This procedure requires that you have deployed Cloud Foundry using cf-deployment. 
 
-On the CF CLI, create a new apps domain in CF matching the DNS name that was created when setting up your load balancers.
+## <a id="deploy"></a> Deploy Cloud Foundry with the Istio Ops File
 
-`cf create-shared-domain istio.apps-domain.com`
+Follow the steps below to redeploy Cloud Foundry with the Istio routing tier. 
+
+1. Get ops file from the istio-release repo: https://github.com/cloudfoundry/istio-release/blob/master/deploy/cf-deployment-operations/add-istio.yml. 
+
+1. Redeploy your cf-deployment while including the Istio ops file:
+	<pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
+    -o add-istio.yml</pre>
+
+    <p class="note"><strong>Note</strong>: The above <code>bosh deploy</code> command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o add-istio.yml</code> option.</p>
+
+1. Once you deploy with the ops file, you can run `bosh vms` to see the new VMs in your  deployment: `istio-router`, `istio-control`, and `cc-route-syncer`. 
+	<pre class="terminal">
+	Instance                                            Process State   AZ   IPs          VM CID                                   VM Type  Active
+    istio-control/369f958d-9e32-458d-849d-8ea3ab3e4a62  running         z1   10.0.1.30    vm-b5199b90-9459-47fe-6d4c-08cdf4c4f5a2  medium   true
+    istio-router/3b436071-575b-4553-b148-f1fd029af402   running         z2   10.0.1.32    vm-15a05a6b-cce4-42d3-7d2e-2dfee5a7c3fd  minimal  true
+	</pre>
+
+## <a id="deploy"></a> Configure Load Balancing for Istio Ingress
+
+Once you hae deployed a Cloud Foundry with the Istio routing tier, you must set up a new load balancer to communicate with the Istio routers. To configure load balancing, follow the procedure below that corresponds to your use case.
+
+### <a id="deploy"></a> Configure with bbl
+
+If you deployed CF on GCP using `bbl`, you can use a custom `bbl-config` to set up load balancers that point to the Istio routers. Use the following file from the istio-release repository https://github.com/cloudfoundry/istio-release/tree/master/deploy/bbl-config to re-run `bbl up` on your BOSH director.
+
+### <a id="deploy"></a> Configure Manually
+
+Configure your load balancer as follows. The exact procedure varies by IaaS. 
+
+1. Create a load balancer with a static IP.
+1. Configure the backends of the load balancer to be the `istio-router` VMs. You can retrieve the IPs of the router VMs by running `bosh vms`. 
+1. Configure the health check to be port `8002` and path `/healthcheck`. 
+1. Add firewall rules for the load balancer to allow HTTP port `80`, TLS on `443`, and HTTP on `8002` for the healthcheck.
+1. Create a new DNS name, such as `*.istio.CF-APPS-DOMAIN`, which resolves to the IP of the load balancer.
+
+## <a id="domain"></a> Create a Domain for Istio Routes
+
+You must create a new domain dedicated to the Istio router. Routes pushed to this domain are handled by the Istio router, and can take advantage of Istio features like weighted routing. 
+
+Using the CF CLI, create a new apps domain that matches the DNS name created when configuring load balancing. For example:
+
+```
+cf create-shared-domain istio.apps-domain.com
+```
 
