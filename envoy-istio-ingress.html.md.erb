@@ -23,6 +23,8 @@ Follow the steps below to redeploy Cloud Foundry with the Istio routing tier.
 
 1. Get ops file from the istio-release repo: https://github.com/cloudfoundry/istio-release/blob/master/deploy/cf-deployment-operations/add-istio.yml. 
 
+1. If you want to use a domain other than `istio.CF-SYSTEM-DOMAIN` for Istio routes, modify the `temporary_istio_domains` property in the ops file. 
+
 1. Redeploy your cf-deployment while including the Istio ops file:
 	<pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
     -o add-istio.yml</pre>
