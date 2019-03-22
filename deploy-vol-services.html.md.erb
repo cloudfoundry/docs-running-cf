@@ -16,17 +16,16 @@ For current versions of CF that have been been deployed with cf-deployment, depl
 For more information about volume services and the drivers and brokers available to CF, see the following:
 
 * [Volume Services Google Doc](https://docs.google.com/document/d/1YtPMY9EjxlgJPa4SVVwIinfid_fshCF48xRhzyoZhrQ/edit?usp=sharing)
+* [Volume Services Troubleshooting Guide](https://github.com/cloudfoundry/volman/blob/master/TROUBLESHOOTING.md)
 * [NFS volume release repository](https://github.com/cloudfoundry/nfs-volume-release)
-* [CIFS/SMB volume release repository](https://github.com/cloudfoundry/smb-volume-release)
+* [SMB volume release repository](https://github.com/cloudfoundry/smb-volume-release)
 * [EFS volume release repository](https://github.com/cloudfoundry-incubator/efs-volume-release)
-* [CEPHFS release repository](https://github.com/cloudfoundry-incubator/cephfs-bosh-release)
 
 <p class="note"><strong>Note:</strong> For test purposes, you can deploy the <a href="https://github.com/cloudfoundry/local-volume-release.git">Local Volume Release</a> if running a single Diego Cell CF deployment. This is not intended for production deployments.</p>
 
 ### <a id='contact'></a> Contact
 
 If you have any questions, you can contact the team that develops volume services for CF on the **#persi** channel in the [Cloud Foundry (Open Source)](https://cloudfoundry.slack.com) Slack organization.
-
 
 ## <a id="example"></a> Example: Deploy NFS Volume Service to CF
 
@@ -37,7 +36,7 @@ The following procedure provides an example of how to deploy the NFS broker and 
 This procedure requires the following:
 
 * A current version of Cloud Foundry deployed [as described here](/deploying/index.html).
-* A BOSH v2 CLI.
+* A [BOSH CLI](https://bosh.io/docs/cli-v2-install/).
 * An NFS Server. If you require it, a test server can be deployed following the instructions in [Deploying the NFS Test Server](#server).
 
 ### <a id="redeploy"></a> Redeploy CF with NFS Enabled
@@ -85,7 +84,6 @@ CF Developers can now create an NFS service and bind instances to their apps as 
 
 For better security, configure your deployment of nfs-volume-release to connect to an external LDAP server to resolve user credentials into UIDs. For more information, see [this note](https://github.com/cloudfoundry/nfs-volume-release/blob/master/USING_LDAP.md).
 
-
 ## <a id="smb-example"></a> Example 2: Deploy SMB Volume Service to CF
 
 The following procedure provides an example of how to deploy the SMB broker and corresponding driver to an existing CF deployment.
@@ -95,7 +93,7 @@ The following procedure provides an example of how to deploy the SMB broker and 
 This procedure requires the following:
 
 * A current version of Cloud Foundry deployed [as described here](/deploying/index.html).
-* A BOSH v2 CLI.
+* A [BOSH CLI](https://bosh.io/docs/cli-v2-install/).
 * An SMB Server. If you require it, a test server can be deployed following the instructions in [Deploying the SMB Test Server](#smb-server).
 
 ### <a id="smb-redeploy"></a> Redeploy CF with SMB Enabled
