@@ -1,0 +1,97 @@
+---
+title: Deploying Service Mesh (Beta)
+owner: Routing
+---
+
+This topic describes how to deploy service mesh for Cloud Foundry. Following this procedure deploys an new routing plane consisting of three VMs. This routing plane runs in parallel to the existing HTTP and TCP routers. For more information, see [Service Mesh (Beta)](../adminguide/service-mesh.html).
+
+This routing plane provides additional features, such as the ability to configure routing weights for apps. For more information, see [Using Weighted Routing (Beta)](../devguide/weighted-routing.html).
+
+## <a id="prereq"></a> Prerequisite
+
+This procedure requires that you have deployed Cloud Foundry using cf-deployment. 
+
+## <a id="deploy"></a> Deploy Cloud Foundry with the Istio Ops File
+
+Follow the steps below to deploy Cloud Foundry with service mesh. 
+
+1. Clone the `istio-release` repository: 
+
+	```
+	git clone https://github.com/cloudfoundry-incubator/istio-release
+	```
+
+1. In the istio-release repository, run the following command:
+
+	```
+	./scripts/update
+	``` 
+
+1. (Optional) To use a domain other than `istio.CF-APPS-DOMAIN` for Istio routes, modify the `temporary_istio_domains` property in the ops file `deploy/cf-deployment-operations/add-istio.yml`. 
+
+1. (Optional) To enable TLS termination at the Istio router, add a `frontend_tls_keypairs` property to the `copilot` job in the ops file `deploy/cf-deployment-operations/add-istio.yml`. This step is strongly recommended for security.
+
+	```
+	frontend_tls_keypairs:
+	  - cert_chain: |
+	    -----BEGIN CERTIFICATE-----
+	    YOUR-CERTIFICATE
+	    -----END CERTIFICATE-----
+	  - private_key: |
+	    -----BEGIN RSA PRIVATE KEY-----
+	    YOUR-PRIVATE-KEY
+	    -----END RSA PRIVATE KEY-----
+	```
+
+	Where:
+	* `YOUR-CERTIFICATE` is your TLS certificate. 
+	* `YOUR-PRIVATE-KEY` is the private key pair to your TLS certificate.
+
+	During deploy, the routing plane integrates the certificates with any Istio routes. All routes created using the Istio routing plane then use TLS.
+
+1. Create and upload the Istio release with BOSH:
+
+	```
+	bosh create-release && bosh upload-release
+	```
+
+1. Deploy your cf-deployment with the Istio ops file:
+	```
+	bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
+    -o deploy/cf-deployment-operations/add-istio.yml
+    ```
+
+    <p class="note"><strong>Note</strong>: The above <code>bosh deploy</code> command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o add-istio.yml</code> option.</p>
+
+1. Once you deploy with the ops file, you can run `bosh vms` to see the new VMs in your  deployment: `istio-router`, `istio-control`, and `cc-route-syncer`. 
+
+## <a id="deploy"></a> Configure Load Balancing 
+
+Once you have deployed a Cloud Foundry with service mesh, you must set up a new load balancer to communicate with the Istio routers. To configure load balancing, follow the procedure below that corresponds to your use case.
+
+### <a id="deploy"></a> Configure with bbl
+
+If you deployed CF on GCP using `bbl`, you can use a custom `bbl-config` to set up load balancers that point to the Istio routers. Use the following file from the istio-release repository https://github.com/cloudfoundry/istio-release/tree/master/deploy/bbl-config to re-run `bbl up` on your BOSH director.
+
+### <a id="deploy"></a> Configure Manually
+
+Configure your load balancer as follows. The exact procedure varies by IaaS. 
+
+1. Create a load balancer with a static IP.
+1. Configure the backends of the load balancer to be the `istio-router` VMs. You can retrieve the IPs of the router VMs by running `bosh vms`. 
+1. Configure the health check to be port `8002` and path `/healthcheck`. 
+1. Add firewall rules for the load balancer to allow HTTP port `80`, TLS on `443`, and HTTP on `8002` for the healthcheck.
+1. Create a new DNS name that resolves to the IP of the load balancer. By default this must be `*.istio.CF-APPS-DOMAIN`. If you modified the `temporary_istio_domains` field in the ops file, use the domain you specified. 
+
+## <a id="domain"></a> Create a Domain
+
+You must create a new domain dedicated to service mesh. Routes pushed to this domain are handled by the Istio router, and can take advantage of service mesh features like weighted routing. 
+
+Using the CF CLI, create a new apps domain that matches the DNS name created when configuring load balancing. For example:
+
+```
+cf create-shared-domain istio.YOUR-APPS-DOMAIN.com
+```
+
+
+
