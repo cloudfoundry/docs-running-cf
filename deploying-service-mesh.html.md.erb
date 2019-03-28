@@ -80,7 +80,29 @@ that correspond to your use case:
 
 ### <a id="config-bbl"></a> Configure with bbl
 
-If you deployed CF on GCP using `bbl`, you can use a custom `bbl-config` to set up load balancers that point to the Istio routers. To re-run `bbl up` on your BOSH director, see [bbl-config](https://github.com/cloudfoundry/istio-release/tree/master/deploy/bbl-config) .
+If you deployed CF on GCP using `bbl`, you can use a custom `bbl-config` to set up load balancers that point to the Istio routers. 
+
+To configure load balancing with bbl, do the following:
+
+1. In a terminal window, navigate to the `bosh-bootloader` repository from which you initially ran `bbl up` to pave your infrastructure. 
+
+	```
+	cd bosh-bootloader
+	```
+
+1. Run the following command to copy the `cloud-config` file from your `istio-release` directory to the `bosh-bootloader` directory:
+
+	```
+	cp ~/workspace/istio-release/deploy/bbl-config/cloud-config/istio.yml cloudconfig/gcp/fixtures/
+	```
+
+1. Copy the following Terraform template from the `istio-release` directory to the `bosh-bootloader` directory:
+
+	```
+	cp ~/workspace/istio-release/deploy/bbl-config/terraform/istio-router.tf terraform/gcp/templates/
+	```
+
+1. Run `bbl up`. 
 
 ### <a id="config-manual"></a> Configure Manually
 
@@ -96,11 +118,13 @@ To configure your load balancer, do the following. The exact procedure varies by
 
 You must create a new domain dedicated to service mesh. Routes pushed to this domain are handled by the Istio router, and can take advantage of service mesh features like weighted routing. 
 
-Using the CF CLI, create a new apps domain that matches the DNS name created when configuring load balancing. For example:
+To create a domain, do the following:
 
-```
-cf create-shared-domain istio.YOUR-APPS-DOMAIN.com
-```
+1. Using the CF CLI, create a new apps domain that matches the DNS name created when configuring load balancing. For example:
+
+	```
+	cf create-shared-domain istio.YOUR-APPS-DOMAIN.com
+	```
 
 
 
