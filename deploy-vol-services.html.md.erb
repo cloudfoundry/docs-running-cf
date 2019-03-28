@@ -37,9 +37,9 @@ This procedure requires the following:
 
 * A current version of Cloud Foundry deployed [as described here](/deploying/index.html).
 * A [BOSH CLI](https://bosh.io/docs/cli-v2-install/).
-* An NFS Server. If you require it, a test server can be deployed following the instructions in [Deploying the NFS Test Server](#server).
+* An NFS server. If you require it, an NFS test server can be deployed following the instructions in [Deploying the Test Servers](#server).
 
-### <a id="redeploy"></a> Redeploy CF with NFS Enabled
+### <a id="redeploy"></a> Redeploy Cloud Foundry with NFS Enabled
 
 1. Clone the cf-deployment repository from Git, if you do not already have it:
   <pre class="terminal">
@@ -59,17 +59,6 @@ This procedure requires the following:
 
 Your CF deployment now has a running service broker and volume drivers and is ready to mount NFS volumes.
 
-#### <a id="server"></a> Deploying the NFS Test Server
-
-To deploy the NFS test server, you can fetch the operations file from the [persi-ci GitHub repository](https://github.com/cloudfoundry/persi-ci/blob/master/operations/enable-nfs-test-server.yml) and include that operation with a `-o` flag. This creates a separate VM with nfs exports you can use to experiment with volume mounts.
-
-<p class="note"><strong>Note:</strong> By default, the NFS test server expects that your CF deployment is deployed to a 10.x.x.x subnet. If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x), you must override the "export_cidr" property.<br/>
- Edit the operations file, and replace this line:<br/>
- <span style="font-family:monospace">  nfstestserver: {}</span><br/>
- with something like this:<br/>
-	<span style="font-family:monospace">  nfstestserver: {export_cidr: 192.168.0.0/16}</span>
-</p>
-
 ### <a id="broker"></a> Grant Access to the NFS Broker
 
 Grant access to the services of the broker.
@@ -82,7 +71,68 @@ CF Developers can now create an NFS service and bind instances to their apps as 
 
 ### <a id="ldap"></a> (Optional) LDAP Support
 
-For better security, configure your deployment of nfs-volume-release to connect to an external LDAP server to resolve user credentials into UIDs. For more information, see [this note](https://github.com/cloudfoundry/nfs-volume-release/blob/master/USING_LDAP.md).
+For better NFS security, configure your deployment to connect to an external LDAP server.
+Configuring an LDAP server enables the NFS volume driver to:
+
+- Ensure that the application developer has valid credentials (according to the LDAP server) to use an account.
+- Translate user credentials into a valid UID and GID for that user.
+
+The principal benefit of this feature is that it secures the NFS volume service so that it is no longer possible for an application developer to bind
+to an NFS share using an arbitrary UID and potentially gain access to sensitive data stored by another user or application.  Once LDAP support is
+enabled, regular UID and GID parameters are disabled and application developers will need to provide valid credentials for any user they wish to use on the nfs server.
+
+#### Changes to your LDAP server
+
+It is not generally necessary to make adjustments to your LDAP server to enable integration, but you will need the following:
+
+- Your LDAP server must be reachable through the network from the Diego cell VMs on the port you will use to connect (normally 389 or 636)
+- You should provision a service account on the LDAP server that has read-only access to user records.  This account will be used by
+  nfsv3driver to look up usernames and convert them to UIDs.  In Windows server 2008 or later this can be accomplished by creating a new user
+  and adding it to the `Read-only Domain Controllers` group.
+- Your LDAP schema must contain `uidNumber` and `gidNumber` fields for the user accounts used by nfs services. These fields are used to
+  establish the correct UID for a named user.
+
+#### Changes to your Cloud Foundry deployment.
+
+Include the [`enable-nfs-ldap`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/enable-nfs-ldap.yml) operations file  in
+your deployment to turn on LDAP authentication.  You will need to provide the following variables in a variables file or with the `-v` option on the BOSH command line:
+
+- `nfs-ldap-service-user`: LDAP service account user name
+- `nfs-ldap-service-password`: LDAP service account password
+- `nfs-ldap-host`: LDAP server host name or ip address
+- `nfs-ldap-port`: LDAP server port
+- `nfs-ldap-proto`: LDAP server protocol (tcp or udp)
+- `nfs-ldap-fqdn`: LDAP fqdn for user records we will search against when looking up user UIDs
+
+### <a id="server"></a> (Optional) Deploying the Test Servers
+
+The NFS volume service includes two test servers: a test NFS server that provides NFS shares, and a test LDAP server that provides sample UID resolution when the LDAP feature is enabled.
+
+#### NFS Test Server
+
+To deploy the NFS test server, include the [enable-nfs-test-server.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/test/enable-nfs-test-server.yml) operations file. This creates a separate VM with nfs exports you can use to experiment with volume mounts.
+
+<p class="note"><strong>Note:</strong> By default, the NFS test server expects that your CF deployment is deployed to a 10.x.x.x subnet. If you are deploying to a subnet that is not 10.x.x.x (e.g. 192.168.x.x), you must override the "export_cidr" property.<br/>
+ Edit the operations file, and replace this line:<br/>
+ <span style="font-family:monospace">  nfstestserver: {}</span><br/>
+ with something like this:<br/>
+	<span style="font-family:monospace">  nfstestserver: {export_cidr: 192.168.0.0/16}</span>
+</p>
+
+#### LDAP Test Server
+
+To deploy the LDAP test server, include the [enable-nfs-test-ldapserver.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/test/enable-nfs-test-ldapserver.yml) operations file. This installs an LDAP server onto the VM created for the NFS test server.
+
+The deployed LDAP server is preconfigured with a single user account with username `uid1000` and password `secret`.  When queried this test user will resolve to UID 1000 and GID 1000.
+
+When using the LDAP test server with your Cloud Foundry deployment, you can use the following values for required variables to connect to it:
+
+- `nfs-ldap-service-user`: cn=admin,dc=domain,dc=com
+- `nfs-ldap-service-password`: secret
+- `nfs-ldap-host`: nfstestldapserver.service.cf.internal
+- `nfs-ldap-port`: 389
+- `nfs-ldap-proto`: tcp
+- `nfs-ldap-fqdn`: ou=Users,dc=domain,dc=com
 
 ## <a id="smb-example"></a> Example 2: Deploy SMB Volume Service to CF
 
