@@ -9,7 +9,7 @@ This routing plane provides additional features, such as the ability to configur
 
 ## <a id="prereq"></a> Prerequisite
 
-This procedure requires that you have deployed Cloud Foundry using cf-deployment. 
+This procedure requires that you have deployed Cloud Foundry using cf-deployment. For more information, see [Deploying Cloud Foundry with cf-deployment](../deploying/cf-deployment/index.html). 
 
 ## <a id="deploy"></a> Deploy Cloud Foundry with the Istio Ops File
 
@@ -58,11 +58,20 @@ To deploy Cloud Foundry with service mesh, do the following:
 1. Deploy your cf-deployment with the Istio ops file:
 
 	```
-	bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
+	bosh -e YOUR-ENV -d cf deploy PATH-TO-CF-MANIFEST -v PATH-TO-VARIABLES \
     -o deploy/cf-deployment-operations/add-istio.yml
     ```
+    Where:
+    * `YOUR-ENV` is the name of the BOSH environment that contains your CF deployment. 
+    * `PATH-TO-CF-MANIFEST` is the path to the manifest file for your CF deployment. 
+    * `PATH-TO-VARIABLES` is the path to the variables file for your CF deployment. 
 
-    <p class="note"><strong>Note</strong>: The above <code>bosh deploy</code> command is an example, but your deployment command should match the one you used to deploy CF initially, with the addition of a <code>-o add-istio.yml</code> option.</p>
+    For example:
+
+    <pre class="terminal">
+    $ bosh -e my-env -d cf deploy ~/workspace/cf-deployment/cf-deployment.yml -v cf-deployment/cf-deployment.yml \
+    -o deploy/cf-deployment-operations/add-istio.yml
+    </pre>
 
 1. Once you deploy with the ops file, you can run `bosh vms` to see the new VMs in your  deployment: `istio-router`, `istio-control`, and `cc-route-syncer`. 
 
