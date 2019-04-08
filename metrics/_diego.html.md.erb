@@ -162,6 +162,7 @@ Default Origin Name: rep
  CM                                                      | Emitted every 30 seconds.
  ContainerCount                                          | Number of containers hosted on the cell. Emitted every 30 seconds.
  GardenContainerCreationDuration                         | Time in nanoseconds that the rep Garden backend took to create a container. Emitted after every successful container creation.
+ GardenHealthCheckFailed                                 | Whether the cell has failed to pass its healthcheck against the garden backend. `0` signifies healthy, and `1` signifies unhealthy. Emitted every 30 seconds.
  LogMessage                                              | Emitted every 30 seconds.
  logSenderTotalMessagesRead                              | Count of application log messages sent by Diego Executor. Emitted every 30 seconds.
  memoryStats.lastGCPauseTimeNS                           | Duration in nanoseconds of the last garbage collector pause.
@@ -169,7 +170,7 @@ Default Origin Name: rep
  memoryStats.numBytesAllocatedStack                      | Instantaneous count of bytes used by the stack allocator.
  numGoRoutines                                           | Instantaneous number of active goroutines in the process.
  RepBulkSyncDuration                                     | Time in nanoseconds that the cell rep took to synchronize the ActualLRPs it has claimed with its actual garden containers. Emitted every 30 seconds by each rep.
- UnhealthyCell                                           | Whether the cell has failed to pass its healthcheck against the garden backend. `0` signifies healthy, and `1` signifies unhealthy. Emitted every 30 seconds<a id="routeemitter"></a>.
+ UnhealthyCell                                           | DEPRECATED in favor of GardenHealthCheckFailed<a id="routeemitter"></a>.
 
 Default Origin Name: route_emitter
 
