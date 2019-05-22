@@ -23,6 +23,7 @@ The `cloud_controller_ng` Ruby process can be considered the _main_ job in capi-
 ##### Heuristics
 * Average response latency
 * Degraded web UI responsiveness or timeouts
+* `bosh is --ps --vitals` has elevated CPU usage for the api instance group's "cloud_controller_ng" job (see footnote [1] on BOSH cpu metrics)
 
 ##### Logs
 * `/var/vcap/sys/log/cloud_controller_ng/cloud_controller_ng.log`
