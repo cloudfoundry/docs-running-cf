@@ -43,8 +43,8 @@ thread\_info.event\_machine.threadqueue.size        | Number of unscheduled task
 thread\_info.thread\_count                          | Total number of threads that are either runnable or stopped. Emitted every 30 seconds per VM.
 total\_users                                        | Total number of users ever created, including inactive users. Emitted every 10 minutes per VM.
 vcap\_sinatra.recent\_errors                        | 50 most recent errors. DEPRECATED
-vitals.cpu                                          | Percentage of CPU used by the Cloud Controller process. Emitted every 30 seconds per VM.
-vitals.cpu\_load\_avg                               | System CPU load averaged over the last 1 minute according to the OS. Emitted every 30 seconds per VM.
+vitals.cpu                                          | Average lifetime CPU% utilization of the Cloud Controller process according to ps. Usually misleading, prefer `vitals.cpu_load_average`. Emitted every 30 seconds per VM.
+vitals.cpu\_load\_avg                               | System CPU load averaged over the last 1 minute according to the OS's vmstat metrics. Emitted every 30 seconds per VM.
 vitals.mem\_bytes                                   | The RSS bytes (resident set size) or real memory of the Cloud Controller process. Emitted every 30 seconds per VM.
 vitals.mem\_free\_bytes                             | Total memory available according to the OS. Emitted every 30 seconds per VM.
 vitals.mem\_used\_bytes                             | Total memory used (active + wired) according to the OS. Emitted every 30 seconds per VM.
