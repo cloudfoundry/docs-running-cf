@@ -51,6 +51,9 @@ Colloquially known as "local workers," this job is primarily responsible for han
 
 ### When to Scale
 
+Each API VM has 2 local workers by default, that perform upload tasks. eg. If you have 3 API instances, then it'll be able to perform 6 concurrent pushes at one time. 
+If you anticipate more than 6 concurrent pushes in this examples, you may want to scale up your api instances. 
+
 #### Key Metrics
 
 * `cc.job_queue_length.cc-VM_NAME-VM_INDEX` is continuously growing.
