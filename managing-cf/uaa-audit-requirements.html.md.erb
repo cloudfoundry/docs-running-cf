@@ -3,15 +3,17 @@ title: User Account and Authentication Service Audit Requirements
 owner: UAA
 ---
 
+This topic describes audit requirements for the User Account and Authentication Service (UAA). 
+
 ## <a id="overview"></a>Overview
 
-The User Account and Authentication Service (UAA):
+UAA does the following:
 
 * Handles authentication for users and client applications
 * Manages user accounts
 * Manages client application registrations
 
-Each audit event contains
+Each audit event contains the following:
 
   * Client Address - the client IP or if not attainable, the IP of the last proxy
   * Date/Time of the event
@@ -20,6 +22,8 @@ Each audit event contains
   * Data identifying the event
 
 ## <a id="auth-passwd-events"></a>Authentication and Password Events
+
+UAA includes the following authentication and password events:
 
 * UserAuthenticationSuccess
     - Happens: When a user is successfully authenticated
@@ -86,6 +90,7 @@ Each audit event contains
 
 ## <a id="scim-admin-events"></a>Scim Administration Events
 
+UAA includes the following Scim administration events:
 
 * UserCreatedEvent
     - Happens: When a user is created
@@ -129,12 +134,16 @@ Each audit event contains
 
 ## <a id="token-events"></a>Token Events
 
+UAA includes the following token event:
+
 * TokenIssuedEvent
     - Happens: When a token is created
     - Data Recorded: Principal ID (client or user ID), scopes
 
 
 ## <a id="client-admin-events"></a>Client Administration Events
+
+UAA includes the following client administration events:
 
 * ClientCreateSuccess
     - Happens: When a client is created
@@ -162,6 +171,8 @@ Each audit event contains
 
 
 ## <a id="uaa-admin-events"></a>UAA Administration Events
+
+UAA includes the following UAA administration events:
 
 * ServiceProviderCreatedEvent
     - Happens: When managing the details of an external service provider which uses the UAA as a SAML IDP
@@ -193,7 +204,7 @@ Each audit event contains
 
 ## <a id="flows"></a>Flows
 
-Below are some example flows for a UAA configured with LDAP as an IDP
+Below are some example flows for a UAA configured with LDAP as an IDP:
 
 * Browser flows
      - Successful login: UserNotFound -> PrincipalAuthenticationFailure -> UserCreatedEvent -> IdentityProviderAuthenticationSuccess -> UserAuthenticationSuccess
