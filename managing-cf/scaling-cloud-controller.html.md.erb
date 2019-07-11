@@ -16,20 +16,28 @@ The `cloud_controller_ng` Ruby process is the primary job in CAPI. It, along wit
 
 ### When to Scale
 
+When determining whether to scale `cloud\_controller\_ng`, look for the following:
+
 #### Key Metrics
+
+Cloud Controller emits the following metrics:
 
 * `cc.requests.outstanding` is at or consistently near 20.
 * `system.cpu.user` is above 0.85 utilization of a single core on the API VM.
 * `cc.vitals.cpu_load_avg` is 1 or higher.
 * `cc.vitals.uptime` is consistently low, indicating frequent restarts (possibly due to memory pressure).
 
-#### Heuristics
+#### Heuristic Failures
+
+The following behaviors may occur:
 
 * There is a latency in average response.
 * Web UI responsiveness or timeouts are degraded.
 * `bosh is --ps --vitals` has elevated CPU usage for the API instance group's `cloud_controller_ng` job.
 
-#### Logs
+#### Relevant Log Files
+
+You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/cloud_controller_ng/cloud_controller_ng.log`
 * `/var/vcap/sys/log/cloud_controller_ng/nginx-access.log`
@@ -51,17 +59,25 @@ Colloquially known as "local workers," this job is primarily responsible for han
 
 ### When to Scale
 
+When determining whether to scale `cloud\_controller\_worker\_local`, look for the following:
+
 #### Key Metrics
+
+Cloud Controller emits the following metrics:
 
 * `cc.job_queue_length.cc-VM_NAME-VM_INDEX` is continuously growing.
 * `cc.job_queue_length.total` is continuously growing.
 
-#### Heuristics
+#### Heuristic Failures
+
+The following behaviors may occur:
 
 * `cf push` is intermittently failing.
 * `cf push` average time is elevated.
 
-#### Logs
+#### Relevant Log Files
+
+You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/cloud_controller_ng/cloud_controller_ng.log`
 
@@ -76,18 +92,26 @@ Colloquially known as "generic workers" or just "workers", this job and VM are r
 
 ### When to Scale
 
+When determining whether to scale `cloud\_controller\_worker`, look for the following:
+
 #### Key Metrics
+
+Cloud Controller emits the following metrics:
 
 * `cc.job_queue_length.cc-VM_TYPE-VM_INDEX` (ie. `cc.job_queue_length.cc-cc-worker-0`) is continuously growing.
 * `cc.job_queue_length.total` is continuously growing.
 
-#### Heuristics
+#### Heuristic Failures
+
+The following behaviors may occur:
 
 * `cf delete-org ORG_NAME` appears to leave its contained resources around for a long time.
 * Users report slow deletes for other resources.
 * cf-acceptance-tests succeed generally, but fail during cleanup.
 
-#### Logs
+#### Relevant Log Files
+
+You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/cloud_controller_worker/cloud_controller_worker.log`
 
@@ -104,18 +128,26 @@ The `cloud_controller_clock` job runs Diego sync process and schedules periodic 
 
 ### When to Scale
 
+When determining whether to scale `cloud\_controller\_clock` and `cc\_deployment\_updater`, look for the following:
+
 #### Key Metrics
+
+Cloud Controller emits the following metrics:
 
 * `cc.Diego_sync.duration` is continuously increasing over time.
 * `system.cpu.user` is high on the scheduler VM.
 
-#### Heuristics
+#### Heuristic Failures
+
+The following behaviors may occur:
 
 * Diego domains are frequently unfresh. For more information, see the [Domain Freshness](https://github.com/cloudfoundry/bbs/blob/master/doc/domains.md#domain-freshness) section in the _Overview of Domains_ topic on GitHub.
 * The Diego Desired LRP count is larger than the total process instance count reported through the Cloud Controller APIs.
 * Deployments are slow to increase and decrease instance count.
 
-#### Logs
+#### Relevant Log Files
+
+You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/cloud_controller_clock/cloud_controller_clock.log`
 * `/var/vcap/sys/log/cc_deployment_updater/cc_deployment_updater.log`
@@ -131,18 +163,26 @@ The internal WebDAV blobstore that comes included with Cloud Foundry by default.
 
 ### When to Scale
 
+When determining whether to scale `blobstore\_nginx`, look for the following:
+
 #### Key Metrics
+
+Cloud Controller emits the following metrics:
 
 * `system.cpu.user` is consistently high on the `singleton-blobstore` VM.
 * `system.disk.persistent.percent` is high, indicating that the blobstore is running out of room for additional files.
 
-#### Heuristics
+#### Heuristic Failures
+
+The following behaviors may occur:
 
 * `cf push` is intermittently failing.
 * `cf push` average time is elevated.
 * App droplet downloads are timing out or failing on Diego.
 
-#### Logs
+#### Relevant Log Files
+
+You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/blobstore/internal_access.log`
 
