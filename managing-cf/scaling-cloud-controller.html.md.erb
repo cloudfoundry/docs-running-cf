@@ -59,7 +59,12 @@ Colloquially known as "local workers," this job is primarily responsible for han
 
 ### When to Scale
 
+<<<<<<< HEAD
 When determining whether to scale `cloud\_controller\_worker\_local`, look for the following:
+=======
+Each API VM has 2 local workers by default, that perform upload tasks. eg. If you have 3 API instances, then it'll be able to perform 6 concurrent pushes at one time. 
+If you anticipate more than 6 concurrent pushes in this examples, you may want to scale up your api instances. 
+>>>>>>> 176765554d6d6e7a12f6685b5206348a55596f3f
 
 #### Key Metrics
 
