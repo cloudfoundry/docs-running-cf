@@ -54,7 +54,7 @@ you can deploy one by following the instructions in [Deploy the NFS Test Server]
 
 To redeploy Cloud Foundry with NFS enabled, do the following:
 
-1. If you do not have the `cf-deployment repository`, clone it by
+1. If you do not have the `cf-deployment` repository, clone it
 by running the following commands:
   <pre class="terminal">$ cd ~/workspace
   $ git clone https<span>:</span>//github.com/cloudfoundry/cf-deployment.git
@@ -127,12 +127,12 @@ on the port you use to connect to your deployment. This port is usually `389` or
 #### Configure your Cloud Foundry Deployment.
 
 To enable LDAP authentication in your CF deployment,
-you must include the `enable-nfs-ldap` ops file in your deployment with the `-o` flag.
+you must include the `enable-nfs-ldap.yml` ops file in your deployment with the `-o` flag.
 To view this file,
 see [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/enable-nfs-ldap.yml)
 in GitHub.
 
-To use the `enable-nfs-ldap` ops file, you need to provide the following variables
+To use the `enable-nfs-ldap.yml` ops file, you need to provide the following variables
 in a variables file or with the `-v` flag on the BOSH command line:
 
 <table>
@@ -276,18 +276,18 @@ you can deploy one by following the instructions in [Deploy the SMB Test Servers
 
 To redeploy Cloud Foundry with SMB enabled, do the following:
 
-1. If you do not have the `cf-deployment repository`, clone it by
+1. If you do not have the `cf-deployment` repository, clone it
 by running the following commands:
   <pre class="terminal">$ cd ~/workspace
   $ git clone https<span>:</span>//github.com/cloudfoundry/cf-deployment.git
   $ cd ~/workspace/cf-deployment</pre>
 
-1. Redeploy your cf-deployment while including the SMB ops file by running the following
+1. Redeploy your cf-deployment with the SMB ops file by running the following
 command:
 
     ```
     bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML -v VARIABLES-YAML \
-      -o operations/enable-smb-volume-service.yml
+      -o operations/experimental/enable-smb-volume-service.yml
     ```
 
     Where:
