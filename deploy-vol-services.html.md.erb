@@ -3,23 +3,23 @@ title: Adding Volume Services to Your Deployment
 owner: Diego Persistence
 ---
 
-This topic describes how Cloud Foundry (CF) operators can deploy volume services.
+This topic describes how Cloud Foundry operators can deploy volume services.
 
 
 ## <a id="overview"></a> Overview
 
 A volume service gives apps access to a remote filesystem, such as NFS.
-To provide a volume service for CF developers to use with their apps,
+To provide a volume service for Cloud Foundry developers to use with their apps,
 you must deploy a driver and broker pair.
 
-For current versions of CF that have been been deployed with cf-deployment,
-you can deploy brokers and drivers using ops files.
-For an example, see [Example: Deploy NFS Volume Service to CF](#example) and
-[Example 2: Deploy SMB Volume Service to CF](#smb-example) below.
+For current versions of Cloud Foundry that have been been deployed with cf-deployment,
+you can deploy brokers and drivers using ops files. 
+
+For examples of deploying brokers and drivers using ops files, see [Deploy NFS Volume Service to Cloud Foundry](#example) and [Deploy SMB Volume Service to Cloud Foundry](#smb-example) below.
 
 ### <a id='additional-info'></a> Additional Information
 
-For more information about volume services and the drivers and brokers available to CF, see the following:
+For more information about volume services and the drivers and brokers available to Cloud Foundry, see the following:
 
 * [Volume Services Google Doc](https://docs.google.com/document/d/1YtPMY9EjxlgJPa4SVVwIinfid_fshCF48xRhzyoZhrQ/edit?usp=sharing)
 * [Volume Services Troubleshooting Guide](https://github.com/cloudfoundry/volman/blob/master/TROUBLESHOOTING.md)
@@ -27,22 +27,32 @@ For more information about volume services and the drivers and brokers available
 * [SMB volume release repository](https://github.com/cloudfoundry/smb-volume-release)
 * [EFS volume release repository](https://github.com/cloudfoundry-incubator/efs-volume-release)
 
-<p class="note"><strong>Note:</strong> For test purposes, you can deploy the <a href="https://github.com/cloudfoundry/local-volume-release.git">Local Volume Release</a> if running a single Diego Cell CF deployment. This is not intended for production deployments.</p>
+<p class="note"><strong>Note:</strong> If you are running a single Diego Cell Cloud Foundry deployment, you can deploy a local volume release in a 
+  test environment. Do not deploy local volume releases in production deployments. For information about 
+  local volume releases, see <a href="https://github.com/cloudfoundry/local-volume-release.git">local-volume-release</a> in GitHub.
+</p>
 
 ### <a id='contact'></a> Contact
 
 If you have any questions, you can contact the team that develops volume services
-for CF on the **#persi** channel in the [Cloud Foundry (Open Source)](https://cloudfoundry.slack.com)
+for Cloud Foundry on the **#persi** channel in the [Cloud Foundry (Open Source)](https://cloudfoundry.slack.com)
 Slack organization.
 
-## <a id="example"></a> Example: Deploy NFS Volume Service to CF
+## <a id="example"></a> Deploy NFS Volume Service to Cloud Foundry
 
-The following procedure provides an example of how to deploy the NFS broker and
-corresponding driver to an existing CF deployment.
+This section provides an example of how to deploy the NFS broker and
+corresponding driver to an existing Cloud Foundry deployment.
+
+To deploy the NFS broker and driver to an existing Cloud Foundry deployment, do the following:
+
+1. [Redeploy Cloud Foundry with NFS Enabled](#redeploy)
+1. [Grant Access to the NFS Service](#broker)
+1. [(Optional) Enable LDAP Support](#ldap)
+1. [(Optional) Deploy Test Servers](#server)
 
 ### <a id="pre"></a> Prerequisites
 
-Before you deploy the NFS volume service to a CF deployment, you must have the following:
+Before you deploy the NFS volume service to a Cloud Foundry deployment, you must have the following:
 
 * A current version of Cloud Foundry deployed.
 See [Overview of Deploying Cloud Foundry](/deploying/index.html).
@@ -70,8 +80,8 @@ by running the following commands:
     Where:
     + `MY-ENV` is the name of the BOSH Director.
     + `MY-DEPLOYMENT` is the name of your deployment.
-    + `MANIFEST-YAML` is the name of the manifest YAML file you used when you deployed CF.
-    + `VARIABLES-YAML` is the name of the variables YAML file you used when you deployed CF.
+    + `MANIFEST-YAML` is the name of the manifest YAML file you used when you deployed Cloud Foundry.
+    + `VARIABLES-YAML` is the name of the variables YAML file you used when you deployed Cloud Foundry.
 
     For example:
     <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
@@ -81,98 +91,133 @@ by running the following commands:
   For example:
   <pre class="terminal">$ bosh -e my-env -d cf run-errand nfsbrokerpush</pre>
 
-Your CF deployment now has a running service broker and volume drivers and is ready to mount NFS volumes.
+Your Cloud Foundry deployment now has a running service broker and volume drivers 
+and is ready to mount NFS volumes.
 
-### <a id="broker"></a> Grant Access to the NFS Broker
+### <a id="broker"></a> Grant Access to the NFS Service
 
-Grant access to the services of the broker by running the following command:
+For Cloud Foundry app developers to use the NFS broker, you must grant app developers access
+to the NFS service.
 
-<pre class="terminal">$ cf enable-service-access nfs</pre>
+To grant access to the NFS service, do the following:
 
-CF app developers can now create an NFS service and bind instances to their apps.
+1. Run the following command:
+
+    ```
+    cf enable-service-access nfs
+    ```
+
+Cloud Foundry app developers can now create an NFS service and bind instances to their apps.
 For more information, see
 [Using an External File System (Volume Services)](../devguide/services/using-vol-services.html).
 
 ### <a id="ldap"></a> (Optional) Enable LDAP Support
 
-For better NFS security you can configure your deployment to connect to an external LDAP server.
-Configuring an LDAP server enables the NFS volume driver to do the following:
-
-- Ensure that app developers have valid credentials to use an account.
-- Translate user credentials into a valid UID and GID for that user.
-
+For better NFS security, you can configure your Cloud Foundry deployment to connect to an external LDAP server.
 When you connect your deployment to an LDAP server, the NFS volume service is secured
 so that an app developer cannot bind
 to an NFS share using an arbitrary UID.
 This ensures that an app developer cannot gain access to
 sensitive data stored by another user or app.
 
+Configuring an LDAP server enables the NFS volume driver to do the following:
+
+- Validate app developer credentials for user accounts.
+- Translate user credentials into a valid UID and GID for that user.
+
 When you enable LDAP support, regular UID and GID parameters are disabled. If you enable LDAP,
 app developers need to provide valid credentials
 for any user they want to use on the NFS server.
 
-#### Configure your LDAP Server
+To enable LDAP support, do the following:
 
-To enable LDAP integration with your CF deployment, your external LDAP server must have the following:
+1. [Configure your LDAP Server](#ldap-config)
+1. [Configure your Cloud Foundry Deployment](#cf-ldap-config)
 
-- A provisioned service account that has read-only access to user records. This account
-is used by nfsv3driver to look up usernames and convert them to UIDs.<br>
-In Windows Server 2008 and later, you can do this by creating a new user
-  and adding it to the `Read-only Domain Controllers` group.
-- A LDAP schema that contains `uidNumber` and `gidNumber` fields for the user accounts
-used by NFS services. These fields are used to establish the correct UID for a named user.
-- Be reachable through the network from the Diego cell VMs
-on the port you use to connect to your deployment. This port is usually `389` or `636`.
+#### <a name="ldap-config"></a>Configure your LDAP Server
 
-#### Configure your Cloud Foundry Deployment.
+If you want to integrate LDAP, your LDAP server must be configured to connect to a Cloud Foundry deployment.
+ 
+To integrate LDAP with your Cloud Foundry deployment, do the following:
 
-To enable LDAP authentication in your CF deployment,
-you must include the `enable-nfs-ldap.yml` ops file in your deployment with the `-o` flag.
-To view this file,
+1. Configure your external LDAP server to have the following:
+    - A provisioned service account that has read-only access to user records. This account
+    is used by nfsv3driver to look up usernames and convert them to UIDs.<br>
+    In Windows Server 2008 and later, you can do this by creating a new user
+      and adding it to the `Read-only Domain Controllers` group.
+    - A LDAP schema that contains `uidNumber` and `gidNumber` fields for the user accounts
+    used by NFS services. These fields are used to establish the correct UID for a named user.
+    - Be reachable through the network from the Diego cell VMs
+    on the port you use to connect to your deployment. This port is usually `389` or `636`.
+
+#### <a name="cf-ldap-config"></a>Configure your Cloud Foundry Deployment
+
+If you want to integrate LDAP, your Cloud Foundry deployment must redeployed with the `enable-nfs-ldap.yml` ops file
+and your LDAP server information. 
+To view the NFS LDAP ops file,
 see [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/enable-nfs-ldap.yml)
 in GitHub.
+ 
+To integrate LDAP with your Cloud Foundry deployment, do the following:
 
-To use the `enable-nfs-ldap.yml` ops file, you need to provide the following variables
-in a variables file or with the `-v` flag on the BOSH command line:
+1. Provide the following variables in a variables file or with the `-v` flag on the BOSH command line:
 
-<table>
-  <tr>
-    <th width=35%>Variable</th>
-    <th>Description</th>
-  </tr>
+    <table>
+      <tr>
+        <th width=35%>Variable</th>
+        <th>Description</th>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-service-user</code></td>
-    <td>This is your LDAP service account user name.</td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-service-user</code></td>
+        <td>This is your LDAP service account user name.</td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-service-password</code></td>
-    <td>This is your LDAP service account password.</td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-service-password</code></td>
+        <td>This is your LDAP service account password.</td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-host</code></td>
-    <td>This is the LDAP server host name or IP address.</td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-host</code></td>
+        <td>This is the LDAP server host name or IP address.</td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-port</code></td>
-    <td>This is the LDAP server port.</td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-port</code></td>
+        <td>This is the LDAP server port.</td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-proto</code></td>
-    <td>This is the LDAP server protocol. The protocol is either TCP or UDP.</td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-proto</code></td>
+        <td>This is the LDAP server protocol. The protocol is either TCP or UDP.</td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-fqdn</code></td>
-    <td>This is the LDAP fully qualified domain name for user records.
-      This domain name is searched against when user UIDs are looked up.</td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-fqdn</code></td>
+        <td>This is the LDAP fully qualified domain name for user records.
+          This domain name is searched against when user UIDs are looked up.</td>
+      </tr>
 
-</table>
+    </table>
+
+1. Redeploy your cf-deployment with the `enable-nfs-ldap.yml` ops file by running the following command:
+
+    ```
+    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML -v VARIABLES-YAML \
+  		-o operations/enable-nfs-ldap.yml
+    ```
+
+    Where:
+    + `MY-ENV` is the name of the BOSH Director.
+    + `MY-DEPLOYMENT` is the name of your deployment.
+    + `MANIFEST-YAML` is the name of the manifest YAML file you used when you deployed Cloud Foundry.
+    + `VARIABLES-YAML` is the name of the variables YAML file for the LDAP information.
+
+    For example:
+    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v ldap-vars.yml \
+		-o operations/enable-nfs-ldap.yml</pre>
+
 
 ### <a id="server"></a> (Optional) Deploy Test Servers
 
@@ -184,95 +229,131 @@ See [Deploy LDAP Test Server](#ldap-test) below.
 
 #### <a name="nfs-test"></a> Deploy the NFS Test Server
 
-To deploy the NFS test server, include the `enable-nfs-test-server.yml` ops file in your deployment
-with the `-o` flag.
-To view this file, see
+If you want to experiment with volume mounts, you can deploy a NFS test server using the `enable-nfs-test-server.yml` ops file. This file creates a separate VM with NFS exports. To view the NFS test server ops file, see
 [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/test/enable-nfs-test-server.yml)
 in GitHub.
 
-The `enable-nfs-test-server.yml` ops file creates a separate VM with NFS exports you can use to experiment with volume mounts.
+To redeploy your Cloud Foundry deployment with a NFS test server, do the following:
 
-<p class="note"><strong>Note:</strong> By default, the NFS test server expects that your
-  CF deployment is deployed to a <code>10.x.x.x </code>subnet.
-  If you are deploying to a subnet that is not <code>10.x.x.x</code>,
-  you must override the <code>export_cidr</code> property.<br><br>
- To override the <code>export_cidr</code> property, edit the ops file and
- replace <code>nfstestserver: {}</code>
- with <code>nfstestserver: {export_cidr: YOUR-SUBNET}</code>,
- where <code> YOUR-SUBNET</code> is the subnet you are deploying CF to.
-</p>
+1. Run the following command:
+
+    ```
+    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML \
+  		-o operations/test/enable-nfs-test-server.yml
+    ```
+
+    Where:
+    + `MY-ENV` is the name of the BOSH Director.
+    + `MY-DEPLOYMENT` is the name of your deployment.
+    + `MANIFEST-YAML` is the name of the manifest YAML file you used when you deployed Cloud Foundry.
+    
+    For example:
+    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml  \
+		-o operations/test/enable-nfs-test-server.yml</pre>
+
+    <p class="note"><strong>Note:</strong> By default, the NFS test server expects that your
+      Cloud Foundry deployment is deployed to a <code>10.x.x.x </code>subnet.
+      If you are deploying to a subnet that is not <code>10.x.x.x</code>,
+      you must override the <code>export_cidr</code> property.<br><br>
+     To override the <code>export_cidr</code> property, edit the ops file and
+     replace <code>nfstestserver: {}</code>
+     with <code>nfstestserver: {export_cidr: YOUR-SUBNET}</code>,
+     where <code> YOUR-SUBNET</code> is the subnet you are deploying Cloud Foundry to.
+    </p>
 
 #### <a name="ldap-test"></a>Deploy LDAP Test Server
 
-To deploy the LDAP test server, include the `enable-nfs-test-ldapserver.yml` operations
-file in your deployment with the `-o` flag. To view this file
-file, see [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/test/enable-nfs-test-ldapserver.yml)
+If you want to experiment with using LDAP with an NFS server, you can deploy a LDAP test server using the `enable-nfs-test-ldapserver.yml` ops file. This file installs an LDAP server
+onto the VM created for the NFS test server. To view the LDAP test server ops file, see
+[cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/test/enable-nfs-test-ldapserver.yml)
 in GitHub.
-
-The `enable-nfs-test-ldapserver.yml` ops file installs an LDAP server
-onto the VM created for the NFS test server.
 
 The deployed LDAP server is preconfigured with a single user account
 with username `uid1000` and password `secret`.
 When the test user is queried, the user resolves to UID `1000` and GID `1000`.
 
-To connect to the LDAP test server you can use the following values for required variables:
+To redeploy your Cloud Foundry deployment with a LDAP test server, do the following:
 
+1. Provide the following variables in a variables file or with the -v flag on the BOSH command line:
 
-<table>
-  <tr>
-    <th width=35%>Variable</th>
-    <th>Value</th>
-  </tr>
+    <table>
+      <tr>
+        <th width=35%>Variable</th>
+        <th>Value</th>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-service-user</code></td>
-    <td><code>cn=admin,dc=domain,dc=com</code></td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-service-user</code></td>
+        <td><code>cn=admin,dc=domain,dc=com</code></td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-service-password</code></td>
-    <td><code>secret</code></td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-service-password</code></td>
+        <td><code>secret</code></td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-host</code></td>
-    <td><code>nfstestldapserver.service.cf.internal</code></td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-host</code></td>
+        <td><code>nfstestldapserver.service.cf.internal</code></td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-port</code></td>
-    <td><code>389</code></td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-port</code></td>
+        <td><code>389</code></td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-proto</code></td>
-    <td><code>tcp</code></td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-proto</code></td>
+        <td><code>tcp</code></td>
+      </tr>
 
-  <tr>
-    <td><code>nfs-ldap-fqdn</code></td>
-    <td><code> ou=Users,dc=domain,dc=com</code></td>
-  </tr>
+      <tr>
+        <td><code>nfs-ldap-fqdn</code></td>
+        <td><code> ou=Users,dc=domain,dc=com</code></td>
+      </tr>
 
-</table>
+    </table>
+    
+1. Run the following command:
 
-## <a id="smb-example"></a> Example 2: Deploy SMB Volume Service to CF
+    ```
+    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML -v VARIABLES-YAML\
+  		-o operations/test/enable-nfs-test-ldapserver.yml
+    ```
 
-The following procedure provides an example of how to deploy the SMB broker and
-corresponding driver to an existing CF deployment.
+    Where:
+    + `MY-ENV` is the name of the BOSH Director.
+    + `MY-DEPLOYMENT` is the name of your deployment.
+    + `MANIFEST-YAML` is the name of the manifest YAML file you used when you deployed Cloud Foundry.
+    + `VARIABLES-YAML` is the name of the variables YAML file for the LDAP settings.
+    
+    For example:
+    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v ldapserver-vars.yml \
+		-o operations/test/enable-nfs-test-ldapserver.yml</pre>
+
+## <a id="smb-example"></a>Deploy SMB Volume Service to Cloud Foundry
+
+This section provides an example of how to deploy the SMB broker and
+corresponding driver to an existing Cloud Foundry deployment.
+
+To deploy the SMB broker and driver to an existing Cloud Foundry deployment, do the following:
+
+1. [Redeploy Cloud Foundry with SMB Enabled](#smb-redeploy)
+1. [Grant Access to the SMB Service](#smb-broker)
+1. [(Optional) Deploy the SMB Test Server](#smb-server)
+
 
 ### <a id="smb-pre"></a> Prerequisites
 
-Before you deploy the NFS volume service to a CF deployment, you must have the following:
+Before you deploy the SMB volume service to a Cloud Foundry deployment, you must have the following:
 
 * A current version of Cloud Foundry deployed.
 See [Overview of Deploying Cloud Foundry](/deploying/index.html).
 * The BOSH CLI. See [Installing the CLI](https://bosh.io/docs/cli-v2-install/) in the BOSH documentation.
 * An SMB server. If you require an SMB test server,
-you can deploy one by following the instructions in [Deploy the SMB Test Servers](#smb-server). below.
+you can deploy one by following the instructions in [(Optional) Deploy the SMB Test Servers](#smb-server) below.
 
-### <a id="smb-redeploy"></a> Redeploy CF with SMB Enabled
+### <a id="smb-redeploy"></a> Redeploy Cloud Foundry with SMB Enabled
 
 To redeploy Cloud Foundry with SMB enabled, do the following:
 
@@ -293,8 +374,8 @@ command:
     Where:
     + `MY-ENV` is the name of the BOSH Director.
     + `MY-DEPLOYMENT` is the name of your deployment.
-    + `MANIFEST-YAML` is the name of the manifest YAML file you used when you deployed CF.
-    + `VARIABLES-YAML` is the name of the variables YAML file you used when you deployed CF.
+    + `MANIFEST-YAML` is the name of the manifest YAML file you used when you deployed Cloud Foundry.
+    + `VARIABLES-YAML` is the name of the variables YAML file you used when you deployed Cloud Foundry.
 
     For example:
     <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
@@ -304,34 +385,55 @@ command:
   For example:
   <pre class="terminal">$ bosh -e my-env -d cf run-errand smbbrokerpush</pre>
 
-Your CF deployment now has a running service broker and volume drivers and
+Your Cloud Foundry deployment now has a running service broker and volume drivers and
 is ready to mount existing SMB shares.
 
-#### <a id="smb-server"></a> Deploy the SMB Test Server
+### <a id="smb-broker"></a> Grant Access to the SMB Service
 
-To deploy the SMB test server, include the `enable-smb-test-server.yml` ops file
-in your deployment with the `-o` flag. To view this file,
+For Cloud Foundry app developers to use the SMB broker, you must grant app developers access
+to the SMB service.
+
+To grant access to the SMB service, do the following:
+
+1. Run the following command:
+
+    ```
+    cf enable-service-access smb
+    ```
+
+Cloud Foundry app developers can now create an SMB service and bind instances to their apps.
+For more information, see
+[Using an External File System (Volume Services)](../devguide/services/using-vol-services.html).
+
+### <a id="smb-server"></a> (Optional) Deploy the SMB Test Server
+
+If you want to experiment with volume mounts, you can deploy a SMB test server using the `enable-smb-test-server.yml` ops file. This file creates a separate VM with SMB shares. To view the SMB test server ops file, 
 see [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/test/enable-smb-test-server.yml)
 in GitHub.
 
-The `enable-smb-test-server.yml` ops file creates a separate VM with
-SMB shares you can use to experiment with volume mounts.
+To redeploy your Cloud Foundry deployment with a SMB test server, do the following:
 
-<p class="note"><strong>Note:</strong> By default, the SMB test server expects that your
-  CF deployment is deployed to a <code>10.x.x.x </code>subnet.
-  If you are deploying to a subnet that is not <code>10.x.x.x</code>,
-  you must override the <code>export_cidr</code> property.<br><br>
- To override the <code>export_cidr</code> property, edit the ops file and
- add in the properties section <code>export_cidr: YOUR-SUBNET</code>,
- where <code> YOUR-SUBNET</code> is the subnet you are deploying CF to.
-</p>
+1. Run the following command:
 
-###<a id="smb-broker"></a> Grant Access to the SMB Broker
+    ```
+    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML \
+      -o operations/test/enable-smb-test-server.yml
+    ```
 
-Grant access to the services of the broker by running the following command:
+    Where:
+    + `MY-ENV` is the name of the BOSH Director.
+    + `MY-DEPLOYMENT` is the name of your deployment.
+    + `MANIFEST-YAML` is the name of the manifest YAML file you used when you deployed Cloud Foundry.
 
-<pre class="terminal">$ cf enable-service-access smb</pre>
+    For example:
+    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml \
+		-o operations/test/enable-smb-test-server.yml</pre>
 
-CF app developers can now create an SMB service and bind instances to their apps.
-For more information, see
-[Using an External File System (Volume Services)](../devguide/services/using-vol-services.html).
+    <p class="note"><strong>Note:</strong> By default, the SMB test server expects that your
+      Cloud Foundry deployment is deployed to a <code>10.x.x.x </code>subnet.
+      If you are deploying to a subnet that is not <code>10.x.x.x</code>,
+      you must override the <code>export_cidr</code> property.<br><br>
+     To override the <code>export_cidr</code> property, edit the ops file and
+     add in the properties section <code>export_cidr: YOUR-SUBNET</code>,
+     where <code> YOUR-SUBNET</code> is the subnet you are deploying Cloud Foundry to.
+    </p>
