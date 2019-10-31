@@ -32,12 +32,12 @@ UAA includes the following authentication and password events:
 * `UserAuthenticationFailure`
     - **Trigger:** When a user authentication fails, user exists
     - **Data Recorded:** Username
-    - **Notes:** Followed by a `PrincipalAuthenticationFailureEvent`
+    - **Notes:** Followed by a `PrincipalAuthenticationFailure`
 
 * `UserNotFound`
     - **Trigger:** When a user authentication fails, user does not exists
     - **Data Recorded:** Username
-    - **Notes:** Followed by a `PrincipalAuthenticationFailureEvent`
+    - **Notes:** Followed by a `PrincipalAuthenticationFailure`
 
 * `UnverifiedUserAuthentication`
     - **Trigger:** When a user that is not yet verified authenticates
@@ -78,7 +78,7 @@ UAA includes the following authentication and password events:
 * `IdentityProviderAuthenticationFailure`
     - **Trigger:** When a user authentication fails for the password login, and user exists
     - **Data Recorded:** User ID
-    - **Notes:** Followed by a `UserAuthenticationFailureEvent` and `PrincipalAuthenticationFailureEvent`
+    - **Notes:** Followed by a `UserAuthenticationFailureEvent` and `PrincipalAuthenticationFailure`
 
 * `MfaAuthenticationSuccess`
     - **Trigger:** When a user successfully authenticates with MFA
