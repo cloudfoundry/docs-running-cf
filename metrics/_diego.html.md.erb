@@ -6,7 +6,7 @@ Diego metrics have the following origin names:
 + [locket](#locket)
 + [rep](#rep)
 + [route_emitter](#routeemitter)
-+ [ssh_proxy](#sshproxy)
++ [ssh_proxy](#sshproxy)<a id="auctioneer"></a>
 
 
 Default Origin Name: auctioneer
@@ -25,9 +25,9 @@ Default Origin Name: auctioneer
  memoryStats.lastGCPauseTimeNS                               | Duration in nanoseconds of the last garbage collector pause.
  memoryStats.numBytesAllocatedHeap                           | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                          | Instantaneous count of bytes used by the stack allocator.
- numGoRoutines                                               | Instantaneous number of active goroutines in the process<a id="bbs"></a>.
+ numGoRoutines                                               | Instantaneous number of active goroutines in the process.
  RequestCount                                                | Cumulative number of requests the auctioneer has handled through its API.  Emitted periodically.
- RequestLatency                                              | Time the auctioneer took to handle requests to its API endpoints. Emitted when the auctioneer handles requests.
+ RequestLatency                                              | Time the auctioneer took to handle requests to its API endpoints. Emitted when the auctioneer handles requests<a id="bbs"></a>.
 
 Default Origin Name: bbs
 
@@ -76,10 +76,10 @@ Default Origin Name: bbs
  TasksCompleted                                          | Total number of Tasks that have completed. Emitted every 30 seconds.
  TasksPending                                            | Total number of Tasks that have not yet been placed on a cell. Emitted every 30 seconds.
  TasksResolving                                          | Total number of Tasks locked for deletion. Emitted every 30 seconds.
- TasksRunning                                            | Total number of Tasks running on cells. Emitted every 30 seconds<a id="ccuploader"></a>.
+ TasksRunning                                            | Total number of Tasks running on cells. Emitted every 30 seconds.
  TasksSucceeded                                          | Cumulative number of tasks completed successfully. **Note** This metric has a `cell-id` tag that can be used to get the per cell metric.
  TasksFailed                                             | Cumulative number of tasks that failed. **Note** This metric has a `cell-id` tag that can be used to get the per cell metric.
- TasksStarted                                            | Cumulative number of tasks that has started so far. **Note** This metric has a `cell-id` tag that can be used to get the per cell metric.
+ TasksStarted                                            | Cumulative number of tasks that has started so far. **Note** This metric has a `cell-id` tag that can be used to get the per cell metric<a id="fileserver"></a>.
 
 Default Origin Name: file\_server
 
@@ -88,7 +88,7 @@ Default Origin Name: file\_server
  memoryStats.lastGCPauseTimeNS                   | Duration in nanoseconds of the last garbage collector pause.
  memoryStats.numBytesAllocatedHeap               | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack              | Instantaneous count of bytes used by the stack allocator.
- numGoRoutines                                   | Instantaneous number of active goroutines in the process<a id="gardenlinux"></a>.
+ numGoRoutines                                   | Instantaneous number of active goroutines in the process<a id="locket"></a>.
 
 Default Origin Name: locket
 
@@ -106,19 +106,19 @@ Default Origin Name: locket
  memoryStats.lastGCPauseTimeNS                      | Duration in nanoseconds of the last garbage collector pause.
  memoryStats.numBytesAllocatedHeap                  | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                 | Instantaneous count of bytes used by the stack allocator.
- numGoRoutines                                      | Instantaneous number of active goroutines in the process<a id="gardenlinux"></a>.
+ numGoRoutines                                      | Instantaneous number of active goroutines in the process.
  PresenceExpired                                    | Cumulative number of presences that have expired. Emitted every 60 seconds.
  RequestsCancelled                                  | Cumulative number of requests of a particular type that have been cancelled by the client. Currently tracking `Lock`, `Release`, `Fetch`, and `FetchAll` requests. Emitted every 60 seconds.
  RequestsStarted                                    | Cumulative number of requests of a particular type that have been made. Currently tracking `Lock`, `Release`, `Fetch`, and `FetchAll` requests. Emitted every 60 seconds.
  RequestsSucceeded                                  | Cumulative number of requests of a particular type that have completed successfully. Currently tracking `Lock`, `Release`, `Fetch`, and `FetchAll` requests. Emitted every 60 seconds.
  RequestsFailed                                     | Cumulative number of requests of a particular type that have failed for any reason. Currently tracking `Lock`, `Release`, `Fetch`, and `FetchAll` requests. Emitted every 60 seconds.
  RequestsInFlight                                   | Number of requests of a particular type currently being handled by locket. Currently tracking `Lock`, `Release`, `Fetch`, and `FetchAll` requests. Emitted every 60 seconds.
- RequestLatencyMax                                  | Maximum request latency emitted by a request of a particular type in the last 60 seconds. Currently tracking `Lock`, `Release`, `Fetch`, and `FetchAll` requests. Emitted every 60 seconds.
+ RequestLatencyMax                                  | Maximum request latency emitted by a request of a particular type in the last 60 seconds. Currently tracking `Lock`, `Release`, `Fetch`, and `FetchAll` requests. Emitted every 60 seconds<a id="rep"></a>.
 
 Default Origin Name: rep (applies to rep and rep_windows jobs)
 
- Metric Name                                             | Description
----------------------------------------------------------|----------------------------------------------------------------------------------------------
+ Metric Name                                        | Description
+----------------------------------------------------|----------------------------------------------------------------------------------------------
  CapacityAllocatedDisk                              | Amount of disk allocated to containers on this cell.  Emitted periodically.
  CapacityAllocatedMemory                            | Amount of memory allocated to containers on this cell.  Emitted periodically.
  CapacityRemainingContainers                        | Remaining number of containers this cell can host. Emitted periodically.
@@ -145,7 +145,7 @@ Default Origin Name: rep (applies to rep and rep_windows jobs)
  memoryStats.lastGCPauseTimeNS                      | Duration in nanoseconds of the last garbage collector pause.
  memoryStats.numBytesAllocatedHeap                  | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                 | Instantaneous count of bytes used by the stack allocator.
- numGoRoutines                                      | Instantaneous number of active goroutines in the process<a id="gardenlinux"></a>.
+ numGoRoutines                                      | Instantaneous number of active goroutines in the process.
  RepBulkSyncDuration                                | Time the cell rep took to synchronize the ActualLRPs it has claimed with its actual garden containers. Emitted periodically by each rep.
  RequestsStarted                                    | Cumulative number of requests of a particular type that have been made. Currently tracking `CancelTask`, `ContainerMetrics`, `Perform`, `Reset`, `State`, and `StopLRPInstance` requests. Emitted every 60 seconds.
  RequestsSucceeded                                  | Cumulative number of requests of a particular type that have completed successfully. Currently tracking `CancelTask`, `ContainerMetrics`, `Perform`, `Reset`, `State`, and `StopLRPInstance` requests. Emitted every 60 seconds.
@@ -160,7 +160,7 @@ Default Origin Name: rep (applies to rep and rep_windows jobs)
  VolmanMountErrors                                  | Count of failed volume mounts. Emitted periodically by each rep.
  VolmanUnmountDuration                              | Time volman took to unmount a volume. Emitted by each rep when volumes are mounted.
  VolmanUnmountDurationFor                           | Time volman took to unmount a volume with a specifc volume driver. Emitted by each rep when volumes are mounted.
- VolmanUnmountErrors                                | Count of failed volume unmounts. Emitted periodically by each rep.
+ VolmanUnmountErrors                                | Count of failed volume unmounts. Emitted periodically by each rep<a id="routeemitter"></a>.
 
 Default Origin Name: route_emitter (applies to route_emitter and route_emitter_windows jobs)
 
@@ -181,8 +181,8 @@ Default Origin Name: route_emitter (applies to route_emitter and route_emitter_w
  RoutesRegistered                               | Cumulative number of route registrations emitted from the route-emitter as it reacts to changes to LRPs. Emitted every 30 seconds.
  RoutesSynced                                   | Cumulative number of route registrations emitted from the route-emitter during its periodic route-table synchronization. Emitted every 30 seconds.
  RoutesTotal                                    | Number of routes in the route-emitter's routing table. Emitted every 30 seconds.
- RoutesUnregistered                             | Cumulative number of route unregistrations emitted from the route-emitter as it reacts to changes to LRPs. Emitted every 30 seconds<a id="sshproxy"></a>.
- TCPRouteCount                                  | Number of TCP route associations (route-endpoint pairs) in the route-emitter's routing table. Emitted periodically when emitter is in local mode.
+ RoutesUnregistered                             | Cumulative number of route unregistrations emitted from the route-emitter as it reacts to changes to LRPs. Emitted every 30 seconds.
+ TCPRouteCount                                  | Number of TCP route associations (route-endpoint pairs) in the route-emitter's routing table. Emitted periodically when emitter is in local mode<a id="sshproxy"></a>.
 
 Default Origin Name: ssh_proxy
 
@@ -192,6 +192,6 @@ Default Origin Name: ssh_proxy
  memoryStats.lastGCPauseTimeNS                     | Duration in nanoseconds of the last garbage collector pause.
  memoryStats.numBytesAllocatedHeap                 | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                | Instantaneous count of bytes used by the stack allocator.
- numGoRoutines                                     | Instantaneous number of active goroutines in the process <a id="stager"></a>.
+ numGoRoutines                                     | Instantaneous number of active goroutines in the process.
 
 [Top](#top)
