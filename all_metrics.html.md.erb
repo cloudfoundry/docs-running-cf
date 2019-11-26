@@ -3,36 +3,46 @@ title: Cloud Foundry Component Metrics
 owner: Logging and Metrics
 ---
 
+<% current_page.data.title = vars.app_runtime_abbr + " Component Metrics" %>
 
-<a id='top'></a>This topic lists and describes the metrics available for Cloud Foundry (CF) system components. These metrics are streamed from the Loggregator [Firehose](../loggregator/architecture.html).
+<a id='top'></a> This topic lists and describes the metrics available for <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>) system components. These metrics are streamed from the Loggregator Firehose. For more information about the Firehose, see [Loggregator Architecture](../loggregator/architecture.html).
 
-##<a id='cc'></a>About this Topic
 
-The CF component metric names and descriptions listed in this topic may be out of date because CF component metrics change often. If you have questions about CF component metrics, consider contacting the component teams directly on their respective channels in the [Cloud Foundry Slack](https://cloudfoundry.slack.com) organization. For example, you can contact the Diego team at **#diego**. 
+## <a id='cc'></a> Overview
 
-##<a id='cc'></a>Cloud Controller
+The <%= vars.app_runtime_abbr %> component metric names and descriptions listed in this topic may be out of date because <%= vars.app_runtime_abbr %> component metrics change often. If you have questions about <%= vars.app_runtime_abbr %> component metrics, consider contacting the component teams directly on their respective channels in the [Cloud Foundry Slack](https://cloudfoundry.slack.com) organization. For example, you can contact the Diego team at **#diego**. 
+
+## <a id='cc'></a> Cloud Controller
+
 <%= partial './metrics/cloud_controller' %>
 
-##<a id='diego'></a>Diego
+## <a id='diego'></a> Diego
+
 <%= partial './metrics/diego' %>
 
-##<a id='doppler'></a>DopplerServer
+## <a id='doppler'></a> DopplerServer
+
 <%= partial './metrics/doppler' %>
 
-##<a id='metron'></a>Metron Agent
+## <a id='metron'></a> Metron Agent
+
 <%= partial './metrics/metron_agent' %>
 
-##<a id='routing'></a>Routing
+## <a id='routing'></a> Routing
+
 <%= partial './metrics/routing' %>
 
-##<a id='syslog'></a>Syslog Drain Binder
+## <a id='syslog'></a> Syslog Drain Binder
+
 <%= partial './metrics/syslog_drain_binder' %>
 
-##<a id='traffic'></a>Traffic Controller
+## <a id='traffic'></a> Traffic Controller
+
 <%= partial './metrics/traffic_controller' %>
 
-##<a id='uaa'></a>User Account and Authentication (UAA)
+## <a id='uaa'></a> User Account and Authentication (UAA)
+
 <%= partial './metrics/uaa' %>
 
-For information about metrics related to UAA's performance, see <a href="../uaa/uaa-metrics.html">UAA Performance Metrics</a>.
+For information about metrics related to UAA's performance, see [UAA Performance Metrics](../uaa/uaa-metrics.html).
 

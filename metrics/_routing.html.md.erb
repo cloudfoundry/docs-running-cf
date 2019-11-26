@@ -20,21 +20,21 @@ Routing Release metrics have following origin names:
  numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
  numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
  logSenderTotalMessagesRead         | Lifetime number of application log messages. Emitted every 5 seconds.
- backend\_exhausted\_conns          | Lifetime number of requests that have been rejected due to the limit on number of connections per backend having been reached for all backends tried. Emitted every 5 seconds.
+ backend\_exhausted\_conns          | Lifetime number of requests that have been rejected due to the limit on number of connections per back end having been reached for all back ends tried. Emitted every 5 seconds.
  bad\_gateways                      | Lifetime number of bad gateways at the Gorouter. Emitted every 5 seconds.
- latency                            | Total round trip time, in milliseconds, for requests through the Gorouter. This includes time spent by backend application to process requests. Emitted per router request.
+ latency                            | Total round trip time, in milliseconds, for requests through the Gorouter. This includes time spent by back end app to process requests. Emitted per router request.
  latency.{component}                | Time in milliseconds that the Gorouter took to handle requests from each component to its endpoints. Emitted per router request.
  route\_registration\_latency         | Time in milliseconds between when an actual LRP is started and when the app is routable via Gorouter. Emitted per route-register message of new LRPs. This metric might be a negative value up to ~30 ms due to clock skew between the machines this metric is derived from.
  registry\_message.{component}      | Lifetime number of route register messages received for each component. Emitted per route-register message.
  unregistry\_message.{component}    | Lifetime number of route unregister messages received for each component. Emitted per route-unregister message.
  rejected\_requests                 | Lifetime number of bad requests received on the Gorouter. Emitted every 5 seconds.
  requests.{component}               | Lifetime number of requests received for each component. Emitted per router request.
- responses                          | Lifetime number of HTTP responses returned by the backend application. Emitted every 5 seconds.
- responses.2xx                      | Lifetime number of 2xx HTTP responses returned by the backend application. Emitted every 5 seconds.
- responses.3xx                      | Lifetime number of 3xx HTTP responses returned by the backend application. Emitted every 5 seconds.
- responses.4xx                      | Lifetime number of 4xx HTTP responses returned by the backend application. Emitted every 5 seconds.
- responses.5xx                      | Lifetime number of 5xx HTTP responses returned by the backend application. Emitted every 5 seconds.
- responses.xxx                      | Lifetime number of other(non-(2xx-5xx)) HTTP responses returned by the backend application. Emitted every 5 seconds.
+ responses                          | Lifetime number of HTTP responses returned by the back end app. Emitted every 5 seconds.
+ responses.2xx                      | Lifetime number of 2xx HTTP responses returned by the back end app. Emitted every 5 seconds.
+ responses.3xx                      | Lifetime number of 3xx HTTP responses returned by the back end app. Emitted every 5 seconds.
+ responses.4xx                      | Lifetime number of 4xx HTTP responses returned by the back end app. Emitted every 5 seconds.
+ responses.5xx                      | Lifetime number of 5xx HTTP responses returned by the back end app. Emitted every 5 seconds.
+ responses.xxx                      | Lifetime number of other(non-(2xx-5xx)) HTTP responses returned by the back end app. Emitted every 5 seconds.
  route\_lookup\_time                | Time in nanoseconds to look up a request URL in the route table. Emitted per router request.
  websocket_upgrades                 | Lifetime number of WebSocket upgrades. Emitted every 5 seconds.
  websocket_failures                 | Lifetime number of WebSocket failures. Emitted every 5 seconds.
@@ -45,9 +45,9 @@ Routing Release metrics have following origin names:
  uptime                             | Uptime for router. Emitted every second.
  file_descriptors                   | Number of file descriptors currently used by the Gorouter. Emitted every 5 seconds.
  routes_pruned                      | Lifetime number of stale routes that have been automatically pruned by the Gorouter. Emitted every 5 seconds.
- backend\_tls\_handshake_failed       | Lifetime number of failed TLS handshakes when connecting to a backend registered with TLS port. Corresponds to HTTP 525 error response from the Gorouter. Emitted every 5 seconds.
- backend\_invalid_id                 | Lifetime number of requests that were rejected because the backend presents a certificate with an invalid id. Corresponds to HTTP 503 error response from the Gorouter. Emitted every 5 seconds.
- backend\_invalid\_tls_cert           | Lifetime number of requests that were rejected because the backend presents a certificate that is not trusted by the Gorouter. Corresponds to HTTP 526 error response from Gorouter. Emitted every 5 seconds.
+ backend\_tls\_handshake_failed       | Lifetime number of failed TLS handshakes when connecting to a back end registered with TLS port. Corresponds to HTTP 525 error response from the Gorouter. Emitted every 5 seconds.
+ backend\_invalid_id                 | Lifetime number of requests that were rejected because the back end presents a certificate with an invalid ID. Corresponds to HTTP 503 error response from the Gorouter. Emitted every 5 seconds.
+ backend\_invalid\_tls_cert           | Lifetime number of requests that were rejected because the back end presents a certificate that is not trusted by the Gorouter. Corresponds to HTTP 526 error response from Gorouter. Emitted every 5 seconds.
  buffered_messages                  | Current number of messages in the Gorouter's NATS client's buffer. Emitted every 5 seconds.
  total\_dropped_messages             | Lifetime number of messages that have been dropped by the Gorouter's NATS client due to a full buffer. Emitted every 5 seconds.
 
@@ -96,11 +96,11 @@ Routing Release metrics have following origin names:
  memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
  numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
  numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
- {session_id}.ConnectionTime        | Average connection time to backend in current session. Emitted every 60 seconds per session ID. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+ {session_id}.ConnectionTime        | Average connection time to back end in current session. Emitted every 60 seconds per session ID. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
  {session_id}.CurrentSessions       | Total number of current sessions. Emitted every 60 seconds per session ID. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
- AverageConnectTimeMs               | Average backend response time (in ms). Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+ AverageConnectTimeMs               | Average back end response time (in ms). Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
  AverageQueueTimeMs                 | Average time spent in queue (in ms). Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
- TotalBackendConnectionErrors       | Total number of backend connection errors. Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
+ TotalBackendConnectionErrors       | Total number of back end connection errors. Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
  TotalCurrentQueuedRequests         | Total number of requests unassigned in queue. Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
 
 

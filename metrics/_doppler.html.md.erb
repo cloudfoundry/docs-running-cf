@@ -23,11 +23,11 @@ Metric Name                                                 | Description
  memoryStats.numMallocs                                     | Lifetime number of memory allocations.
  messageRouter.numberOfContainerMetricSinks                 | Instantaneous number of container metric sinks known to the SinkManager. Emitted every 5 seconds.
  messageRouter.numberOfDumpSinks                            | Instantaneous number of dump sinks known to the SinkManager. Emitted every 5 seconds.
- messageRouter.numberOfFirehoseSinks                        | Instantaneous number of firehose sinks known to the SinkManager. Emitted every 5 seconds.
+ messageRouter.numberOfFirehoseSinks                        | Instantaneous number of Firehose sinks known to the SinkManager. Emitted every 5 seconds.
  messageRouter.numberOfSyslogSinks                          | Instantaneous number of syslog sinks known to the SinkManager.
  messageRouter.numberOfWebsocketSinks                       | Instantaneous number of WebSocket sinks known to the SinkManager. Emitted every 5 seconds.
- messageRouter.totalDroppedMessages                         | Lifetime number of messages dropped inside Doppler for various reasons (downstream consumer can't keep up internal object wasn't ready for message, etc.).
- sentMessagesFirehose.\<SUBSCRIPTION\_ID\>                  | Number of sent messages through the firehose per subscription id. Emitted every 5 seconds.
+ messageRouter.totalDroppedMessages                         | Lifetime number of messages dropped inside Doppler for various reasons (downstream consumer cannot keep up internal object was not ready for message, etc.).
+ sentMessagesFirehose.\<SUBSCRIPTION\_ID\>                  | Number of sent messages through the firehose per subscription ID. Emitted every 5 seconds.
  udpListener.receivedByteCount                              | Lifetime number of bytes received by Doppler's UDP Listener.
  udpListener.receivedMessageCount                           | Lifetime number of messages received by Doppler's UDP Listener.
  udpListener.receivedErrorCount                             | Lifetime number of errors encountered by Doppler's UDP Listener while reading from the connection.
@@ -37,7 +37,7 @@ Metric Name                                                 | Description
  tlsListener.receivedByteCount                              | Lifetime number of bytes received by Doppler's TLS Listener. Emitted every 5 seconds.
  tlsListener.receivedMessageCount                           | Lifetime number of messages received by Doppler's TLS Listener. Emitted every 5 seconds.
  tlsListener.receivedErrorCount                             | Lifetime number of errors encountered by Doppler's TLS Listener while handshaking, decoding or reading from the connection.
- TruncatingBuffer.DroppedMessages                           | Number of messages intentionally dropped by Doppler from the sink for the specific sink. This counter event will correspond with log messages "Log message output is too high." Emitted every 5 seconds.
+ TruncatingBuffer.DroppedMessages                           | Number of messages intentionally dropped by Doppler from the sink for the specific sink. This counter event corresponds with log messages "Log message output is too high." Emitted every 5 seconds.
  TruncatingBuffer.totalDroppedMessages                      | Lifetime total number of messages intentionally dropped by Doppler from all of its sinks due to back pressure. Emitted every 5 seconds.
  listeners.totalReceivedMessageCount                        | Total number of messages received across all of Doppler's listeners (UDP, TCP, TLS).
  numCpus                                                    | Number of CPUs on the machine.

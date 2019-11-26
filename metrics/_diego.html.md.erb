@@ -67,19 +67,19 @@ Default Origin Name: bbs
  MigrationDuration                                       | Time in nanoseconds that the BBS took to run migrations against its persistence store. Emitted each time a BBS becomes the active master.
  numGoRoutines                                           | Instantaneous number of active goroutines in the process.
  OpenFileDescriptors                                     | Current (non-cumulative) number of open file descriptors held by the BBS. Emitted periodically.
- PresentCells                                            | Total number of cells that are maintaining presence with Locket. Emitted periodically.
+ PresentCells                                            | Total number of Diego Cells that are maintaining presence with Locket. Emitted periodically.
  RequestCount                                            | Cumulative number of requests the BBS has handled through its API. Emitted for each BBS request.
  RequestLatency                                          | Time in nanoseconds that the BBS took to handle requests to its API endpoints. Emitted when the BBS API handles requests.
  SuspectCells                                            | Total number of cells that are not maintaining their presences with Locket but for which the BBS has a record of at least one ActualLRP. Emitted periodically.
- SuspectClaimedActualLRPs                                | Total number of Suspect LRP instances that have been claimed by some cell. Emitted periodically.
- SuspectRunningActualLRPs                                | Total number of Suspect LRP instances that are running on cells. Emitted periodically.
+ SuspectClaimedActualLRPs                                | Total number of Suspect LRP instances that have been claimed by some Diego Cell. Emitted periodically.
+ SuspectRunningActualLRPs                                | Total number of Suspect LRP instances that are running on Diego Cells. Emitted periodically.
  TasksCompleted                                          | Total number of Tasks that have completed. Emitted every 30 seconds.
- TasksPending                                            | Total number of Tasks that have not yet been placed on a cell. Emitted every 30 seconds.
+ TasksPending                                            | Total number of Tasks that have not yet been placed on a Diego Cell. Emitted every 30 seconds.
  TasksResolving                                          | Total number of Tasks locked for deletion. Emitted every 30 seconds.
- TasksRunning                                            | Total number of Tasks running on cells. Emitted every 30 seconds.
- TasksSucceeded                                          | Cumulative number of tasks completed successfully. **Note** This metric has a `cell-id` tag that can be used to get the per cell metric.
- TasksFailed                                             | Cumulative number of tasks that failed. **Note** This metric has a `cell-id` tag that can be used to get the per cell metric.
- TasksStarted                                            | Cumulative number of tasks that has started so far. **Note** This metric has a `cell-id` tag that can be used to get the per cell metric<a id="fileserver"></a>.
+ TasksRunning                                            | Total number of Tasks running on Diego Cells. Emitted every 30 seconds.
+ TasksSucceeded                                          | Cumulative number of tasks completed successfully. This metric has a `cell-id` tag that can be used to get the per Cell metric.
+ TasksFailed                                             | Cumulative number of tasks that failed. This metric has a `cell-id` tag that can be used to get the per Cell metric.
+ TasksStarted                                            | Cumulative number of tasks that has started so far. This metric has a `cell-id` tag that can be used to get the per Cell metric<a id="fileserver"></a>.
 
 Default Origin Name: file\_server
 
@@ -119,42 +119,42 @@ Default Origin Name: rep (applies to rep and rep_windows jobs)
 
  Metric Name                                        | Description
 ----------------------------------------------------|----------------------------------------------------------------------------------------------
- CapacityAllocatedDisk                              | Amount of disk allocated to containers on this cell.  Emitted periodically.
- CapacityAllocatedMemory                            | Amount of memory allocated to containers on this cell.  Emitted periodically.
- CapacityRemainingContainers                        | Remaining number of containers this cell can host. Emitted periodically.
- CapacityRemainingDisk                              | Remaining amount of disk available for this cell to allocate to containers.  Emitted periodically.
- CapacityRemainingMemory                            | Remaining amount of memory available for this cell to allocate to containers.  Emitted periodically.
- CapacityTotalContainers                            | Total number of containers this cell can host. Emitted periodically.
- CapacityTotalDisk                                  | Total amount of disk available for this cell to allocate to containers. Emitted periodically.
- CapacityTotalMemory                                | Total amount of memory available for this cell to allocate to containers.  Emitted periodically.
- ContainerCompletedCount                            | Number of containers exited on this cell. Emitted after container exits.
- ContainerCount                                     | Number of containers hosted on the cell. Emitted periodically.
- ContainerExitedOnTimeoutCount                      | Number of containers on this cell exited after graceful shutdown interval. Emitted after container exits.
- ContainerUsageDisk                                 | Amount of disk used by containers on this cell.  Emitted periodically.
- ContainerUsageMemory                               | Amount of memory used by containers on this cell.  Emitted periodically.
+ CapacityAllocatedDisk                              | Amount of disk allocated to containers on this Diego Cell.  Emitted periodically.
+ CapacityAllocatedMemory                            | Amount of memory allocated to containers on this Diego Cell.  Emitted periodically.
+ CapacityRemainingContainers                        | Remaining number of containers this Diego Cell can host. Emitted periodically.
+ CapacityRemainingDisk                              | Remaining amount of disk available for this Diego Cell to allocate to containers. Emitted periodically.
+ CapacityRemainingMemory                            | Remaining amount of memory available for this Diego Cell to allocate to containers.  Emitted periodically.
+ CapacityTotalContainers                            | Total number of containers this Diego Cell can host. Emitted periodically.
+ CapacityTotalDisk                                  | Total amount of disk available for this Diego Cell to allocate to containers. Emitted periodically.
+ CapacityTotalMemory                                | Total amount of memory available for this Diego Cell to allocate to containers.  Emitted periodically.
+ ContainerCompletedCount                            | Number of containers exited on this Diego Cell. Emitted after container exits.
+ ContainerCount                                     | Number of containers hosted on the Diego Cell. Emitted periodically.
+ ContainerExitedOnTimeoutCount                      | Number of containers on this Diego Cell exited after graceful shutdown interval. Emitted after container exits.
+ ContainerUsageDisk                                 | Amount of disk used by containers on this Diego Cell. Emitted periodically.
+ ContainerUsageMemory                               | Amount of memory used by containers on this Diego Cell. Emitted periodically.
  CredCreationFailedCount                            | Count of failed instance identity credential creations. Emitted after every failed credential creation.
  CredCreationSucceededCount                         | Count of successful instance identity credential creations. Emitted after every successful credential creation.
  CredCreationSucceededDuration                      | Time the rep took to create instance identity credentials. Emitted after every successful credential creation.
- ContainerSetupSucceededDuration                    | Time the rep took to setup a container with the Garden backend. Emitted after every successful container setup.
- ContainerSetupFailedDuration                       | Time the rep took to setup a container with the Garden backend. Emitted after every failed container setup.
- GardenContainerCreationFailedDuration              | Time the rep's Garden backend took to create a container. Emitted after every failed container creation.
- GardenContainerCreationSucceededDuration           | Time the rep's Garden backend took to create a container. Emitted after every successful container creation.
- GardenContainerDestructionFailedDuration           | Time the rep's Garden backend took to destroy a container. Emitted after every failed container destruction.
- GardenContainerDestructionSucceededDuration        | Time the rep's Garden backend took to destroy a container. Emitted after every successful container destruction.
- GardenHealthCheckFailed                            | Whether the cell has failed to pass its healthcheck against the garden backend.  0 signifies healthy, and 1 signifies unhealthy. Emitted periodically.
+ ContainerSetupSucceededDuration                    | Time the rep took to setup a container with the Garden back end. Emitted after every successful container setup.
+ ContainerSetupFailedDuration                       | Time the rep took to setup a container with the Garden back end. Emitted after every failed container setup.
+ GardenContainerCreationFailedDuration              | Time the rep's Garden back end took to create a container. Emitted after every failed container creation.
+ GardenContainerCreationSucceededDuration           | Time the rep's Garden back end took to create a container. Emitted after every successful container creation.
+ GardenContainerDestructionFailedDuration           | Time the rep's Garden back end took to destroy a container. Emitted after every failed container destruction.
+ GardenContainerDestructionSucceededDuration        | Time the rep's Garden back end took to destroy a container. Emitted after every successful container destruction.
+ GardenHealthCheckFailed                            | Whether the cell has failed to pass its healthcheck against the garden back end.  0 signifies healthy, and 1 signifies unhealthy. Emitted periodically.
  memoryStats.lastGCPauseTimeNS                      | Duration in nanoseconds of the last garbage collector pause.
  memoryStats.numBytesAllocatedHeap                  | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                 | Instantaneous count of bytes used by the stack allocator.
  numGoRoutines                                      | Instantaneous number of active goroutines in the process.
- RepBulkSyncDuration                                | Time the cell rep took to synchronize the ActualLRPs it has claimed with its actual garden containers. Emitted periodically by each rep.
+ RepBulkSyncDuration                                | Time the Diego Cell rep took to synchronize the ActualLRPs it has claimed with its actual Garden containers. Emitted periodically by each rep.
  RequestsStarted                                    | Cumulative number of requests of a particular type that have been made. Currently tracking `CancelTask`, `ContainerMetrics`, `Perform`, `Reset`, `State`, and `StopLRPInstance` requests. Emitted every 60 seconds.
  RequestsSucceeded                                  | Cumulative number of requests of a particular type that have completed successfully. Currently tracking `CancelTask`, `ContainerMetrics`, `Perform`, `Reset`, `State`, and `StopLRPInstance` requests. Emitted every 60 seconds.
  RequestsFailed                                     | Cumulative number of requests of a particular type that have failed for any reason. Currently tracking `CancelTask`, `ContainerMetrics`, `Perform`, `Reset`, `State`, and `StopLRPInstance` requests. Emitted every 60 seconds.
  RequestsInFlight                                   | Cumulative number of requests of a particular type that are in-flight by rep. Currently tracking `CancelTask`, `ContainerMetrics`, `Perform`, `Reset`, `State`, and `StopLRPInstance` requests. Emitted every 60 seconds.
  RequestLatencyMax                                  | Maximum request latency emitted by a request of a particular type in the last 60 seconds. Currently tracking `CancelTask`, `ContainerMetrics`, `Perform`, `Reset`, `State`, and `StopLRPInstance` requests. Emitted every 60 seconds.
- StalledGardenDuration                              | Time the rep is waiting on its garden backend to become healthy during startup.  Emitted only if garden not responsive when the rep starts up.
+ StalledGardenDuration                              | Time the rep is waiting on its Garden back end to become healthy during startup. Emitted only if garden not responsive when the rep starts up.
  StartingContainerCount                             | Number of containers currently in a Reserved, Initializing, or Created state. Emitted periodically.
- StrandedEvacuatingActualLRPs                       | Evacuating ActualLPRs that timed out during the evacuation process. Emitted when evacuation doesn't complete successful.
+ StrandedEvacuatingActualLRPs                       | Evacuating ActualLPRs that timed out during the evacuation process. Emitted when evacuation does not complete successfully.
  VolmanMountDuration                                | Time volman took to mount a volume. Emitted by each rep when volumes are mounted.
  VolmanMountDurationFor                             | Time volman took to mount a volume with a specific volume driver. Emitted by each rep when volumes are mounted.
  VolmanMountErrors                                  | Count of failed volume mounts. Emitted periodically by each rep.
