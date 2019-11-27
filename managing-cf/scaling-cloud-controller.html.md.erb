@@ -140,7 +140,7 @@ Cloud Controller emits the following metrics:
 
 The following behaviors may occur:
 
-* Diego domains are frequently unfresh. For more information, see the [Domain Freshness](https://github.com/cloudfoundry/bbs/blob/master/doc/domains.md#domain-freshness) section in the _Overview of Domains_ topic on GitHub.
+* Diego domains frequently lack freshness. For more information, see the [Domain Freshness](https://github.com/cloudfoundry/bbs/blob/master/doc/domains.md#domain-freshness) section in the _Overview of Domains_ topic on GitHub.
 * The Diego Desired LRP count is larger than the total process instance count reported through the Cloud Controller APIs.
 * Deployments are slow to increase and decrease instance count.
 
@@ -162,7 +162,7 @@ The internal WebDAV blobstore that comes included with Cloud Foundry by default.
 
 ### When to Scale
 
-When determining whether to scale `blobstore\_nginx`, look for the following:
+When determining whether to scale `blobstore_nginx`, look for the following:
 
 #### Key Metrics
 
