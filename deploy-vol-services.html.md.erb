@@ -147,6 +147,8 @@ To integrate LDAP with your Cloud Foundry deployment, do the following:
       and adding it to the `Read-only Domain Controllers` group.
     - A LDAP schema that contains `uidNumber` and `gidNumber` fields for the user accounts
     used by NFS services. These fields are used to establish the correct UID for a named user.
+    - A LDAP schema where each user record contains the attribute `objectClass: User`. When searching, this field 
+    is used by the nfsv3driver as a filter to identify which records are user records.
     - Be reachable through the network from the Diego cell VMs
     on the port you use to connect to your deployment. This port is usually `389` or `636`.
 
