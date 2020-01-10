@@ -3,22 +3,30 @@ title: Usage Events and Billing
 owner: CAPI
 ---
 
+This topic describes types of usage events and how you can use them to construct billing information for apps and service instances.
+
 
 ## <a id='usage-events'></a> Usage Events
 
-Cloud Foundry operators can use usage events to construct billing information for apps and service instances.
+You can use usage events to construct billing information for apps and service instances.
 
-Despite being similar in name, usage events are different from Cloud Foundry audit events (`/v2/events`). You should not use the audit events stored in the events table for billing purposes. Audit events are recorded regardless of the action succeeding and are not guaranteed to be in the correct order.
+Despite being similar in name, usage events are different from Cloud Foundry audit events. You should not use the audit events stored in the events table for billing purposes. Audit events are recorded regardless of the action succeeding and are not guaranteed to be in the correct order.
 
 ### <a id='app-usage-events'></a> App Usage Events
 
-App Usage Events provide information about when users create, delete, and update apps. They also include information about the app to enable operators to bill based on resource usage.
+App usage events provide information about when users create, delete, and update apps. They also include information about the app to enable you to bill based on resource usage.
 
-App Usage Events expire after 31 days by default. This is configurable using the cf-release manifest property `cc.app_usage_events.cutoff_age_in_days`.
+App usage events expire after 31 days by default. You can configure a custom expiration period using the cf-release manifest property `cc.app_usage_events.cutoff_age_in_days`.
 
 #### <a id='app_usage_events_endpoint'></a> Endpoint
 
-Run `GET /v2/app_usage_events` to retrieve information about app usage events.
+To retrieve information about app usage events, run:
+
+```
+GET /v2/app_usage_events
+```
+
+This command returns app usage events in output similar to the example below:
 
 <pre class=‘terminal’>
 $ GET /v2/app_usage_events
@@ -65,25 +73,31 @@ For more information, see [List all App Usage Events](https://apidocs.cloudfound
 
 #### <a id='app-usage-events-event-states'></a> Event States
 
-App Usage Events have the following valid states: 'STARTED', 'STOPPED', 'TASK\_STARTED', 'TASK\_STOPPED', and 'BUILDPACK_SET'.
+App usage events have the following valid states: `STARTED`, `STOPPED`, `TASK_STARTED`, `TASK_STOPPED`, and `BUILDPACK_SET`.
 
-Multiple 'STARTED' events can occur in a row, so as to indicate updates to the app. You can parse the response to determine the specific difference.
+Multiple `STARTED` events can occur in a row, so as to indicate updates to the app. You can parse the response to determine the specific difference.
 
-Multiple 'STOPPED' events cannot occur without 'STARTED' events between them.
+Multiple `STOPPED` events cannot occur without 'STARTED' events between them.
 
-The usage events for 'TASK_*' events do not indicate app state, instead they indicate that a one-off task was executed.
+The app usage events for `TASK_STARTED` and `TASK_STOPPED` events do not indicate app state. Instead, they indicate that a one-off task was executed.
 
-The App Usage Events with the 'BUILDPACK_SET' state do not represent an actual app state. Instead, they signify that a buildpack has been used for the app. This can be used by operators who wish to charge for buildpack usage.
+The app usage events with the `BUILDPACK_SET` state do not represent an actual app state. Instead, they signify that a buildpack has been used for the app. You can use these app usage events to charge for buildpack usage.
 
 ### <a id='service-usage-events'></a> Service Usage Events
 
-Service Usage Events provide information about when users create, update, and delete service instances.
+Service usage events provide information about when users create, update, and delete service instances.
 
-Service Usage Events expire after 31 days by default. This is configurable using the cf-release manifest property `cc.service_usage_events.cutoff_age_in_days`. Expiration of Service Usage Events was introduced in cf-release v226.
+Service usage events expire after 31 days by default as of cf-release v226. You can configure a custom expiration period using the cf-release manifest property `cc.service_usage_events.cutoff_age_in_days`.
 
 #### <a id='service-usage-events-endpoint'></a> Endpoint
 
-Run `GET /v2/service_usage_events` to retrieve information about app usage events.
+To retrieve information about service usage events, run:
+
+```
+GET /v2/service_usage_events
+```
+
+This command returns service usage events in output similar to the example below:
 
 <pre class=‘terminal’>
 $ GET /v2/service_usage_events
@@ -119,56 +133,69 @@ $ GET /v2/service_usage_events
 }
 </pre>
 
-For documentation about the response information, see the [API documentation](http://apidocs.cloudfoundry.org/latest-release/service_usage_events/list_service_usage_events.html).
+For more information, see [List Service Usage Events](http://apidocs.cloudfoundry.org/12.24.0/service_usage_events/list_service_usage_events.html) in the Cloud Foundry API documentation.
 
 #### <a id='service-usage-events-event-states'></a> Event States
 
-Service Usage Events have the following valid states: 'CREATED', 'DELETED', and 'UPDATED'. These states signify the desired state of the service.
+Service usage events have the following valid states: `CREATED`, `DELETED`, and `UPDATED`. These states signify the desired state of the service.
 
 #### <a id='managed-vs-user-provided'></a> Managed Service Instances vs User-Provided Service Instances
 
-Service Usage Events include the `service_instance_type` field to distinguish between managed service instances (service instances backed by a broker) and user-provided service instances. You will likely not need to consider user-provided service instances for billing purposes.
+Service usage events include the `service_instance_type` field to distinguish between managed service instances, or service instances backed by a broker, and user-provided service instances. You likely do not need to consider user-provided service instances for billing purposes.
 
 
 ## <a id='using-usage-events'></a> Using Usage Events
+
+These sections describe how to use usage events.
 
 ### <a id='ordering'></a> Ordering Usage Events
 
 The order of events returned from the API are guaranteed to match the sequence of events that occurred in the system.
 
-The timestamps on events should not be used to sequence events. They may come from different Cloud Controller instances whose time could be slightly mismatched. Unless you are billing on the millisecond, they will be precise enough for normal usage.
+You should not use the timestamps on events to sequence events. They may come from different Cloud Controller instances whose time could be slightly mismatched. Unless you are billing on the millisecond, they are precise enough for normal usage.
 
 ### <a id='querying'></a> Querying For Events
 
-To only fetch events that you have not yet seen, use the `after_guid` query parameter. This will only return usage events that occurred after the event with the provided guid.
+To only fetch events that you have not yet seen, use the `after_guid` query parameter. This only returns usage events that occurred after the event with the provided GUID.
 
-Example:
+For example:
 
 ```
 GET /v2/app_usage_events?after_guid=7a63d717-3316-402f-bf12-a2a63211d1b9
 ```
 
-Note that using the `after_guid` query parameter can result in lost events if you are not careful. Usage events are guaranteed to be in the correct order based on when the event creation started, but some event transactions take longer than others to complete.
+Using the `after_guid` query parameter can result in lost events. Usage events are guaranteed to be in the correct order based on when the event creation started, but some event transactions take longer than others to complete.
 
-If you always use the last event guid for `after_guid`, you may miss events that occurred before that event, but that were still processing at the time of your query.
+If you always use the last event GUID for `after_guid`, you may miss events that occurred before that event, but that were still processing at the time of your query.
 
-We recommend that operators select their `after_guid` from an event far enough back in time to ensure that all hanging transactions finish. The exact buffer period depends on the expected transaction time of a particular Cloud Foundry installation, but 1 minute is typically sufficient to prevent data loss.
+<%= vars.recommended_by %> recommends that you select yourr `after_guid` from an event far enough back in time to ensure that all hanging transactions finish. The exact buffer period depends on the expected transaction time of a particular Cloud Foundry installation, but 1 minute is typically sufficient to prevent data loss.
 
 ### <a id='ext-warehouse'></a> External Warehouse
 
-To generate accurate billing information, Cloud Foundry operators must maintain their own external data warehouses. These warehouses can persist App Usage Events and Service Usage Events for longer than their expiration periods and prevent operators from having to continuously make expensive usage event queries.
+To generate accurate billing information, you must maintain your own external data warehouses. These warehouses can persist app usage events and service usage events for longer than their expiration periods and prevent you from having to continuously make expensive usage event queries.
 
-Commonly, operators generate aggregate billing events from the raw Cloud Foundry usage events to reduce the number of raw events that they need to store.
+Commonly, you generate aggregate billing events from the raw Cloud Foundry usage events to reduce the number of raw events you need to store.
 
 ### <a id='creating-billing-epoch'></a> Creating Your Billing Epoch
 
-When an operator first starts billing, there may be apps or instances without start events due to event expiration or other reasons. To seed the app usage events with a start event (epoch) for all apps, use the purge endpoints.
+When you first start billing, there may be apps or instances without start events due to event expiration or other reasons. To seed the usage events with start events for all apps, use the purge endpoints.
 
-|Event Type| Endpoint | Documentation |
-|---|---|---|
-| App Usage Events | `/v2/app_usage_events/destructively_purge_all_and_reseed_started_apps`| [API documentation](http://apidocs.cloudfoundry.org/latest-release/app_usage_events/purge_and_reseed_app_usage_events.html) |
-| Service Usage Events | `/v2/service_usage_events/destructively_purge_all_and_reseed_existing_instances` | [API documentation](http://apidocs.cloudfoundry.org/latest-release/service_usage_events/purge_and_reseed_service_usage_events.html) |
+To seed the app usage events with start events, run:
 
-The purge endpoints are used to create initial events for all apps or service instances. The seeded events will all have the current timestamp, rather than the time the app was actually started.
+```
+POST /v2/app_usage_events/destructively_purge_all_and_reseed_started_apps
+```
 
-<p class='note'><strong>Note:</strong> The purge endpoints delete <strong>all</strong> existing events, so it is important to use them <strong>only once</strong> when you start to record usage events for the first time. The purge endpoints are <strong>not</strong> intended to be called multiple times. Calling these events multiple times may result in lost events.</p>
+For more information, see [Purge and reseed App Usage Events](http://apidocs.cloudfoundry.org/latest-release/app_usage_events/purge_and_reseed_app_usage_events.html) in the Cloud Foundry API documentation.
+
+To seed the service usage events with start events, run:
+
+```
+POST /v2/service_usage_events/destructively_purge_all_and_reseed_existing_instances
+```
+
+For more information, see [Purge and reseed Service Usage Events](http://apidocs.cloudfoundry.org/latest-release/service_usage_events/purge_and_reseed_service_usage_events.html) in the Cloud Foundry API documentation.
+
+The purge endpoints create initial events for all apps or service instances. The seeded events all have the current timestamp, rather than the time the app was actually started.
+
+<p class='note'><strong>Note:</strong> The purge endpoints delete all existing events, so it is important to use them only once when you start to record usage events for the first time. The purge endpoints are not intended to be called multiple times. Calling these events multiple times may result in lost events.</p>
