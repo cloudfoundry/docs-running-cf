@@ -119,7 +119,7 @@ Default Origin Name: rep (applies to rep and rep_windows jobs)
 
  Metric Name                                        | Description
 ----------------------------------------------------|----------------------------------------------------------------------------------------------
- AppInstanceExceededLogRateLimitCount               | Number of application instances that have exceeded the app log rate limit. Emitted once for each application instance that exceeds the log rate limit within the last 5 minute interval (metric only emitted if a app log rate limit has been set and an app instance has exceeded that limit).
+ AppInstanceExceededLogRateLimitCount               | Number of application instances that have exceeded the app log rate limit. Emitted once for each application instance that exceeds the log rate limit within the last 5 minute interval. This metric is only emitted if an operator has configured an app log rate limit and an app instance has exceeded that limit.
  CapacityAllocatedDisk                              | Amount of disk allocated to containers on this Diego Cell.  Emitted periodically.
  CapacityAllocatedMemory                            | Amount of memory allocated to containers on this Diego Cell.  Emitted periodically.
  CapacityRemainingContainers                        | Remaining number of containers this Diego Cell can host. Emitted periodically.
