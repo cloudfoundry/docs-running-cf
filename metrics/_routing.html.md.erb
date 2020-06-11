@@ -27,7 +27,7 @@ Routing Release metrics have following origin names:
  route\_registration\_latency         | Time in milliseconds between when an actual LRP is started and when the app is routable via Gorouter. Emitted per route-register message of new LRPs. This metric might be a negative value up to ~30 ms due to clock skew between the machines this metric is derived from.
  registry\_message.{component}      | Lifetime number of route register messages received for each component. Emitted per route-register message.
  unregistry\_message.{component}    | Lifetime number of route unregister messages received for each component. Emitted per route-unregister message.
- rejected\_requests                 | Lifetime number of bad requests received on the Gorouter. Emitted every 5 seconds.
+ rejected\_requests                 | Lifetime number of bad requests received on the Gorouter. Bad requests occur when the route does not exist, when the value of the "X-Cf-App-Instance" header is invalid, or when the host header on the request is empty. Emitted every 5 seconds.
  requests.{component}               | Lifetime number of requests received for each component. Emitted per router request.
  responses                          | Lifetime number of HTTP responses returned by the back end app. Emitted every 5 seconds.
  responses.2xx                      | Lifetime number of 2xx HTTP responses returned by the back end app. Emitted every 5 seconds.
