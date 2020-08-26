@@ -9,7 +9,7 @@ This topic describes how and when to scale CAPI in cf-for-k8s, and includes deta
 
 ## <a id='cf-api-server'></a> cf-api-server
 
-The `cf-api-server` is the primary container in CAPI. It, along with `nginx`, powers the Cloud Controller API that all users of Cloud Foundry interact with. In addition to serving external clients, `cf-api-server` also provides APIs for internal components within Cloud Foundry, such as Logging and Networking subsystems.
+The `cf-api-server` is the primary container in CAPI. It, along with `nginx`, powers the Cloud Controller API that all users of Cloud Foundry interact with. In addition to serving external clients, `cf-api-server` also provides APIs for internal components within Cloud Foundry, such as logging and networking subsystems.
 
 ### When to Scale
 
@@ -40,13 +40,13 @@ You can find the above heuristic failures in the following logs:
 
 Before and after scaling Cloud Controller API pods, you should verify that the Cloud Controller database is not overloaded. All Cloud Controller processes are backed by the same database, so heavy load on the database impacts API performance regardless of the number of Cloud Controllers deployed. Cloud Controller supports both PostgreSQL and MySQL, so there is no specific scaling guidance for the database.
 
-Cloud Controller API pods should primarily be scaled horizontally. Scaling up the number of compute resources requested past 1 CPU is not effective. This is because Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
+Cloud Controller API pods should primarily be scaled horizontally. Scaling up the number of compute resources requested past one CPU is not effective. This is because Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
 
 <p class='note'><strong>Note:</strong> Since Cloud Controller supports both PostgreSQL and MySQL external databases, there is no absolute guidance on what a healthy database looks like. In general, high database CPU utilization is a good indicator of scaling issues, but always defer to the documentation specific to your database.</p>
 
 ## <a id='cf-api-local-worker'></a> cf-api-local-worker
 
-Colloquially known as "local workers," this container is primarily responsible for handling files uploaded to the API pods during `cf push`, such as `packages`, `droplets`, and resource matching.
+Known as "local workers," this container is primarily responsible for handling files uploaded to the API pods during `cf push`, such as `packages`, `droplets`, and resource matching.
 
 ### When to Scale
 
@@ -74,11 +74,11 @@ You can find the above heuristic failures in the following logs:
 
 ### How to Scale
 
-Because local workers are colocated with the Cloud Controller API pod, they are scaled horizontally along with the API.
+Because local workers are co-located with the Cloud Controller API pod, they are scaled horizontally along with the API.
 
 ## <a id='cf-api-worker'></a> cf-api-worker
 
-Colloquially known as "generic workers" or just "workers", these pods are responsible for handling asynchronous work, batch deletes, and other periodic tasks scheduled by the `cf-api-clock`.
+Known as "generic workers" or just "workers", these pods are responsible for handling asynchronous work, batch deletes, and other periodic tasks scheduled by the `cf-api-clock`.
 
 ### When to Scale
 
@@ -88,7 +88,7 @@ When determining whether to scale `cf-api-worker`, look for the following:
 
 Cloud Controller emits the following metrics:
 
-* `cc_job_queue_length_cc-CF_API_WORKER_POD_NAME` (e.g. `cc_job_queue_length_cc_cf_api_worker_565c45df86_h2nsp`) is continuously growing.
+* `cc_job_queue_length_cc-CF_API_WORKER_POD_NAME` (for example, `cc_job_queue_length_cc_cf_api_worker_565c45df86_h2nsp`) is continuously growing.
 * `cc_job_queue_length_total` is continuously growing.
 
 #### Heuristic Failures
@@ -107,7 +107,7 @@ You can find the above heuristic failures in the following log files:
 
 ### How to Scale
 
-The cf-api-worker pod can safely scale horizontally in all deployments.
+The `cf-api-worker` pod can safely scale horizontally in all deployments.
 
 ## <a id='clock_and_updater'></a> cf-api-clock and cf-api-deployment-updater
 
@@ -139,5 +139,4 @@ You can find the above heuristic failures in the following log files:
 
 ### How to Scale
 
-Both of these pods are singletons, so extra instances are for failover HA rather than scalability. Performance issues are likely due to database overloading.
-
+Both of these pods are singletons, so extra instances are for failover high availability rather than scalability. Performance issues are likely due to database overloading.
