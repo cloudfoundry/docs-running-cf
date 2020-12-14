@@ -18,7 +18,7 @@ Routing Release metrics have following origin names:
  memoryStats.numFrees               | Lifetime number of memory deallocations. Emitted every 10 seconds.
  memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
  numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
- numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
+ numGoRoutines                      | Instantaneous number of active goroutines in the gorouter process. Emitted every 10 seconds.
  logSenderTotalMessagesRead         | Lifetime number of application log messages. Emitted every 5 seconds.
  backend\_exhausted\_conns          | Lifetime number of requests that have been rejected due to the limit on number of connections per back end having been reached for all back ends tried. Emitted every 5 seconds.
  bad\_gateways                      | Lifetime number of bad gateways at the Gorouter. Emitted every 5 seconds.
@@ -62,7 +62,7 @@ Routing Release metrics have following origin names:
  memoryStats.numFrees               | Lifetime number of memory deallocations. Emitted every 10 seconds.
  memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
  numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
- numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
+ numGoRoutines                      | Instantaneous number of active goroutines in the routing_api process. Emitted every 10 seconds.
  key\_refresh\_events               | Total number of events when fresh token was fetched from UAA. Emitted every 30 seconds.
  total\_http\_routes                | Number of HTTP routes in the routing table. Emitted every 30 seconds, or when there is a new HTTP route added. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
  total\_http\_subscriptions         | Number of HTTP routes subscriptions. Emitted every 30 seconds. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
@@ -81,7 +81,7 @@ Routing Release metrics have following origin names:
  memoryStats.numFrees               | Lifetime number of memory deallocations. Emitted every 10 seconds.
  memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
  numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
- numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
+ numGoRoutines                      | Instantaneous number of active goroutines in the tcp_emitter process. Emitted every 10 seconds.
 
 
 <a id="tcp_router"></a>Default Origin Name: tcp-router
@@ -95,7 +95,7 @@ Routing Release metrics have following origin names:
  memoryStats.numFrees               | Lifetime number of memory deallocations. Emitted every 10 seconds.
  memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
  numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
- numGoRoutines                      | Instantaneous number of active goroutines in the Doppler process. Emitted every 10 seconds.
+ numGoRoutines                      | Instantaneous number of active goroutines in the tcp_router process. Emitted every 10 seconds.
  {session_id}.ConnectionTime        | Average connection time to back end in current session. Emitted every 60 seconds per session ID. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
  {session_id}.CurrentSessions       | Total number of current sessions. Emitted every 60 seconds per session ID. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
  AverageConnectTimeMs               | Average back end response time (in ms). Emitted every 60 seconds. Interval value for this metric can be configured with manifest property `tcp_router.tcp_stats_collection_interval`.
