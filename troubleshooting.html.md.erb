@@ -406,7 +406,7 @@ This recreation function can fail if a drain script on the VM is broken or times
 out.
 To resolve this issue:
 
-1. SSH into the VM and use the `sv stop agent` command to kill the BOSH Agent.
+1. SSH into the VM and use the `sv stop agent` command to stop the BOSH Agent.
 
     <pre class="terminal">
     $ bosh -e dev -d cf-deployment ssh diego-cell/abcd0123-a012-b345-c678-9def01234567
@@ -421,4 +421,3 @@ Add `-d MY-DEPLOYMENT` to view tasks for a specific deployment.
     <pre class="terminal">$ bosh -e dev -d cf-deployment tasks</pre>
 * Run `bosh -e MY-ENV task TASK-ID` with the task ID of the "scan and fix" task.
     <pre class="terminal">$ bosh -e dev task 83</pre>
-
