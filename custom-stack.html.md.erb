@@ -20,7 +20,7 @@ The following example adds a new Linux-based `pancakes` stack for use with the [
 
 Stacks exist in a subdirectory on their host machine, typically under `/var/vcap/packages` or `/var/vcap/data`. Your BOSH job template must deploy the stack onto a host machine, and provide lifecycle binaries that work with your stack. The lifecycle binaries for your stack are helper programs that stage and run apps on the stack file system. To create a `pancakes-release` job template that deploys a custom stack, follow these steps:
 
-1. [Create a BOSH release](http://bosh.io/docs/create-release.html) `pancakes-release` for a job template that expands a stack into place in its subdirectory. The rootfs must be packaged as a `.tar` file, for example, a `pancakes-rootfs` template might create a tarred full Linux root file system at `/var/vcap/packages/pancakes-rootfs/rootfs.tar`. See the [rootfses job template in diego-release](https://github.com/cloudfoundry/cflinuxfs3-release/tree/master/jobs/cflinuxfs3-rootfs-setup) for one way to do this.
+1. [Create a BOSH release](http://bosh.io/docs/create-release.html) `pancakes-release` for a job template that expands a stack into place in its subdirectory. The rootfs must be packaged as a `.tar` file, for example, a `pancakes-rootfs` template might create a tarred full Linux root file system at `/var/vcap/packages/pancakes-rootfs/rootfs.tar`. See the [rootfses job template in diego-release](https://github.com/cloudfoundry/cflinuxfs3-release/tree/main/jobs/cflinuxfs3-rootfs-setup) for one way to do this.
 
 1. Create lifecycle binaries for your stack. See the diego-release repository for examples of app lifecycle binary source code:
   * [Buildpack App Lifecycle](https://github.com/cloudfoundry-incubator/diego-release/tree/develop/packages/buildpack_app_lifecycle)
@@ -97,4 +97,3 @@ Stacks exist in a subdirectory on their host machine, typically under `/var/vcap
           <b>&#45; name: "pancakes"
             description: "Linux-based filesystem, with delicious pancakes"</b>
     </pre>
-
