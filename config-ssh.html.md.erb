@@ -14,17 +14,15 @@ To configure manifest properties, you can edit them directly or put them in stub
 
 ### <a id='requirements'></a> Generate a Key Pair
 
-Enabling SSH access requires generating a RSA key pair for your SSH proxy.
+Enabling SSH access requires generating a RSA key pair for your SSH proxy. Generate a unique key pair for each deployment.
 
-<p class="note"><strong>Note</strong>: In recent versions of <code>cf-deployment</code> this key pair is automatically generated and stored into <code>credhub</code>.</p>
-
-<p class="note"><strong>Note</strong>: You should generate a unique key pair for each deployment.</p>
+In recent versions of <code>cf-deployment</code>, this key pair is automatically generated and stored in <code>credhub</code>.
 
 1. Generate your key pair, entering an empty string for the passphrase when prompted.
 <pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
 $ ssh-keygen -lf ssh-proxy-host-key.pem.pub | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
 </pre>
-<p class="note"><strong>Note</strong>: Recent versions of ssh-keygen print the SHA256 fingerprint hashes of the keys. 
+<p class="note"><strong>Note</strong>: ssh-keygen print the SHA256 fingerprint hashes of the keys. 
 To obtain MD5 hashes of the server key fingerprints, use the <code>-E</code> option to specify the hash algorithm.</p>
 <pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
 $ ssh-keygen -E md5 -lf ssh-proxy-host-key.pem.pub | sed 's/MD5://' | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
