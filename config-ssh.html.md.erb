@@ -16,6 +16,8 @@ To configure manifest properties, you can edit them directly or put them in stub
 
 Enabling SSH access requires generating a RSA key pair for your SSH proxy.
 
+<p class="note"><strong>Note</strong>: In recent versions of <code>cf-deployment</code> this key pair is automatically generated and stored into <code>credhub</code>.</p>
+
 <p class="note"><strong>Note</strong>: You should generate a unique key pair for each deployment.</p>
 
 1. Generate your key pair, entering an empty string for the passphrase when prompted.
@@ -72,13 +74,11 @@ Your manifest for Diego should include the following properties:
       enable\_diego\_auth: false
       diego\_credentials: ""
       uaa\_secret: SSH-PROXY-SECRET
-      uaa\_token_url: <span>https</span>://uaa.YOUR-SYSTEM-DOMAIN/oauth/token
   </pre>
 
 1. `ssh_proxy.host_key`: Supply the PEM-encoded private key from the RSA key pair that you originally generated for your deployment. This key secures the SSH proxy that brokers connections to individual app containers.
 1. Specify CF Authentication only by setting `enable_cf_auth` to `true` and `enable_diego_auth` to `false`, as in the example above.
 1. For `SSH-PROXY-SECRET`, enter the same secret you provided in the `ssh-proxy.secret` field in your Cloud Foundry manifest.
-1. To complete the `uaa_token_url` field, provide `YOUR-SYSTEM-DOMAIN`.
 
 ## <a id="ssh-load-balancer-configuration"></a> SSH Load Balancer Configuration
 
@@ -165,10 +165,6 @@ If you receive an error message attempting to SSH into an app container, refer t
   <tr>
     <td><code>Error opening SSH connection</code></td>
     <td>Verify that <code>enable_cf_auth</code> in your Diego manifest is set to <code>true</code>.</td>
-  </tr>
-  <tr>
-    <td><code>Error opening SSH connection</code></td>
-    <td>Confirm that you provided the correct UAA token URL for the <code>uaa_token_url</code> property in the Diego manifest.</td>
   </tr>
   <tr>
     <td><code>Error opening SSH connection</code></td>
