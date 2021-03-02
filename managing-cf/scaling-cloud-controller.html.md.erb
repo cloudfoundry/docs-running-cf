@@ -21,7 +21,7 @@ When determining whether to scale `cloud\_controller\_ng`, look for the followin
 
 Cloud Controller emits the following metrics:
 
-* `cc.requests.outstanding` is at or consistently near 20.
+* `cc.requests.outstanding.gauge` or `cc.requests.outstanding` (deprecated) is at or consistently near 20.
 * `system.cpu.user` is above 0.85 utilization of a single core on the API VM.
 * `cc.vitals.cpu_load_avg` is 1 or higher.
 * `cc.vitals.uptime` is consistently low, indicating frequent restarts (possibly due to memory pressure).
