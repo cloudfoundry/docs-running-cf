@@ -158,16 +158,18 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 
 ### <a id='app-lifecycle'></a> App Lifecycle (audit.app.*)
 
+- audit.app.apply\_manifest
 - audit.app.build.create
 - audit.app.copy-bits
 - audit.app.create
 - audit.app.delete-request
+- audit.app.deployment.cancel
 - audit.app.deployment.create
 - audit.app.droplet.create
 - audit.app.droplet.delete
 - audit.app.droplet.download
-- audit.app.droplet.upload
 - audit.app.droplet.mapped
+- audit.app.droplet.upload
 - audit.app.environment.show
 - audit.app.environment_variables.show
 - audit.app.map-route
@@ -182,6 +184,7 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.app.process.terminate_instance
 - audit.app.process.update
 - audit.app.restage
+- audit.app.restart
 - audit.app.revision.create
 - audit.app.revision.environment_variables.show
 - audit.app.ssh-authorized
@@ -193,6 +196,7 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.app.unmap-route
 - audit.app.update
 - audit.app.upload-bits
+
 
 ### <a id='org-lifecycle'></a> Organization Lifecycle (audit.organization.*)
 
@@ -216,6 +220,10 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 
 - audit.service\_binding.create
 - audit.service\_binding.delete
+- audit.service\_binding.start\_create
+- audit.service\_binding.start\_delete
+- audit.service\_binding.update
+
 
 ### <a id='service-broker-lifecycle'></a> Service Broker Lifecycle (audit.service\_broker.*)
 
@@ -238,13 +246,25 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.service\_instance.unshare
 - audit.service\_instance.update
 
+### <a id='service-route-lifecycle'></a> Service Route Lifecycle (audit.service\_route\_binding.*)
+
+- audit.service\_route\_binding.create
+- audit.service\_route\_binding.delete
+- audit.service\_route\_binding.start\_create
+- audit.service\_route\_binding.start\_delete
+- audit.service\_route\_binding.update
+
 ### <a id='service-key-lifecycle'></a> Service Key Lifecycle (audit.service\_key.*)
 
 - audit.service\_key.create
 - audit.service\_key.delete
+- audit.service\_key.start\_create
+- audit.service\_key.start\_delete
+- audit.service\_key.update
 
 ### <a id='service-plan-vis-lifecycle'></a> Service Plan Visibility Lifecycle (audit.service\_plan\_visibility.*)
 
+- audit.service\_plan.delete
 - audit.service\_plan\_visibility.create
 - audit.service\_plan\_visibility.delete
 - audit.service\_plan\_visibility.update
