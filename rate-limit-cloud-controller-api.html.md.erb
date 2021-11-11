@@ -22,7 +22,7 @@ Use this table to understand the rate limit header.
  </tr>
  <tr>
  	<td>X-RateLimit-Remaining</td>
- 	<td>The number of attempts remaining.</td>
+	<td>The estimated number of attempts remaining.</td>
  </tr>
  <tr>
  	<td>X-RateLimit-Reset</td>
@@ -30,4 +30,8 @@ Use this table to understand the rate limit header.
  </tr>
 </table>
 
-When requests exceed the rate limit value, the Cloud Controller API returns a `429: Too Many Requests` error code.
+Requests are counted separately in each Cloud Controller instance and each produces an estimate for the total number of remaining requests.
+The estimate is based off the fraction remaining on the Cloud Controller instance (rounded down to nearest 10%) multiplied by the global maximum number of attempts.
+This may result in slightly inconsistent values for the `X-RateLimit-Remaining` header when running multiple instances of Cloud Controller API such as some requests still being allowed when the header value is `0`.
+
+When requests exceed the maximum rate limit value, the Cloud Controller API returns a `429: Too Many Requests` error code.
