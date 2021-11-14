@@ -144,7 +144,7 @@ A user is able to query the events endpoint with various filters. For example, a
 
 Allowed filters are enumerated on the [API documentation](https://apidocs.cloudfoundry.org/latest-release/events/list_all_events.html).
 
-The following example shows a query with multiple filters. The request gets `audit.app.unmap-route` events from a particular time period. 
+The following example shows a query with multiple filters. The request gets `audit.app.unmap-route` events from a particular time period.
 
 <pre class="terminal">$ cf curl '/v2/events?q=type:audit.app.unmap-route&q=timestamp>2019-02-06T01:08:24Z&q=timestamp&lt;2019-02-08T01:08:24Z&order-by=timestamp'</pre>
 
@@ -180,6 +180,7 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.app.process.crash
 - audit.app.process.create
 - audit.app.process.delete
+- audit.app.process.rescheduling
 - audit.app.process.scale
 - audit.app.process.terminate_instance
 - audit.app.process.update
@@ -311,7 +312,7 @@ For example, a user issuing a `cf stop APP_NAME` command causes an `audit.app.st
 
 * **Service events** (`audit.service*`) are created after the service broker has approved an interaction.
 
-* **Crash events** (`audit.app.crash`) are created when Diego marks an app instance as crashed.
+* **Crash and rescheduling events** (`audit.app.crash`, `audit.app.process.crash|rescheduling`) are created when Diego marks an app instance as crashed or evacuates app instances from cells on Diego cell VM restarts.
 
 * **Blob events** (`blob.remove_orphan`) are created by a daily clean up job and do not represent user action.
 
