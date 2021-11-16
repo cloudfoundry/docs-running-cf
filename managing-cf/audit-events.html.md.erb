@@ -105,13 +105,13 @@ The following describes some of the intended use cases of audit events.
 
 ### <a id='resource-history'></a> Resource History
 
-Audit events allow users, administrators, and operators a view a resource's history. For example, by looking at usage events for an app, an operator will see information such as when it was last updated, if it has crashed recently, etc.
+Audit events allow users, administrators, and operators a view a resource's history. For example, by looking at usage events for an app, an operator can see information such as when it was last updated or if it has crashed recently.
 
 ### <a id='querying'></a> Querying For Events
 
-A user is able to query the events endpoint with various filters. For example, a user could query for all events of a given type, or all events associated with a resource since a given timestamp.
+You can query the events endpoint with various filters. For example, you can query for all events of a given type, or all events associated with a resource since a given timestamp.
 
-Allowed filters are enumerated on the [API documentation](https://v3-apidocs.cloudfoundry.org/index.html#list-audit-events).
+For a list of allowed filters, see [List audit events](https://v3-apidocs.cloudfoundry.org/index.html#list-audit-events) in the API documentation.
 
 The following example shows a query with multiple filters. The request gets `audit.app.unmap-route` events from a particular time period.
 
