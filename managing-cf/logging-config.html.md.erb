@@ -4,37 +4,41 @@ owner: Logging and Metrics
 ---
 
 
-This topic explains how to configure the Cloud Foundry [Logging and Metrics system](../../loggregator/architecture.html).
+This topic explains how to configure the Cloud Foundry logging and metrics system.
 
-## <a id='architecture'></a> Choosing an Architecture
+For more information, see [Logging and Metrics Architecture](../../loggregator/architecture.html).
+
+## <a id='architecture'></a> Choose an Architecture
 
 The configuration available depends on the logging and metrics architecture that you have selected.
 
-* [Loggregator Firehose Architecture](../../loggregator/architecture.html#firehose-architecture). This is the original logging and metrics architecture. In this architecture the [Loggregator Agent](../../loggregator/architecture.html#-how-logs-and-metrics-egress-from-vms) running on each VM collects and sends this data out to Doppler components, which temporarily buffer the data before periodically forwarding it to the Traffic Controller or Reverse Log Proxy (RLP).
-* [Shared Nothing Architecture](../../loggregator/architecture.html#shared-nothing-architecture). Logs are shipped directly from VMs via syslog rather than passing through the Loggregator Firehose components. Metrics are exposed over Prometheus endpoints provided by the metrics agent.
+* [Loggregator Firehose Architecture](../../loggregator/architecture.html#firehose-architecture). This is the original logging and metrics architecture. In this architecture, the [Loggregator Agent](../../loggregator/architecture.html#-how-logs-and-metrics-egress-from-vms) running on each VM collects and sends this data out to Doppler components, which temporarily buffer the data before periodically forwarding it to the Traffic Controller or Reverse Log Proxy (RLP).
+* [Shared Nothing Architecture](../../loggregator/architecture.html#shared-nothing-architecture). Logs are shipped directly from VMs using syslog instead of passing through the Loggregator Firehose components. The metrics agent provides Prometheus endpoints to expose metrics.
 
-It is also possible to combine elements of both architectures in the same deployment, for example to retain existing Loggregator Firehose integrations but use syslog agent to send logs to syslog drains.
+It is also possible to combine elements of both architectures in the same deployment. For example, you can retain existing Loggregator Firehose integrations but use syslog agent to send logs to syslog drains.
 
-## <a id='scaling-loggregator'></a> Scaling Loggregator
+## <a id='scaling-loggregator'></a> Scale Loggregator
 
-Cloud Foundry system components and apps constantly generate log and metrics data. When your deployment is configured to use the [Loggregator Firehose Architecture](../../loggregator/architecture.html#-loggregator-firehose-architecture) and the log and metrics data input to a Doppler exceeds its buffer size for a given interval, data can be lost.
+Cloud Foundry system components and apps constantly generate log and metrics data. If your deployment is configured to use the Loggregator Firehose Architecture and the log and metrics data input to a Doppler exceeds its buffer size for a given interval, data can be lost.
 
-Refer to the indicators [described within loggregator-release](https://github.com/cloudfoundry/loggregator-release/blob/main/jobs/doppler/templates/indicators.yml.erb) (for example log loss rate) and suggested actions (typically scaling out doppler, traffic controller or reverse log proxy instances).
+Refer to the indicators described in the [loggregator-release](https://github.com/cloudfoundry/loggregator-release/blob/main/jobs/doppler/templates/indicators.yml.erb) on GitHub. For example, refer to the log loss rate and suggested actions. Typical actions include scaling Doppler, Traffic Controller, or RLP instances.
 
-## <a id='scaling-shared-nothing'></a> Scaling Shared Nothing
+## <a id='scaling-shared-nothing'></a> Scale Shared Nothing
 
-Refer to loggregator-agent-release for the [indicators for the syslog agent](https://github.com/cloudfoundry/loggregator-agent-release/blob/main/jobs/loggr-syslog-agent/templates/indicators.yml.erb).
+Refer to [loggregator-agent-release](https://github.com/cloudfoundry/loggregator-agent-release/blob/main/jobs/loggr-syslog-agent/templates/indicators.yml.erb) on GitHub for the indicators for the syslog agent.
 
-## <a id='scaling-log-cache'></a> Scaling Log Cache
+## <a id='scaling-log-cache'></a> Scale Log Cache
 
-Refer to log-cache-release for the [indicators for Log Cache](https://github.com/cloudfoundry/log-cache-release/blob/main/jobs/log-cache/templates/indicators.yml.erb).
+Refer to [log-cache-release](https://github.com/cloudfoundry/log-cache-release/blob/main/jobs/log-cache/templates/indicators.yml.erb) on GitHub for the indicators for Log Cache.
 
-## <a id='customizing'></a> Customizing Logging and Metric components
+## <a id='customizing'></a> Customize Logging and Metric components
 
-First review the [cf-deployment operations files](https://github.com/cloudfoundry/cf-deployment/tree/main/operations) that provide for common customizations.
+Review the [cf-deployment operations files](https://github.com/cloudfoundry/cf-deployment/tree/main/operations) on GitHub that provide for common customizations.
 
-You can further customize each component by changing its properties in the deployment manifest. The [BOSH job specs](https://bosh.io/docs/jobs/#spec) in each BOSH release
+You can further customize each component by changing its properties in the deployment manifest. The BOSH job specs in each BOSH release
 are the best reference for the set of configurable properties for logging and metric components.
+
+For more information, see the [BOSH documentation](https://bosh.io/docs/jobs/#spec).
 
 ### loggregator-release
 
