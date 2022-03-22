@@ -42,6 +42,17 @@ When requests exceed the maximum rate limit value, the Cloud Controller API retu
 
 ## <a id="Rate Limit Responses: Service Brokers"></a> Rate Limit Responses: Service Brokers
 
-The optional limit on the number of concurrent service broker requests will, when breached, result in a response that includes a Retry-After header. This gives an _absolute_ time suggesting when the client should attempt to make their request again. This is the current time plus a random number of seconds between 0.5x and 1.5x of the configured value for `cc.broker_client_timeout_seconds`.
+Operators can, optionally, limit the number of concurrent requests for operations related to service brokers that can be made to Cloud Controller API endpoints for the following resource types:
+
+* [`v3/service_instances`](https://v3-apidocs.cloudfoundry.org/index.html#service-instances)
+* [`v3/service_credential_bindings`](https://v3-apidocs.cloudfoundry.org/index.html#service-credential-binding)
+* [`v3/service_route_binding`](https://v3-apidocs.cloudfoundry.org/index.html#service-route-binding)
+* [`v2/service_instances`](https://apidocs.cloudfoundry.org/#service-instances)
+* [`v2/service_bindings`](https://apidocs.cloudfoundry.org/#service-bindings)
+* [`v2/service_keys`](https://apidocs.cloudfoundry.org/#service-keys)
+
+<p class="note"><strong>Note</strong>: A request finishes when the Cloud Controller API sends a response, even if that response is a `202 Accepted` indicating that an [asynchronous operation](https://v3-apidocs.cloudfoundry.org/index.html#asynchronous-operations) is to be performed (for example, the creation of a service instance by a service broker). This rate limit does _not_ cap the number of asynchronous operations that can be in progress at any one time for any of the above service-related endpoints.
+
+Any requests that breach the concurrency are rate limited, and will receive a response that includes a Retry-After header. This gives an _absolute_ time suggesting when the client should attempt to make their request again. This is the current time plus a random number of seconds between 0.5x and 1.5x of the configured value for `cc.broker_client_timeout_seconds`.
 
 If this property is not set, it defaults to 60 seconds, and the header will therefore suggest a random retry time between 30 and 90 seconds in the future.
