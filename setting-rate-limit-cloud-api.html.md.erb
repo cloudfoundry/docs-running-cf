@@ -5,7 +5,9 @@ owner: CAPI
 
 Cloud Foundry lets you set rate limits on the number of requests third parties can make to the Cloud Controller API. You can set different rate limits for authenticated and unauthenticated users.
 
-When rate limiting is enabled responses to API calls [contain information](./rate-limit-cloud-controller-api.html) about the limit, how close the user is to reaching it, and when it will be reset.
+Rate limits help to prevent servers from getting overloaded by poorly or maliciously-designed clients that could otherwise force the server to use all its resources servicing those calls instead of responding to legitimate requests.
+
+When rate limiting is enabled responses to Cloud Controller API calls [contain information](./rate-limit-cloud-controller-api.html) about the limit, how close the user is to reaching it, and when it will be reset.
 
 Use the following properties in the `cloud_controller_ng` BOSH job to define rate limits:
 
