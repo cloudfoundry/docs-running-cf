@@ -36,16 +36,6 @@ Use the following properties in the `cloud_controller_ng` BOSH job to define rat
     <td>60</td>
  </tr>
  <tr>
-    <td>cc.nginx_rate_limit_general</td>
-    <td>The rate limiting and burst value to use for '/'</td>
-    <td>(none)</td>
- </tr>
- <tr>
-    <td>cc.nginx_rate_limit_zones</td>
-    <td>Array of zones to do rate limiting for.</td>
-    <td>(none)</td>
- </tr>
- <tr>
     <td>cc.max_concurrent_service_broker_requests</td>
     <td>Maximum number of concurrent requests to <a href=./rate-limit-cloud-controller-api.html#Rate%20Limit%20Responses:%20Service%20Brokers>endpoints related to service brokers</a> (note that for this purpose a request ends immediately after a response is sent, even if the request is for an asynchronous operation that is still ongoing - e.g. service instance creation). Set to 0 to not limit concurrent requests.</td>
     <td>0</td>
