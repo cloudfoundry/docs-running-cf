@@ -17,12 +17,12 @@ Use the following properties in the `cloud_controller_ng` BOSH job to define rat
 <th>Default value</th>
  <tr>
 	<td>cc.rate_limiter.enabled</td>
-	<td>Enable rate limiting for UAA-authenticated Cloud Controller API endpoints per user or client</td>
+	<td>Enable rate limiting for authenticated and unauthenticated Cloud Controller API endpoints per user or client</td>
     <td>false</td>
  </tr>
  <tr>
 	<td>cc.rate_limiter.general_limit</td>
-	<td>The number of requests a user or client is allowed to make for all Cloud Controller API endpoints that do not have a custom limit over the configured interval</td>
+	<td>The number of requests an authenticated user or client is allowed to make for all Cloud Controller API endpoints over the configured interval.</td>
     <td>2000</td>
  </tr>
  <tr>
