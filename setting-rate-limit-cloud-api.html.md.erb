@@ -5,11 +5,39 @@ owner: CAPI
 
 Cloud Foundry lets you set rate limits on the number of requests third parties can make to the Cloud Controller API. You can set different rate limits for authenticated and unauthenticated users.
 
-Use the following properties in the cloud_controller BOSH job to define rate limits:
+Rate limits help to prevent servers from getting overloaded by poorly or maliciously-designed clients that could otherwise force the server to use all its resources servicing those calls instead of responding to legitimate requests.
 
-```
-cc.rate_limiter.enabled
-cc.rate_limiter.general_limit
-cc.rate_limiter.unauthenticated_limit
-cc.rate_limiter.reset_interval_in_minutes
-```
+When rate limiting is enabled responses to Cloud Controller API calls [contain information](./rate-limit-cloud-controller-api.html) about the limit, how close the user is to reaching it, and when it will be reset.
+
+Use the following properties in the `cloud_controller_ng` BOSH job to define rate limits:
+
+<table>
+<th>Property</th>
+<th>Description</th>
+<th>Default value</th>
+ <tr>
+	<td>cc.rate_limiter.enabled</td>
+	<td>Enable rate limiting for authenticated and unauthenticated Cloud Controller API endpoints per user or client</td>
+    <td>false</td>
+ </tr>
+ <tr>
+	<td>cc.rate_limiter.general_limit</td>
+	<td>The number of requests an authenticated user or client is allowed to make for all Cloud Controller API endpoints over the configured interval.</td>
+    <td>2000</td>
+ </tr>
+ <tr>
+	<td>cc.rate_limiter.unauthenticated_limit</td>
+	<td>The number of requests an unauthenticated client is allowed to to Cloud Controller API endpoints make over the configured interval</td>
+    <td>100</td>
+ </tr>
+ <tr>
+	<td>cc.rate_limiter.reset_interval_in_minutes</td>
+	<td>The interval in minutes after which a user's available Cloud Controller API requests will be reset</td>
+    <td>60</td>
+ </tr>
+ <tr>
+    <td>cc.max_concurrent_service_broker_requests</td>
+    <td>Maximum number of concurrent requests to <a href=./rate-limit-cloud-controller-api.html#Rate%20Limit%20Responses:%20Service%20Brokers>endpoints related to service brokers</a> (note that for this purpose a request ends immediately after a response is sent, even if the request is for an asynchronous operation that is still ongoing - e.g. service instance creation). Set to 0 to not limit concurrent requests.</td>
+    <td>0</td>
+ </td>
+</table>
