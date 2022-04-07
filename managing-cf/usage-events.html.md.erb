@@ -16,7 +16,7 @@ Despite being similar in name, usage events are different from Cloud Foundry aud
 
 App usage events provide information about when users create, delete, and update apps. They also include information about the app to enable you to bill based on resource usage.
 
-App usage events expire after 31 days by default. You can configure a custom expiration period using the cf-release manifest property `cc.app_usage_events.cutoff_age_in_days`.
+App usage events expire after 31 days by default. You can configure a custom expiration period using the cf-deployment manifest property `cc.app_usage_events.cutoff_age_in_days`.
 
 #### <a id='app_usage_events_endpoint'></a> Endpoint
 
@@ -87,7 +87,7 @@ The app usage events with the `BUILDPACK_SET` state do not represent an actual a
 
 Service usage events provide information about when users create, update, and delete service instances.
 
-Service usage events expire after 31 days by default as of cf-release v226. You can configure a custom expiration period using the cf-release manifest property `cc.service_usage_events.cutoff_age_in_days`.
+Service usage events expire after 31 days by default in cf-deployment. You can configure a custom expiration period using the cf-deployment manifest property `cc.service_usage_events.cutoff_age_in_days`.
 
 #### <a id='service-usage-events-endpoint'></a> Endpoint
 
