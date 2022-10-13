@@ -6,6 +6,7 @@ owner: CAPI
 This topic describes rate limit information that is returned by the Cloud Controller API (CAPI).
 
 For information about how to configure rate limits, see [Setting the Rate Limit for the Cloud Controller API](./setting-rate-limit-cloud-api.html).
+Note that the different rate limits are independent of each other and therefore multiple rate limit information can be returned.
 
 ## <a id="general"></a> Rate Limit Responses: General
 
@@ -41,6 +42,22 @@ The estimate is based on the fraction remaining on the Cloud Controller instance
 This might result in inconsistent values for the `X-RateLimit-Remaining` header when running multiple instances of CAPI, such as some requests still being allowed when the header value is `0`.
 
 When requests exceed the maximum rate limit value, CAPI returns a `429: Too Many Requests` error code.
+
+
+## <a id="v2-api"></a> Rate Limit Responses: V2 API
+
+Operators can optionally limit the number of V2 API requests. This includes all `v2/*` requests except `v2/info`. Each HTTP header includes the following information:
+
+```
+X-Ratelimit-Limit-V2-Api: 60
+X-Ratelimit-Remaining-V2-Api: 56
+X-Ratelimit-Reset-V2-Api: 1643767322
+```
+
+V2 API requests are counted identically to the general rate limit and the headers contain the same information. See table above for more details.
+When the maximum rate limit value is exceeded, CAPI returns a `429 Too Many Requests` response with the body `CF-RateLimitV2APIExceeded`.
+
+Depending on the CAPI configuration users and clients which include scope `cloud_controller.v2_api_rate_limit_exempt` can be exempted from the V2 API rate limit.
 
 ## <a id="service-brokers"></a> Rate Limit Responses: Service Brokers
 
