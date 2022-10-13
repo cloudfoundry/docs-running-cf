@@ -6,7 +6,7 @@ owner: CAPI
 This topic describes rate limit information that is returned by the Cloud Controller API (CAPI).
 
 For information about how to configure rate limits, see [Setting the Rate Limit for the Cloud Controller API](./setting-rate-limit-cloud-api.html).
-Note that the different rate limits are independent of each other and therefore multiple rate limit information can be returned.
+Note that the Cloud Controller offers several, distinct rate limiters to serve different purposes. Where multiple rate limiter are enabled, information about each will be shared in its own HTTP response header.
 
 ## <a id="general"></a> Rate Limit Responses: General
 
@@ -54,10 +54,10 @@ X-Ratelimit-Remaining-V2-Api: 56
 X-Ratelimit-Reset-V2-Api: 1643767322
 ```
 
-V2 API requests are counted identically to the general rate limit and the headers contain the same information. See table above for more details.
+The way V2 API requests are counted is the same as for the general rate limiter, and headers contain the same information. See table above for more details.
 When the maximum rate limit value is exceeded, CAPI returns a `429 Too Many Requests` response with the body `CF-RateLimitV2APIExceeded`.
 
-Depending on the CAPI configuration users and clients which include scope `cloud_controller.v2_api_rate_limit_exempt` can be exempted from the V2 API rate limit.
+Operators can configure CAPI to exempt users and clients with the UAA scope cloud_controller.v2_api_rate_limit_exempt from the V2 API rate limit.
 
 ## <a id="service-brokers"></a> Rate Limit Responses: Service Brokers
 
