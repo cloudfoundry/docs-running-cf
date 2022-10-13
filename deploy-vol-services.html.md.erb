@@ -73,7 +73,7 @@ by running the following commands:
 1. Redeploy your cf-deployment with the NFS ops file by running the following command:
 
     ```
-    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML -v VARIABLES-YAML \
+    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML --vars-file VARIABLES-YAML \
   		-o operations/enable-nfs-volume-service.yml
     ```
 
@@ -162,7 +162,7 @@ in GitHub.
  
 To integrate LDAP with your Cloud Foundry deployment, do the following:
 
-1. Provide the following variables in a variables file or with the `-v` flag on the BOSH command line:
+1. Provide the following variables in a variables file using the `--vars-file` flag or with the `-v` flag on the BOSH command line:
 
     <table>
       <tr>
@@ -217,7 +217,7 @@ To integrate LDAP with your Cloud Foundry deployment, do the following:
     + `VARIABLES-YAML` is the name of the variables YAML file for the LDAP information.
 
     For example:
-    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v ldap-vars.yml \
+    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml --vars-file ldap-vars.yml \
 		-o operations/enable-nfs-ldap.yml</pre>
 
 
@@ -315,11 +315,11 @@ To redeploy your Cloud Foundry deployment with a LDAP test server, do the follow
       </tr>
 
     </table>
-    
+
 1. Run the following command:
 
     ```
-    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML -v VARIABLES-YAML\
+    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML --vars-file VARIABLES-YAML\
   		-o operations/test/enable-nfs-test-ldapserver.yml
     ```
 
@@ -330,7 +330,7 @@ To redeploy your Cloud Foundry deployment with a LDAP test server, do the follow
     + `VARIABLES-YAML` is the name of the variables YAML file for the LDAP settings.
     
     For example:
-    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v ldapserver-vars.yml \
+    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml --vars-file ldapserver-vars.yml \
 		-o operations/test/enable-nfs-test-ldapserver.yml</pre>
 
 ## <a id="smb-example"></a>Deploy SMB Volume Service to Cloud Foundry
@@ -369,7 +369,7 @@ by running the following commands:
 command:
 
     ```
-    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML -v VARIABLES-YAML \
+    bosh -e MY-ENV -d MY-DEPLOYMENT deploy MANIFEST-YAML --vars-file VARIABLES-YAML \
       -o operations/experimental/enable-smb-volume-service.yml
     ```
 
@@ -380,7 +380,7 @@ command:
     + `VARIABLES-YAML` is the name of the variables YAML file you used when you deployed Cloud Foundry.
 
     For example:
-    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml -v deployment-vars.yml \
+    <pre class="terminal">$ bosh -e my-env -d cf deploy cf.yml --vars-file deployment-vars.yml \
 		-o operations/experimental/enable-smb-volume-service.yml</pre>
 
 1. Deploy the SMB service broker app by running the `smbbrokerpush` errand.<br>
