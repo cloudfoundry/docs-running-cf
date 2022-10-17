@@ -46,12 +46,12 @@ Use the following properties in the `cloud_controller_ng` BOSH job to define rat
  <tr>
 	<td>cc.rate_limiter_v2_api.general_limit</td>
 	<td>The number of requests a user or client is allowed to make for v2/* endpoints that do not have a custom limit over the configured interval</td>
-    <td>10000</td>
+    <td>2000</td>
  </tr>
  <tr>
 	<td>cc.rate_limiter_v2_api.admin_limit</td>
 	<td>The number of requests an admin user or client is allowed to make for v2/* endpoints over the configured interval</td>
-    <td>20000</td>
+    <td>2000</td>
  </tr>
  <tr>
 	<td>cc.rate_limiter_v2_api.reset_interval_in_minutes</td>
