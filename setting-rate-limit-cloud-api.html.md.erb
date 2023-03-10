@@ -39,8 +39,42 @@ Use the following properties in the `cloud_controller_ng` BOSH job to define rat
     <td>60</td>
  </tr>
  <tr>
+	<td>cc.rate_limiter_v2_api.enabled</td>
+	<td>Enable rate limiting for UAA-authenticated V2 API (v2/*, except v2/info) endpoints per user or client</td>
+    <td>false</td>
+ </tr>
+ <tr>
+	<td>cc.rate_limiter_v2_api.general_limit</td>
+	<td>The number of requests a user or client is allowed to make for v2/* endpoints that do not have a custom limit over the configured interval</td>
+    <td>2000</td>
+ </tr>
+ <tr>
+	<td>cc.rate_limiter_v2_api.admin_limit</td>
+	<td>The number of requests an admin user or client is allowed to make for v2/* endpoints over the configured interval</td>
+    <td>2000</td>
+ </tr>
+ <tr>
+	<td>cc.rate_limiter_v2_api.reset_interval_in_minutes</td>
+	<td>The interval in minutes after which a user's available V2 API requests will be reset</td>
+    <td>60</td>
+ </tr>
+ <tr>
     <td>cc.max_concurrent_service_broker_requests</td>
     <td>Maximum number of concurrent requests to endpoints related to service brokers. A request ends immediately after a response is sent, even if the request is for an ongoing asynchronous operation, such as creating a service instance. Set to 0 to not limit concurrent requests.</td>
     <td>0</td>
  </tr>
 </table>
+
+
+## <a id="v2-api-exclude"></a> V2 API Rate Limit Exemption
+
+Users and clients are exempted from the V2 API rate limit if their JWT token includes the scope `cloud_controller.v2_api_rate_limit_exempt`.
+In order to exempt users of the CF CLI, the scope `cloud_controller.v2_api_rate_limit_exempt` needs to be added to the `cf` UAA client used by the CF CLI. Example:
+```
+uaac client update cf --scope "<existing scopes> cloud_controller.v2_api_rate_limit_exempt"
+```
+Alternativly cf-deployment ops-file `enable-cc-v2-rate-limiting.yml` can be used instead.
+
+
+This will exempt users or clients including scope `cloud_controller.v2_api_rate_limit_exempt` from the V2 API rate limit.
+
