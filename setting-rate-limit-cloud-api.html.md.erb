@@ -69,12 +69,12 @@ Use the following properties in the `cloud_controller_ng` BOSH job to define rat
 ## <a id="v2-api-exclude"></a> V2 API Rate Limit Exemption
 
 Users and clients are exempted from the V2 API rate limit if their JWT token includes the scope `cloud_controller.v2_api_rate_limit_exempt`.
-In order to exempt users of the CF CLI, the scope `cloud_controller.v2_api_rate_limit_exempt` needs to be added to the `cf` UAA client used by the CF CLI. Example:
+To exempt users of the CF CLI, the scope `cloud_controller.v2_api_rate_limit_exempt` must be added to the `cf` UAA client used by the CF CLI. Example:
+
 ```
 uaac client update cf --scope "<existing scopes> cloud_controller.v2_api_rate_limit_exempt"
 ```
+
 Alternativly cf-deployment ops-file `enable-cc-v2-rate-limiting.yml` can be used instead.
 
-
 This will exempt users or clients including scope `cloud_controller.v2_api_rate_limit_exempt` from the V2 API rate limit.
-
