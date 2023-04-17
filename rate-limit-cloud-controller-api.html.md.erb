@@ -6,6 +6,7 @@ owner: CAPI
 This topic describes rate limit information that is returned by the Cloud Controller API (CAPI).
 
 For information about how to configure rate limits, see [Setting the Rate Limit for the Cloud Controller API](./setting-rate-limit-cloud-api.html).
+Note that the Cloud Controller offers several, distinct rate limiters to serve different purposes. Where multiple rate limiters are enabled, information about each will be shared in its own HTTP response header.
 
 ## <a id="general"></a> Rate Limit Responses: General
 
@@ -42,9 +43,25 @@ This might result in inconsistent values for the `X-RateLimit-Remaining` header 
 
 When requests exceed the maximum rate limit value, CAPI returns a `429: Too Many Requests` error code.
 
+
+## <a id="v2-api"></a> Rate Limit Responses: V2 API
+
+Operators can limit the number of V2 API requests. This includes all `v2/*` requests except `v2/info`. Each HTTP header includes the following information:
+
+```
+X-Ratelimit-Limit-V2-Api: 60
+X-Ratelimit-Remaining-V2-Api: 56
+X-Ratelimit-Reset-V2-Api: 1643767322
+```
+
+The way V2 API requests are counted is the same as for the general rate limiter, and headers contain the same information. See the table for more details.
+When the maximum rate limit value is exceeded, CAPI returns `429 Too Many Requests` with the body `CF-RateLimitV2APIExceeded`.
+
+Operators can configure CAPI to exempt users and clients with the UAA scope cloud_controller.v2_api_rate_limit_exempt from the V2 API rate limit.
+
 ## <a id="service-brokers"></a> Rate Limit Responses: Service Brokers
 
-Operators can optionally limit the number of concurrent requests per user, for each Cloud Controller instance, for operations related to service brokers that can be made to CAPI endpoints for the following resource types:
+Operators can limit the number of concurrent requests per user, for each Cloud Controller instance, for operations related to service brokers that can be made to CAPI endpoints for the following resource types:
 
 * [`v3/service_instances`](https://v3-apidocs.cloudfoundry.org/index.html#service-instances)
 * [`v3/service_credential_bindings`](https://v3-apidocs.cloudfoundry.org/index.html#service-credential-binding)
