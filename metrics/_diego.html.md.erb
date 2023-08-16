@@ -26,7 +26,7 @@ Default Origin Name: auctioneer
  memoryStats.numBytesAllocatedHeap                           | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                          | Instantaneous count of bytes used by the stack allocator.
  numGoRoutines                                               | Instantaneous number of active goroutines in the process.
- RequestCount                                                | Cumulative number of requests the auctioneer has handled through its API.  Emitted periodically.
+ RequestCount                                                | Cumulative number of requests the auctioneer has handled through its API. Emitted periodically.
  RequestLatency                                              | Time the auctioneer took to handle requests to its API endpoints. Emitted when the auctioneer handles requests<a id="bbs"></a>.
 
 Default Origin Name: bbs
@@ -120,14 +120,14 @@ Default Origin Name: rep (applies to rep and rep_windows jobs)
  Metric Name                                        | Description
 ----------------------------------------------------|----------------------------------------------------------------------------------------------
  AppInstanceExceededLogRateLimitCount               | Number of application instances that have exceeded the app log rate limit. Emitted once for each application instance that exceeds the log rate limit within the last 5 minute interval. This metric is only emitted if an operator has configured an app log rate limit and an app instance has exceeded that limit.
- CapacityAllocatedDisk                              | Amount of disk allocated to containers on this Diego Cell.  Emitted periodically.
- CapacityAllocatedMemory                            | Amount of memory allocated to containers on this Diego Cell.  Emitted periodically.
+ CapacityAllocatedDisk                              | Amount of disk allocated to containers on this Diego Cell. Emitted periodically.
+ CapacityAllocatedMemory                            | Amount of memory allocated to containers on this Diego Cell. Emitted periodically.
  CapacityRemainingContainers                        | Remaining number of containers this Diego Cell can host. Emitted periodically.
  CapacityRemainingDisk                              | Remaining amount of disk available for this Diego Cell to allocate to containers. Emitted periodically.
- CapacityRemainingMemory                            | Remaining amount of memory available for this Diego Cell to allocate to containers.  Emitted periodically.
+ CapacityRemainingMemory                            | Remaining amount of memory available for this Diego Cell to allocate to containers. Emitted periodically.
  CapacityTotalContainers                            | Total number of containers this Diego Cell can host. Emitted periodically.
  CapacityTotalDisk                                  | Total amount of disk available for this Diego Cell to allocate to containers. Emitted periodically.
- CapacityTotalMemory                                | Total amount of memory available for this Diego Cell to allocate to containers.  Emitted periodically.
+ CapacityTotalMemory                                | Total amount of memory available for this Diego Cell to allocate to containers. Emitted periodically.
  ContainerCompletedCount                            | Number of containers exited on this Diego Cell. Emitted after container exits.
  ContainerCount                                     | Number of containers hosted on the Diego Cell. Emitted periodically.
  ContainerExitedOnTimeoutCount                      | Number of containers on this Diego Cell exited after graceful shutdown interval. Emitted after container exits.
@@ -142,7 +142,7 @@ Default Origin Name: rep (applies to rep and rep_windows jobs)
  GardenContainerCreationSucceededDuration           | Time the rep's Garden back end took to create a container. Emitted after every successful container creation.
  GardenContainerDestructionFailedDuration           | Time the rep's Garden back end took to destroy a container. Emitted after every failed container destruction.
  GardenContainerDestructionSucceededDuration        | Time the rep's Garden back end took to destroy a container. Emitted after every successful container destruction.
- GardenHealthCheckFailed                            | Whether the cell has failed to pass its healthcheck against the garden back end.  0 signifies healthy, and 1 signifies unhealthy. Emitted periodically.
+ GardenHealthCheckFailed                            | Whether the cell has failed to pass its healthcheck against the garden back end. 0 signifies healthy, and 1 signifies unhealthy. Emitted periodically.
  memoryStats.lastGCPauseTimeNS                      | Duration in nanoseconds of the last garbage collector pause.
  memoryStats.numBytesAllocatedHeap                  | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                 | Instantaneous count of bytes used by the stack allocator.

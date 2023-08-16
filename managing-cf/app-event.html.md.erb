@@ -1,5 +1,5 @@
 ---
-title: Retrieving App and Event Information
+title: Retrieving app and event information
 owner: CAPI
 ---
 
@@ -7,9 +7,9 @@ owner: CAPI
 This topic explains how to query the Cloud Controller API (CAPI) to retrieve current information about apps and events.
 
 
-## <a id='target'></a> Target and Log In
+## <a id='target'></a> Target and log in
 
-To perform the procedures in this topic, you must authenticate to your Cloud Controller.  There are two ways of doing this:
+To perform the procedures in this topic, you must authenticate to your Cloud Controller. There are two ways of doing this:
 
 * Run `curl` commands that include the Cloud Controller endpoint and pass in your authorization token each time with the `-H` flag.
 
@@ -31,19 +31,14 @@ To perform the procedures in this topic, you must authenticate to your Cloud Con
   User:            user<span>@</span>example.com
   Org:             YOUR-ORG
   Space:           development
-  </pre>  
+  </pre>
     If you do not have the cf CLI installed, see the [Installing the cf CLI](../../cf-cli/install-go-cli.html) topic
 
-## <a id='obtain_apps'></a> Obtain App Information
+## <a id='obtain_apps'></a> Obtain app information
 
-You can obtain the following app information:
+You can obtain the following app information.
 
-* [All Apps](#all-apps)
-* [App Summary](#app-summary)
-* [Events](#events)
-* [App Usage Events](#app-usage-events)
-
-### <a id='all-apps'></a> All Apps
+### <a id='all-apps'></a> All apps
 
 Use the `apps` endpoint to retrieve information about all of your apps:
 
@@ -97,7 +92,7 @@ $ cf curl /v2/apps
 
 The output of this command provides the URL endpoints for each app, within the `metadata: url` section. You can use these app-specific endpoints to retrieve more information about that app. In the example above, the endpoints for the two apps are `/v2/apps/acf2ce33-ee92-54TY-9adb-55a596a8dcba` and `/v2/apps/79bb58cc-3737-4540-ac70-39a2843b5178`.
 
-### <a id='app-summary'></a> App Summary
+### <a id='app-summary'></a> App summary
 
 Use the `summary` endpoint under each app-specific URL to retrieve the instances and any bound services for that app:
 
@@ -141,17 +136,17 @@ $ cf curl /v2/apps/acf2ce75-ee92-4bb6-9adb-55a596a8dcba/summary
               "version": null
 [...]
 </pre>
-   
-To view the `app_usages` report that covers app usage within an org during a period of time, see [List all App Usage Events](https://apidocs.cloudfoundry.org/6.7.0/app_usage_events/list_all_app_usage_events.html) in the Cloud Foundry API documentation.
+
+To view the `app_usages` report that covers app usage within an org during a period of time, see [List all app usage events](https://apidocs.cloudfoundry.org/6.7.0/app_usage_events/list_all_app_usage_events.html) in the Cloud Foundry API documentation.
 
 ### <a id='events'></a> Events
 
 Use the `events` endpoint to retrieve information about app events.
 
-For more information, see the [Audit Events](./audit-events.html) topic and [List all Events](https://apidocs.cloudfoundry.org/6.7.0/events/list_all_events.html) in the Cloud Foundry API documentation.
+For more information, see the [Audit events](./audit-events.html) topic and [List all events](https://apidocs.cloudfoundry.org/6.7.0/events/list_all_events.html) in the Cloud Foundry API documentation.
 
-### <a id='app-usage-events'></a> App Usage Events
+### <a id='app-usage-events'></a> App usage events
 
 Use the `app-usage-events` endpoint to retrieve information about app usage events.
 
-For more information, see the [Usage Events and Billing](./usage-events.html) topic and [List all App Usage Events](https://apidocs.cloudfoundry.org/6.7.0/app_usage_events/list_all_app_usage_events.html) in the Cloud Foundry API documentation.
+For more information, see the [Usage events and billing](./usage-events.html) topic and [List all app usage events](https://apidocs.cloudfoundry.org/6.7.0/app_usage_events/list_all_app_usage_events.html) in the Cloud Foundry API documentation.

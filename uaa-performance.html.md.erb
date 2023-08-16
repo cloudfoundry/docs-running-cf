@@ -3,7 +3,7 @@ title: UAA Performance
 owner: UAA
 ---
 
-<!--- 
+<!---
 fancyBox is licensed under the GPLv3 license for all open source applications.
 Do not use this code in commercial documentation
 --->
@@ -19,15 +19,15 @@ This topic provides an overview of the configuration and results of performance 
 
 For information about monitoring and diagnosing UAA performance over time, see <a href="../uaa/uaa-metrics.html">UAA Performance Metrics</a>.
 
-The perfomance test results illustrate the baseline performance of a single instance and expected performance when horizontally scaling the number of UAA virtual machine (VM) instances. 
+The perfomance test results illustrate the baseline performance of a single instance and expected performance when horizontally scaling the number of UAA virtual machine (VM) instances.
 
 The graphs in this topic are presented as time series and describe the effect of increasing concurrency on throughput and latency. Operators can use this information to determine the number of instances required to achieve a target throughput under reasonable latency.
 
 ##<a id='benchmark-setup'></a> Benchmarking
-	
-UAA testing for this topic was performed in the context of a Cloud Foundry environment instead of in full isolation tests. 
 
-The benchmarking test setup places the database, client, router, and UAA servers within the same network to minimize external network factors on performance. The test setup relies on Gorouter to load balance requests across multiple UAA instances. 
+UAA testing for this topic was performed in the context of a Cloud Foundry environment instead of in full isolation tests.
+
+The benchmarking test setup places the database, client, router, and UAA servers within the same network to minimize external network factors on performance. The test setup relies on Gorouter to load balance requests across multiple UAA instances.
 
 The [Apache JMeter](http://jmeter.apache.org/) client increases step concurrency to reach the target currency for a given test run. The testing tools are packaged as a BOSH release and deployed to a dedicated VM. The performance tests exercise the following flows:
 
@@ -54,9 +54,9 @@ We simulate increasing load by ramping up the number of concurrent threads in in
 
 ##<a id='tools'></a> Tools
 
-[JMeter test plan](https://github.com/cf-identity/jmeter): A collection of JMeter scripts. UAA testing for this topic uses these scripts with JMeter to load test, measure, and analyze performance. JMeter supports variable parameterization, response assertions and validation, and graph generation. 
+[JMeter test plan](https://github.com/cf-identity/jmeter): A collection of JMeter scripts. UAA testing for this topic uses these scripts with JMeter to load test, measure, and analyze performance. JMeter supports variable parameterization, response assertions and validation, and graph generation.
 
-### Benchmarking Setup ###
+### Benchmarking setup
 
 - VM Instance Properties
     - GCP Cloud Config Name: n1-standard-2
@@ -76,11 +76,11 @@ We simulate increasing load by ramping up the number of concurrent threads in in
     - GCP does not document any network bandwidth on any vm types
     - Gorouter is scaled to 8 GB memory to prevent router bottlenecks
 - Data Configuration: Test dataset includes the following:
-      - 1 client 
+      - 1 client
       - 1 User
       - 41 Groups
 
-##<a id='results'></a> Performance Results 
+##<a id='results'></a> Performance results
 
 ###<a id='client-credentials'></a> Client Credentials Grant Type
 
@@ -132,9 +132,9 @@ We simulate increasing load by ramping up the number of concurrent threads in in
   </tr>
 </table>
 
-Server Performance metric like CPU utilization, heap memory usage, and time 
-spent in garbage collection. These metrics are collected by an agent colocated 
-with the UAA VM. Graphs are plotted as time series. 
+Server Performance metric like CPU utilization, heap memory usage, and time
+spent in garbage collection. These metrics are collected by an agent colocated
+with the UAA VM. Graphs are plotted as time series.
 
 <table class="nice">
   <tr>
@@ -217,9 +217,9 @@ with the UAA VM. Graphs are plotted as time series.
   </tr>
 </table>
 
-Server Performance metric like CPU utilization, heap memory usage, and time 
-spent in garbage collection. These metrics are collected by an agent colocated 
-with the UAA VM. Graphs are plotted as time series. 
+Server Performance metric like CPU utilization, heap memory usage, and time
+spent in garbage collection. These metrics are collected by an agent colocated
+with the UAA VM. Graphs are plotted as time series.
 
 <table class="nice">
   <tr>
@@ -281,9 +281,9 @@ with the UAA VM. Graphs are plotted as time series.
   </tr>
 </table>
 
-Server Performance metric like CPU utilization, heap memory usage, and time 
-spent in garbage collection. These metrics are collected by an agent colocated 
-with the UAA VM. Graphs are plotted as time series. 
+Server Performance metric like CPU utilization, heap memory usage, and time
+spent in garbage collection. These metrics are collected by an agent colocated
+with the UAA VM. Graphs are plotted as time series.
 
 <table class="nice">
   <tr>
@@ -333,9 +333,9 @@ with the UAA VM. Graphs are plotted as time series.
   </tr>
 </table>
 
-Server Performance metric like CPU utilization, heap memory usage, and time 
-spent in garbage collection. These metrics are collected by an agent colocated 
-with the UAA VM. Graphs are plotted as time series. 
+Server Performance metric like CPU utilization, heap memory usage, and time
+spent in garbage collection. These metrics are collected by an agent colocated
+with the UAA VM. Graphs are plotted as time series.
 
 <table class="nice">
   <tr>

@@ -11,7 +11,9 @@ This topic describes how and when to scale BOSH jobs in CAPI, and includes detai
 
 The `cloud_controller_ng` Ruby process is the primary job in CAPI. It, along with `nginx_cc`, powers the Cloud Controller API that all users of Cloud Foundry interact with. In addition to serving external clients, `cloud_controller_ng` also provides APIs for internal components within Cloud Foundry, such as Loggregator and Networking subsystems.
 
-<p class='note'><strong>Note:</strong> Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds with the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
+<p class="note important">
+<span class="note__title">Important</span>
+Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds to the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
 
 ### When to Scale
 
@@ -49,38 +51,40 @@ In CF deployments with internal MySQL clusters, a single MySQL database VM with 
 
 Cloud Controller API VMs should primarily be scaled horizontally. Scaling up the number of cores on a single VM is not effective. This is because Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
 
-<p class='note'><strong>Note:</strong> Since Cloud Controller supports both PostgreSQL and MySQL external databases, there is no absolute guidance on what a healthy database looks like. In general, high database CPU utilization is a good indicator of scaling issues, but always defer to the documentation specific to your database.</p>
+<p class="note important">
+<span class="note__title">Important</span>
+Since Cloud Controller supports both PostgreSQL and MySQL external databases, there is no absolute guidance about what a healthy database looks like. In general, high database CPU utilization is a good indicator of scaling issues, but always defer to the documentation specific to your database.</p>
 
 
 ## <a id='cloud_controller_worker_local'></a> cloud\_controller\_worker\_local
 
 Colloquially known as "local workers," this job is primarily responsible for handling files uploaded to the API VMs during `cf push`, such as `packages`, `droplets`, and resource matching.
 
-### When to Scale
+### When to scale
 
 When determining whether to scale `cloud\_controller\_worker\_local`, look for the following:
 
-#### Key Metrics
+#### Key metrics
 
 Cloud Controller emits the following metrics:
 
 * `cc.job_queue_length.cc-VM_NAME-VM_INDEX` is continuously growing.
 * `cc.job_queue_length.total` is continuously growing.
 
-#### Heuristic Failures
+#### Heuristic failures
 
 The following behaviors may occur:
 
 * `cf push` is intermittently failing.
 * `cf push` average time is elevated.
 
-#### Relevant Log Files
+#### Relevant log files
 
 You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/cloud_controller_ng/cloud_controller_ng.log`
 
-### How to Scale
+### How to scale
 
 Because local workers are located with the Cloud Controller API job, they are scaled horizontally along with the API.
 
@@ -89,18 +93,18 @@ Because local workers are located with the Cloud Controller API job, they are sc
 
 Colloquially known as "generic workers" or just "workers", this job and VM are responsible for handling asynchronous work, batch deletes, and other periodic tasks scheduled by the `cloud_controller_clock`.
 
-### When to Scale
+### When to scale
 
 When determining whether to scale `cloud\_controller\_worker`, look for the following:
 
-#### Key Metrics
+#### Key metrics
 
 Cloud Controller emits the following metrics:
 
 * `cc.job_queue_length.cc-VM_TYPE-VM_INDEX` (ie. `cc.job_queue_length.cc-cc-worker-0`) is continuously growing.
 * `cc.job_queue_length.total` is continuously growing.
 
-#### Heuristic Failures
+#### Heuristic failures
 
 The following behaviors may occur:
 
@@ -108,35 +112,37 @@ The following behaviors may occur:
 * Users report slow deletes for other resources.
 * cf-acceptance-tests succeed generally, but fail during cleanup.
 
-#### Relevant Log Files
+#### Relevant log files
 
 You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/cloud_controller_worker/cloud_controller_worker.log`
 
-### How to Scale
+### How to scale
 
 The cc-worker VM can safely scale horizontally in all deployments, but if your worker VMs have CPU/memory headroom, you can also use the `cc.jobs.generic.number_of_workers` BOSH property to increase the number of worker processes on each VM.
 
 
 ## <a id='clock_and_updater'></a> cloud\_controller\_clock and cc\_deployment\_updater
 
-The `cloud_controller_clock` job runs Diego sync process and schedules periodic background jobs. The `cc_deployment_updater` job is responsible for handling v3 rolling app deployments. For more information, see [Rolling App Deployments (Beta)](https://docs.cloudfoundry.org/devguide/deploy-apps/rolling-deploy.html).
+The `cloud_controller_clock` job runs Diego sync process and schedules periodic background jobs. The `cc_deployment_updater` job is responsible for handling v3 rolling app deployments.
 
-<p class='note'><strong>Note:</strong> Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds with the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
+<p class="note important">
+<span class="note__title">Important</span>
+Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds to the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
 
-### When to Scale
+### When to scale
 
 When determining whether to scale `cloud\_controller\_clock` and `cc\_deployment\_updater`, look for the following:
 
-#### Key Metrics
+#### Key metrics
 
 Cloud Controller emits the following metrics:
 
 * `cc.Diego_sync.duration` is continuously increasing over time.
 * `system.cpu.user` is high on the scheduler VM.
 
-#### Heuristic Failures
+#### Heuristic failures
 
 The following behaviors may occur:
 
@@ -144,14 +150,14 @@ The following behaviors may occur:
 * The Diego Desired LRP count is larger than the total process instance count reported through the Cloud Controller APIs.
 * Deployments are slow to increase and decrease instance count.
 
-#### Relevant Log Files
+#### Relevant log files
 
 You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/cloud_controller_clock/cloud_controller_clock.log`
 * `/var/vcap/sys/log/cc_deployment_updater/cc_deployment_updater.log`
 
-### How to Scale
+### How to scale
 
 Both of these jobs are singletons, so extra instances are for failover HA rather than scalability. Performance issues are likely due to database overloading or greedy neighbors on the scheduler VM.
 
@@ -160,18 +166,18 @@ Both of these jobs are singletons, so extra instances are for failover HA rather
 
 The internal WebDAV blobstore that comes included with Cloud Foundry by default. It is used by the platform to store `packages`, staged `droplets`, `buildpacks`, and cached app resources. Files are typically uploaded to the internal blobstore through the Cloud Controller local workers and downloaded by Diego when app instances are started.
 
-### When to Scale
+### When to scale
 
 When determining whether to scale `blobstore_nginx`, look for the following:
 
-#### Key Metrics
+#### Key metrics
 
 Cloud Controller emits the following metrics:
 
 * `system.cpu.user` is consistently high on the `singleton-blobstore` VM.
 * `system.disk.persistent.percent` is high, indicating that the blobstore is running out of room for additional files.
 
-#### Heuristic Failures
+#### Heuristic failures
 
 The following behaviors may occur:
 
@@ -179,15 +185,15 @@ The following behaviors may occur:
 * `cf push` average time is elevated.
 * App droplet downloads are timing out or failing on Diego.
 
-#### Relevant Log Files
+#### Relevant log files
 
 You can find the above heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/blobstore/internal_access.log`
 
-### How to Scale
+### How to scale
 
-The internal WebDAV blobstore cannot be scaled horizontally, not even for availability purposes, because of its reliance on the `singleton-blobstore` VM's persistent disk for file storage. For this reason, it is not recommended for environments that require high availability. For these environments, you should use an external blobstore. For more information, see [Cloud Controller Blobstore Configuration](https://docs.cloudfoundry.org/deploying/common/cc-blobstore-config.html) and the [Blob Storage](https://docs.cloudfoundry.org/concepts/high-availability.html#blobstore) section of the _High Availability in Cloud Foundry_ topic.
+The internal WebDAV blobstore cannot be scaled horizontally, not even for availability purposes, because of its reliance on the `singleton-blobstore` VM's persistent disk for file storage. For this reason, it is not recommended for environments that require high availability. For these environments, you should use an external blobstore. For more information, see [Cloud Controller blobstore configuration](https://docs.cloudfoundry.org/deploying/common/cc-blobstore-config.html) and the [Blob storage](https://docs.cloudfoundry.org/concepts/high-availability.html#blobstore) section of the _High Availability in Cloud Foundry_ topic.
 
 The internal WebDAV blobstore can be scaled vertically, so scaling up the number of CPUs or adding faster disk storage can improve the performance of the internal WebDAV blobstore if it is under high load.
 

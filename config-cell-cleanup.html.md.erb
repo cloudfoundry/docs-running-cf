@@ -17,7 +17,7 @@ Disk cleanup is the process of removing unused layers from the Diego Cell disk. 
 
 ## <a id='options'></a> Options for Disk Cleanup
 
-CF provides the following options for scheduling the disk cleanup process on Diego Cells: 
+CF provides the following options for scheduling the disk cleanup process on Diego Cells:
 
 * **Never clean up Diego Cell disk space**: Cloud Foundry does not recommend using this option for production environments.
 
@@ -37,7 +37,7 @@ For CF installations that mainly run **Docker images**, or both Docker images an
 
 ### <a id='choosing-a-threshold'></a> Choosing a Threshold
 
-To choose a realistic value when configuring the disk cleanup threshold, you must identify some of the most frequently used Docker images in your CF installation. Docker images tend to be constructed by creating layers over existing, base, images. In some cases, you may find it easier to identify which base Docker images are most frequently used.  
+To choose a realistic value when configuring the disk cleanup threshold, you must identify some of the most frequently used Docker images in your CF installation. Docker images tend to be constructed by creating layers over existing, base, images. In some cases, you may find it easier to identify which base Docker images are most frequently used.
 
 To configure the disk cleanup threshold:
 

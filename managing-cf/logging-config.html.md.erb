@@ -1,29 +1,29 @@
 ---
-title: Configuring System Logging
+title: Configuring system logging
 owner: Logging and Metrics
 ---
 
 
 This topic explains how to configure the Cloud Foundry logging and metrics system.
 
-For more information, see [Logging and Metrics Architecture](../../loggregator/architecture.html).
+For more information, see [Logging and metrics architecture](../../loggregator/architecture.html).
 
-## <a id='architecture'></a> Choose an Architecture
+## <a id='architecture'></a> Choose an architecture
 
 The configuration available depends on the logging and metrics architecture that you have selected.
 
-* [Loggregator Firehose Architecture](../../loggregator/architecture.html#firehose-architecture). This is the original logging and metrics architecture. In this architecture, the [Loggregator Agent](../../loggregator/architecture.html#-how-logs-and-metrics-egress-from-vms) running on each VM collects and sends this data out to Doppler components, which temporarily buffer the data before periodically forwarding it to the Traffic Controller or Reverse Log Proxy (RLP).
-* [Shared Nothing Architecture](../../loggregator/architecture.html#shared-nothing-architecture). Logs are shipped directly from VMs using syslog instead of passing through the Loggregator Firehose components. The metrics agent provides Prometheus endpoints to expose metrics.
+* [Loggregator firehose architecture](../../loggregator/architecture.html#firehose-architecture). This is the original logging and metrics architecture. In this architecture, the [Loggregator agent](../../loggregator/architecture.html#-how-logs-and-metrics-egress-from-vms) running on each VM collects and sends this data out to Doppler components, which temporarily buffer the data before periodically forwarding it to the Traffic Controller or Reverse Log Proxy (RLP).
+* [Shared nothing architecture](../../loggregator/architecture.html#shared-nothing-architecture). Logs are shipped directly from VMs using syslog instead of passing through the Loggregator Firehose components. The metrics agent provides Prometheus endpoints to expose metrics.
 
 It is also possible to combine elements of both architectures in the same deployment. For example, you can retain existing Loggregator Firehose integrations but use syslog agent to send logs to syslog drains.
 
-## <a id='scaling-loggregator'></a> Scale Loggregator
+## <a id='scaling-loggregator'></a> Scale loggregator
 
 Cloud Foundry system components and apps constantly generate log and metrics data. If your deployment is configured to use the Loggregator Firehose Architecture and the log and metrics data input to a Doppler exceeds its buffer size for a given interval, data can be lost.
 
 Refer to the indicators described in the [loggregator-release](https://github.com/cloudfoundry/loggregator-release/blob/main/jobs/doppler/templates/indicators.yml.erb) on GitHub. For example, refer to the log loss rate and suggested actions. Typical actions include scaling Doppler, Traffic Controller, or RLP instances.
 
-## <a id='scaling-shared-nothing'></a> Scale Shared Nothing
+## <a id='scaling-shared-nothing'></a> Scale shared nothing
 
 Refer to [loggregator-agent-release](https://github.com/cloudfoundry/loggregator-agent-release/blob/main/jobs/loggr-syslog-agent/templates/indicators.yml.erb) on GitHub for the indicators for the syslog agent.
 
@@ -31,7 +31,7 @@ Refer to [loggregator-agent-release](https://github.com/cloudfoundry/loggregator
 
 Refer to [log-cache-release](https://github.com/cloudfoundry/log-cache-release/blob/main/jobs/log-cache/templates/indicators.yml.erb) on GitHub for the indicators for Log Cache.
 
-## <a id='customizing'></a> Customize Logging and Metric components
+## <a id='customizing'></a> Customize Logging and metric components
 
 Review the [cf-deployment operations files](https://github.com/cloudfoundry/cf-deployment/tree/main/operations) on GitHub that provide for common customizations.
 
