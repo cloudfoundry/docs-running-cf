@@ -93,8 +93,8 @@ $ cf curl /v3/audit_events
 
 For documentation about using this endpoint, see the [API documentation](https://v3-apidocs.cloudfoundry.org/index.html#list-audit-events).
 
-<p class="note important">
-<span class="note__title">Important</span>
+<p class="note">
+<span class="note__title">Note</span>
 <code>get-events</code> is a community-contributed
 cf CLI plug-in. The plug-in provides convenient flags to list events that took place today,
 from yesterday, or from a particular date. <code>get-events</code> also provides useful output
@@ -283,7 +283,7 @@ For example, a user issuing a `cf stop APP_NAME` command causes an `audit.app.st
 
 * **Service events** (`audit.service*`) are created after the service broker has approved an interaction.
 
-* **Crash and rescheduling events** (`audit.app.crash`, `audit.app.process.crash|rescheduling`) are created when Diego marks an app instance as crashed or evacuates app instances from cells on Diego cell VM restarts.
+* **Crash and rescheduling events** (`audit.app.crash`, `audit.app.process.crash|rescheduling`) are created when Diego marks an app instance as crashed or evacuates app instances from cells on Diego Cell VM restarts.
 
 * **Blob events** (`blob.remove_orphan`) are created by a daily clean up job and do not represent user action.
 

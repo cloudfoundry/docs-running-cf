@@ -1,5 +1,5 @@
 ---
-title: Adding a Custom Stack
+title: Adding a custom stack
 owner:
   - Buildpacks & Stacks
   - Diego
@@ -8,35 +8,38 @@ owner:
 
 
 
-This topic outlines how to add a custom stack under the Diego architecture. To add a stack, you first build a BOSH job template that installs the stack on the host machine. Then you configure your deployment manifests so that Cloud Foundry can run the job when it creates cells.
+This topic describes how to add a custom stack under the Diego architecture. To add a stack, you first build a BOSH job template that installs the stack on the host machine. Then you configure your deployment manifests so that Cloud Foundry can run the job when it creates cells.
 
-The [Cloud Foundry cflinuxfs3](http://github.com/cloudfoundry/cflinuxfs3) repository
+The [Cloud Foundry cflinuxfs4](http://github.com/cloudfoundry/cflinuxfs4) repository
 contains scripts for building your own custom stacks, as well as the available Cloud
 Foundry stacks.
 
 The following example adds a new Linux-based `pancakes` stack for use with the [Garden-runC](https://github.com/cloudfoundry/garden-runc-release) operating system. This `pancakes` stack could, for example, support applications that require an old version of CentOS or Ubuntu.
 
-##<a id='add-new-stack'></a>Step 1: Create a BOSH Job Template ##
+##<a id='add-new-stack'></a>Step 1: Create a BOSH job template
 
 Stacks exist in a subdirectory on their host machine, typically under `/var/vcap/packages` or `/var/vcap/data`. Your BOSH job template must deploy the stack onto a host machine, and provide lifecycle binaries that work with your stack. The lifecycle binaries for your stack are helper programs that stage and run apps on the stack file system. To create a `pancakes-release` job template that deploys a custom stack, follow these steps:
 
 1. [Create a BOSH release](http://bosh.io/docs/create-release.html) `pancakes-release` for a job template that expands a stack into place in its subdirectory. The rootfs must be packaged as a `.tar` file, for example, a `pancakes-rootfs` template might create a tarred full Linux root file system at `/var/vcap/packages/pancakes-rootfs/rootfs.tar`. See the [rootfses job template in diego-release](https://github.com/cloudfoundry/cflinuxfs3-release/tree/main/jobs/cflinuxfs3-rootfs-setup) for one way to do this.
 
 1. Create lifecycle binaries for your stack. See the diego-release repository for examples of app lifecycle binary source code:
-  * [Buildpack App Lifecycle](https://github.com/cloudfoundry-incubator/diego-release/tree/develop/packages/buildpack_app_lifecycle)
-  * [Docker App Lifecycle](https://github.com/cloudfoundry-incubator/diego-release/tree/develop/packages/docker_app_lifecycle)
-  * [Windows App Lifecycle](https://github.com/cloudfoundry-incubator/diego-release/tree/develop/packages/windows_app_lifecycle)
+  * [Buildpack app lifecycle](https://github.com/cloudfoundry-incubator/diego-release/tree/develop/packages/buildpack_app_lifecycle)
+  * [Docker app lifecycle](https://github.com/cloudfoundry-incubator/diego-release/tree/develop/packages/docker_app_lifecycle)
+  * [Windows app lifecycle](https://github.com/cloudfoundry-incubator/diego-release/tree/develop/packages/windows_app_lifecycle)
 
 1. Generate a gzipped tar archive of the lifecycle binaries, `pancakes-app-lifecycle.tgz`.
 
 1. Create a dummy `pancakes-app-lifecycle` job template as a package within `pancakes-release`. Include the `pancakes-app-lifecycle.tgz` file in the job template directory.
-<p class="note"><strong>Note</strong>: The `pancakes-app-lifecycle` job template does not need to run any process of its own.</p>
+
+  <p class="note">
+  <span class="note__title">Note</span>
+  The `pancakes-app-lifecycle` job template does not need to run any process of its own.</p>
 
 1. List the dummy `pancakes-app-lifecycle` job as a dependency in the `pancakes-release` spec file. This makes BOSH publish the lifecycle binaries to `/var/vcap/packages` for inclusion in any cells that use the `pancakes` stack.
 
-##<a id='update-manifests'></a>Step 2: Update the Manifests ###
+##<a id='update-manifests'></a>Step 2: Update the manifests
 
-1. Add the `pancakes-rootfs` job and release name to the Diego manifest, to the list of job templates defined for the `cell` object under `base_job_templates`. This makes the expanded rootfs available locally on the Diego cell, at `/var/vcap/packages/pancakes-rootfs/rootfs`. For example, in the manifests generated with the [spiff-based tooling](https://github.com/cloudfoundry-incubator/spiff) in [diego-release](https://github.com/cloudfoundry-incubator/diego-release), add the lines shown in **bold** to the following list of cell job templates:
+1. Add the `pancakes-rootfs` job and release name to the Diego manifest, to the list of job templates defined for the `cell` object under `base_job_templates`. This makes the expanded rootfs available locally on the Diego Cell, at `/var/vcap/packages/pancakes-rootfs/rootfs`. For example, in the manifests generated with the [spiff-based tooling](https://github.com/cloudfoundry-incubator/spiff) in [diego-release](https://github.com/cloudfoundry-incubator/diego-release), add the lines shown in **bold** to the following list of cell job templates:
 
     <pre>
     cell:

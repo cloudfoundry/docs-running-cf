@@ -1,38 +1,40 @@
 ---
-title: Configuring Diego for Upgrades
+title: Configuring Diego for upgrades
 owner: Diego
 ---
 
 Cloud Foundry supports rolling upgrades in high availability environments. A rolling upgrade means that you can continue to operate an existing Cloud Foundry deployment and its running app instances while upgrading the platform.
 
-<p class="note"><strong>Note</strong>: Rolling upgrade is not available in your deployment if you have not configured your deployment to be highly available. See <a href="../concepts/high-availability.html">High Availability in Cloud Foundry</a>.
+<p class="note important">
+<span class="note__title">Important</span>
+Rolling upgrade is available in your deployment only if you have configured your deployment to be highly available. See <a href="../concepts/high-availability.html">High availability in Cloud Foundry</a>.
 </p>
 
-## <a id="process"></a> Diego Cell Upgrade Process
+## <a id="process"></a> Upgrading Diego Cells
 
-To upgrade Cloud Foundry, BOSH must drain all Diego cell VMs that host app instances. BOSH manages this process by upgrading a batch of cells at a time. 
+To upgrade Cloud Foundry, BOSH must drain all Diego Cell VMs that host app instances. BOSH manages this process by upgrading a batch of cells at a time.
 
-The number of cells that undergo upgrade simultaneously (either in a state of shutting down or coming back online) is controlled by the `max_in_flight` value of the Diego cell job. For example, if `max_in_flight` is set to `10%` and your deployment has 20 Diego cell job instances, then the maximum number of cells that BOSH can upgrade at a single time is `2`. 
+The number of cells that undergo upgrade simultaneously (either in a state of shutting down or coming back online) is controlled by the `max_in_flight` value of the Diego Cell job. For example, if `max_in_flight` is set to `10%` and your deployment has 20 Diego Cell job instances, then the maximum number of cells that BOSH can upgrade at a single time is `2`.
 
-When BOSH triggers an upgrade, each Diego cell undergoing upgrade enters "evacuation" mode. Evacuation mode means that the cell stops accepting new work and signals the rest of the Diego system to schedule replacements for its app instances. This scheduling is managed by the [Diego auctioneer process](../concepts/diego/diego-auction.html).
+When BOSH triggers an upgrade, each Diego Cell undergoing upgrade enters "evacuation" mode. Evacuation mode means that the cell stops accepting new work and signals the rest of the Diego system to schedule replacements for its app instances. This scheduling is managed by the [Diego auctioneer process](../concepts/diego/diego-auction.html).
 
-The evacuating cells continue to interact with the Diego system as replacements come online. The cell undergoing upgrade waits until either its app instance replacements run successfully before shutting down the original local instances, or for the evacuation process to time out. This "evacuation timeout" defaults to 10 minutes. 
+The evacuating cells continue to interact with the Diego system as replacements come online. The cell undergoing upgrade waits until either its app instance replacements run successfully before shutting down the original local instances, or for the evacuation process to time out. This "evacuation timeout" defaults to 10 minutes.
 
 If cell evacuation exceeds this timeout, then the cell stops its app instances and shuts down. The Diego system continues to re-emit start requests for the app replacements.
 
-## <a id="limitations-considerations"></a> Prevent Overload 
+## <a id="limitations-considerations"></a> Prevent overload
 
-A potential issue arises if too many app instance replacements are slow to start or do not start successfully at all. 
+A potential issue arises if too many app instance replacements are slow to start or do not start successfully at all.
 
 If too many app instances are starting concurrently, then the load of these starts on the rest of the system can cause other applications that are already running to crash and be rescheduled. These events can result in a cascading failure.
 
 To prevent overload, Cloud Foundry provides two major throttle configurations:
 
-- **The maximum number of starting containers that Diego can start in Cloud Foundry**: This is a deployment-wide limit. The default value and ability to override this configuration depends on the version of Cloud Foundry deployed. 
+- **The maximum number of starting containers that Diego can start in Cloud Foundry**: This is a deployment-wide limit. The default value and ability to override this configuration depends on the version of Cloud Foundry deployed.
 
-- **The `max_in_flight` setting for the Diego cell job configured in the BOSH manifest**: This configuration, expressed as a percentage or an integer, sets the maximum number of job instances that can be upgraded simultaneously. For example, if your deployment is running 10 Diego cell job instances and the configured `max_in_flight` value is `20%`, then only 2 Diego cell job instances can start up at a single time. <%= vars.max_in_flight_config %>
+- **The `max_in_flight` setting for the Diego Cell job configured in the BOSH manifest**: This configuration, expressed as a percentage or an integer, sets the maximum number of job instances that can be upgraded simultaneously. For example, if your deployment is running 10 Diego Cell job instances and the configured `max_in_flight` value is `20%`, then only 2 Diego Cell job instances can start up at a single time. <%= vars.max_in_flight_config %>
 
-## <a id="max-container-starts"></a> Set a Maximum Number of Starting Containers 
+## <a id="max-container-starts"></a> Set a maximum number of starting containers
 
 This topic describes how to use the auctioneer job to configure the maximum number of app instances starting at a given time. This prevents Diego from scheduling too much new work for your platform to handle concurrently. A lower default can prevent server overload during cold start, which may be important if your infrastructure is not sized for a large number of concurrent cold starts.
 

@@ -1,16 +1,16 @@
 ---
-title: Rate Limit Information Returned by the Cloud Controller API
+title: Rate limit information returned by the Cloud Controller API
 owner: CAPI
 ---
 
 This topic describes rate limit information that is returned by the Cloud Controller API (CAPI).
 
-For information about how to configure rate limits, see [Setting the Rate Limit for the Cloud Controller API](./setting-rate-limit-cloud-api.html).
+For information about how to configure rate limits, see [Setting the rate limit for the Cloud Controller API](./setting-rate-limit-cloud-api.html).
 Note that the Cloud Controller offers several, distinct rate limiters to serve different purposes. Where multiple rate limiters are enabled, information about each will be shared in its own HTTP response header.
 
-## <a id="general"></a> Rate Limit Responses: General
+## <a id="general"></a> Rate limit responses: General
 
-CAPI includes rate limit information in the HTTP header. Each header includes the following:
+CAPI includes rate limit information in the HTTP header. Each header includes:
 
 ```
 X-RateLimit-Limit: 60
@@ -44,7 +44,7 @@ This might result in inconsistent values for the `X-RateLimit-Remaining` header 
 When requests exceed the maximum rate limit value, CAPI returns a `429: Too Many Requests` error code.
 
 
-## <a id="v2-api"></a> Rate Limit Responses: V2 API
+## <a id="v2-api"></a> Rate limit responses: V2 API
 
 Operators can limit the number of V2 API requests. This includes all `v2/*` requests except `v2/info`. Each HTTP header includes the following information:
 
@@ -59,7 +59,7 @@ When the maximum rate limit value is exceeded, CAPI returns `429 Too Many Reques
 
 Operators can configure CAPI to exempt users and clients with the UAA scope cloud_controller.v2_api_rate_limit_exempt from the V2 API rate limit.
 
-## <a id="service-brokers"></a> Rate Limit Responses: Service Brokers
+## <a id="service-brokers"></a> Rate limit responses: Service Brokers
 
 Operators can limit the number of concurrent requests per user, for each Cloud Controller instance, for operations related to service brokers that can be made to CAPI endpoints for the following resource types:
 
@@ -70,7 +70,9 @@ Operators can limit the number of concurrent requests per user, for each Cloud C
 * [`v2/service_bindings`](https://apidocs.cloudfoundry.org/#service-bindings)
 * [`v2/service_keys`](https://apidocs.cloudfoundry.org/#service-keys)
 
-<p class="note"><strong>Note</strong>: Unlike the CAPI rate limit, which caps the requests a user can make across the whole Cloud Foundry platform, service broker rate limits apply per CAPI instance. For example, if the limit is 3 and there are 2 instances, the maximum number of concurrent requests a user can make is 6.</p>
+<p class="note">
+<span class="note__title">Note</span>
+Unlike the CAPI rate limit, which caps the requests a user can make across the whole Cloud Foundry platform, service broker rate limits apply per CAPI instance. For example, if the limit is 3 and there are 2 instances, the maximum number of concurrent requests a user can make is 6.</p>
 
 A request finishes when CAPI sends a response. This occurs even if that response is `202 Accepted`, indicating that an asynchronous operation is to be performed, such as a service broker creating a service instance.
 For more information, see [Asynchronous Operations](https://v3-apidocs.cloudfoundry.org/index.html#asynchronous-operations) in the CAPI V3 documentation.

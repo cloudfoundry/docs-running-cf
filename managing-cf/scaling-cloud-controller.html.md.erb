@@ -11,8 +11,8 @@ This topic describes how and when to scale BOSH jobs in CAPI, and includes detai
 
 The `cloud_controller_ng` Ruby process is the primary job in CAPI. It, along with `nginx_cc`, powers the Cloud Controller API that all users of Cloud Foundry interact with. In addition to serving external clients, `cloud_controller_ng` also provides APIs for internal components within Cloud Foundry, such as Loggregator and Networking subsystems.
 
-<p class="note important">
-<span class="note__title">Important</span>
+<p class="note">
+<span class="note__title">Note</span>
 Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds to the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
 
 ### When to Scale
@@ -51,8 +51,8 @@ In CF deployments with internal MySQL clusters, a single MySQL database VM with 
 
 Cloud Controller API VMs should primarily be scaled horizontally. Scaling up the number of cores on a single VM is not effective. This is because Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
 
-<p class="note important">
-<span class="note__title">Important</span>
+<p class="note">
+<span class="note__title">Note</span>
 Since Cloud Controller supports both PostgreSQL and MySQL external databases, there is no absolute guidance about what a healthy database looks like. In general, high database CPU utilization is a good indicator of scaling issues, but always defer to the documentation specific to your database.</p>
 
 
@@ -127,8 +127,8 @@ The cc-worker VM can safely scale horizontally in all deployments, but if your w
 
 The `cloud_controller_clock` job runs Diego sync process and schedules periodic background jobs. The `cc_deployment_updater` job is responsible for handling v3 rolling app deployments.
 
-<p class="note important">
-<span class="note__title">Important</span>
+<p class="note">
+<span class="note__title">Note</span>
 Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds to the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
 
 ### When to scale
@@ -197,4 +197,4 @@ The internal WebDAV blobstore cannot be scaled horizontally, not even for availa
 
 The internal WebDAV blobstore can be scaled vertically, so scaling up the number of CPUs or adding faster disk storage can improve the performance of the internal WebDAV blobstore if it is under high load.
 
-High numbers of concurrent app container starts on Diego can cause stress on the blobstore. This typically happens during upgrades in environments with a large number of apps and Diego cells. If vertically scaling the blobstore or improving its disk performance is not an option, limiting the max number of concurrent app container starts can mitigate the issue. For more information, see the [starting_container_count_maximum](https://bosh.io/jobs/auctioneer?source=github.com/cloudfoundry/diego-release&version=2.29.0#p%3ddiego.auctioneer.starting_container_count_maximum) section in the _auctioneer job from diego/2.29.0_ topic in the BOSH documentation.
+High numbers of concurrent app container starts on Diego can cause stress on the blobstore. This typically happens during upgrades in environments with a large number of apps and Diego Cells. If vertically scaling the blobstore or improving its disk performance is not an option, limiting the max number of concurrent app container starts can mitigate the issue. For more information, see the [starting_container_count_maximum](https://bosh.io/jobs/auctioneer?source=github.com/cloudfoundry/diego-release&version=2.29.0#p%3ddiego.auctioneer.starting_container_count_maximum) section in the _auctioneer job from diego/2.29.0_ topic in the BOSH documentation.

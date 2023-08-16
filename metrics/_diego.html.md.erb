@@ -15,10 +15,10 @@ Default Origin Name: auctioneer
 -------------------------------------------------------------|----------------------------------------------------------------------------------------------
  AuctioneerFailedCellStateRequests                           | Cumulative number of cells the auctioneer failed to query for state. Emitted during each auction.
  AuctioneerFetchStatesDuration                               | Time in nanoseconds that the auctioneer took to fetch state from all the cells when running its auction. Emitted every 30 seconds during each auction.
- AuctioneerLRPAuctionsFailed                                 | Cumulative number of LRP instances that the auctioneer failed to place on Diego cells. Emitted every 30 seconds during each auction.
- AuctioneerLRPAuctionsStarted                                | Cumulative number of LRP instances that the auctioneer successfully placed on Diego cells. Emitted every 30 seconds during each auction.
- AuctioneerTaskAuctionsFailed                                | Cumulative number of Tasks that the auctioneer failed to place on Diego cells. Emitted every 30 seconds during each auction.
- AuctioneerTaskAuctionsStarted                               | Cumulative number of Tasks that the auctioneer successfully placed on Diego cells. Emitted every 30 seconds during each auction.
+ AuctioneerLRPAuctionsFailed                                 | Cumulative number of LRP instances that the auctioneer failed to place on Diego Cells. Emitted every 30 seconds during each auction.
+ AuctioneerLRPAuctionsStarted                                | Cumulative number of LRP instances that the auctioneer successfully placed on Diego Cells. Emitted every 30 seconds during each auction.
+ AuctioneerTaskAuctionsFailed                                | Cumulative number of Tasks that the auctioneer failed to place on Diego Cells. Emitted every 30 seconds during each auction.
+ AuctioneerTaskAuctionsStarted                               | Cumulative number of Tasks that the auctioneer successfully placed on Diego Cells. Emitted every 30 seconds during each auction.
  LockHeld                                                    | Whether an auctioneer holds the auctioneer lock (in locket): 1 means the lock is held, and 0 means the lock was lost. Emitted periodically by the active auctioneer.
  LockHeld.v1-locks-auctioneer\_lock                          | Whether an auctioneer holds the auctioneer lock: `1` means the lock is held, and `0` means the lock was lost. Emitted every 30 seconds by the active auctioneer.
  LockHeldDuration.v1-locks-auctioneer\_lock                  | Time in nanoseconds that the active auctioneer has held the auctioneer lock. Emitted every 30 seconds by the active auctioneer.
