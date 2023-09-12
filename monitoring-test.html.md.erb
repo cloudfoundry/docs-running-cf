@@ -1,16 +1,16 @@
 ---
-title: Monitoring and Testing Diego Components
+title: Monitoring and testing Diego components
 owner: Diego
 ---
 
 
-The following components monitor and test runtime deployment of Cloud Foundry.
+You can use the Diego components described here to monitor and test runtime deployment of Cloud Foundry.
 
 ##<a id="inigo"></a> Inigo
 
 Inigo is an integration test suite that launches the Diego components through various test cases, including component failures and other exceptional scenarios. Inigo validates a given set of component versions to ensure mutual compatibility, robustness, and graceful performance degradation in failure conditions.
 
-Refer to the [Inigo repository](https://github.com/cloudfoundry-incubator/inigo) on GitHub for more information.
+See the [Inigo repository](https://github.com/cloudfoundry-incubator/inigo) on GitHub for more information.
 
 ##<a id="auction"></a> Auction
 
@@ -22,7 +22,7 @@ The [auction package](https://github.com/cloudfoundry-incubator/auction) encodes
 
 - Across multiple machines in a cloud-like infrastructure, to reveal the impact of latency on the auction
 
-Refer to the [Auction repository](https://github.com/cloudfoundry-incubator/auction) on GitHub for more information.
+See the [Auction repository](https://github.com/cloudfoundry-incubator/auction) on GitHub for more information.
 
 ##<a id="cfdot"></a> cfdot CLI
 
@@ -50,6 +50,6 @@ For more information, see the [cfdot repository](https://github.com/cloudfoundry
 
 ##<a id="cf"></a> CF Acceptance Tests
 
-CF Acceptance Tests (CATs) is a suite of acceptance-level tests that exercises a full Cloud Foundry deployment using the golang cf CLI and `curl`.
+CF Acceptance Tests (CATs) is a suite of acceptance-level tests that exercise a full Cloud Foundry deployment using the golang cf CLI and `curl`.
 
-Refer to the [CF Acceptance Tests repository](https://github.com/cloudfoundry/cf-acceptance-tests) on GitHub for more information.
+See the [CF Acceptance Tests repository](https://github.com/cloudfoundry/cf-acceptance-tests) on GitHub for more information.

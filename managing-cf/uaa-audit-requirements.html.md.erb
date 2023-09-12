@@ -1,11 +1,9 @@
 ---
-title: UAA Audit Requirements
+title: UAA audit requirements
 owner: UAA
 ---
 
-This topic describes audit requirements for the User Account and Authentication Service (UAA). 
-
-## <a id="overview"></a>Overview
+This topic describes audit requirements for the User Account and Authentication Service (UAA).
 
 UAA does the following:
 
@@ -21,7 +19,7 @@ Each audit event contains the following:
   * Client ID - if available
   * Data identifying the event
 
-## <a id="auth-passwd-events"></a>Authentication and Password Events
+## <a id="auth-passwd-events"></a>Authentication and password events
 
 UAA includes the following authentication and password events:
 
@@ -68,7 +66,7 @@ UAA includes the following authentication and password events:
     - **Data Recorded:**
 
 * `PasswordResetRequest`
-    - **Trigger:** When a user requests to reset his/her password
+    - **Trigger:** When a user requests to reset their password
     - **Data Recorded:** Email used
 
 * `IdentityProviderAuthenticationSuccess`
@@ -88,7 +86,7 @@ UAA includes the following authentication and password events:
     - **Trigger:** When a user enters an incorrect code for MFA
     - **Data Recorded:** User ID, Username and MFA type (e.g. google-authenticator)
 
-## <a id="scim-admin-events"></a>Scim Administration Events
+## <a id="scim-admin-events"></a>Scim administration events
 
 UAA includes the following Scim administration events:
 
@@ -132,7 +130,7 @@ UAA includes the following Scim administration events:
     - **Trigger:** When a group is deleted
     - **Data Recorded:** Group ID, Group Name, Members
 
-## <a id="token-events"></a>Token Events
+## <a id="token-events"></a>Token events
 
 UAA includes the following token event:
 
@@ -141,7 +139,7 @@ UAA includes the following token event:
     - **Data Recorded:** Principal ID (client or user ID), scopes
 
 
-## <a id="client-admin-events"></a>Client Administration Events
+## <a id="client-admin-events"></a>Client administration events
 
 UAA includes the following client administration events:
 
@@ -170,7 +168,7 @@ UAA includes the following client administration events:
     - **Data Recorded:** Client ID
 
 
-## <a id="uaa-admin-events"></a>UAA Administration Events
+## <a id="uaa-admin-events"></a>UAA administration events
 
 UAA includes the following UAA administration events:
 

@@ -1,5 +1,5 @@
 ---
-title: Configuring Trusted System Certificates for Applications
+title: Configuring trusted system certificates for applications
 ---
 
 The following mechanisms exist to provide trusted certificates to applications running on Cloud Foundry:
@@ -8,7 +8,7 @@ The following mechanisms exist to provide trusted certificates to applications r
 directly into the system trust store at `/etc/ssl/certs`. In the deployment manifest, set
 the `cflinuxfs3-rootfs.trusted_certs` property of the stack release's
 `cflinuxfs3-rootfs-setup` job to the concatenated values of the PEM-encoded CA
-certificates. 
+certificates.
 <br><br>
 For example:
   <pre>
@@ -23,9 +23,9 @@ For example:
           -----END CERTIFICATE-----
   </pre>
 
-- You can also present trusted certificates to all application instances, including those based on Docker images and those on Windows. 
+- You can also present trusted certificates to all application instances, including those based on Docker images and those on Windows.
 <br><br>
-To do so, provide the concatenated PEM-encoded CA certificates in the `containers.trusted_ca_certificates` BOSH properties on `rep` and `rep_windows` jobs for the Diego release. This property accepts a list of string values, and each string may contain one or more PEM-encoded X.509 certificates. 
+To do so, provide the concatenated PEM-encoded CA certificates in the `containers.trusted_ca_certificates` BOSH properties on `rep` and `rep_windows` jobs for the Diego release. This property accepts a list of string values, and each string may contain one or more PEM-encoded X.509 certificates.
 <br><br>
 The individual certificates in this property appear as separate files in the `/etc/cf-system-certificates` directory in Linux containers, and in the `%USERPROFILE%/etc/cf-system-certificates` directory in Windows 2012 containers.
 <br><br>

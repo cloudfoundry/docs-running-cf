@@ -1,36 +1,39 @@
 ---
-title: Configuring SSH Access for Cloud Foundry
+title: Configuring SSH access for Cloud Foundry
 owner: Diego
 ---
 
 
 This topic describes how to configure your Cloud Foundry deployment to allow SSH access to application instances, and includes details about load balancing SSH sessions.
 
-## <a id='architecture-configuration'></a> Cloud Foundry Configuration
+## <a id='architecture-configuration'></a> Cloud Foundry configuration
 
 To enable SSH access to apps running on Diego, you must configure the properties in your deployment manifests by following the steps below.
 
 To configure manifest properties, you can edit them directly or put them in stub files with [merge tags](https://github.com/cloudfoundry-incubator/spiff#-merge-) that you pass to `generate_deployment_manifest` or another spiff-based manifest-generation script.
 
-### <a id='requirements'></a> Generate a Key Pair
+### <a id='requirements'></a> Generate a key pair
 
 Enabling SSH access requires generating a RSA key pair for your SSH proxy. Generate a unique key pair for each deployment.
 
 In recent versions of <code>cf-deployment</code>, this key pair is automatically generated and stored in <code>credhub</code>.
 
 1. Generate your key pair, entering an empty string for the passphrase when prompted.
-<pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
-$ ssh-keygen -lf ssh-proxy-host-key.pem.pub | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
-</pre>
-<p class="note"><strong>Note</strong>: ssh-keygen print the SHA256 fingerprint hashes of the keys. 
-To obtain MD5 hashes of the server key fingerprints, use the <code>-E</code> option to specify the hash algorithm.</p>
-<pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
-$ ssh-keygen -E md5 -lf ssh-proxy-host-key.pem.pub | sed 's/MD5://' | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
-</pre>
+
+  <pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
+  $ ssh-keygen -lf ssh-proxy-host-key.pem.pub | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
+  </pre>
+
+  <p class="note"><span class="note__title">
+  Note</span>ssh-keygen print the SHA256 fingerprint hashes of the keys. To obtain MD5 hashes of the server key fingerprints, use the <code>-E</code> option to specify the hash algorithm.</p>
+
+  <pre class="terminal">$ ssh-keygen -f ssh-proxy-host-key.pem
+  $ ssh-keygen -E md5 -lf ssh-proxy-host-key.pem.pub | sed 's/MD5://' | cut -d ' ' -f2 > ssh-proxy-host-key-fingerprint
+  </pre>
 
 1. Locate your PEM-encoded private key in `ssh-proxy-host-key.pem` and your public key fingerprint in `ssh-proxy-host-key-fingerprint`. You will need to copy the contents of these files into your Cloud Foundry and Diego manifests.
 
-### <a id='cf-manifest'></a> Configure Your Cloud Foundry Manifest
+### <a id='cf-manifest'></a> Configure your Cloud Foundry manifest
 
 Your manifest for Cloud Foundry should include the following properties:
 
@@ -58,7 +61,7 @@ Your manifest for Cloud Foundry should include the following properties:
 
 1. For `SSH-PROXY-SECRET`, provide a client secret that Diego will use to register the `ssh-proxy` client with your User Account and Authentication (UAA) server.
 
-### <a id='diego-manifest'></a> Configure Your Diego Manifest
+### <a id='diego-manifest'></a> Configure your Diego manifest
 
 Your manifest for Diego should include the following properties:
 
@@ -78,13 +81,13 @@ Your manifest for Diego should include the following properties:
 1. Specify CF Authentication only by setting `enable_cf_auth` to `true` and `enable_diego_auth` to `false`, as in the example above.
 1. For `SSH-PROXY-SECRET`, enter the same secret you provided in the `ssh-proxy.secret` field in your Cloud Foundry manifest.
 
-## <a id="ssh-load-balancer-configuration"></a> SSH Load Balancer Configuration
+## <a id="ssh-load-balancer-configuration"></a> SSH load balancer configuration
 
 ### <a id="ha-proxy"></a>Using HAProxy
 
 If you are using the HAProxy job as the Gorouter load balancer and you set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `true`, HAProxy serves as the load balancer for Diego's SSH proxies. Use this configuration for deployments where all traffic on the system domain and its subdomains is directed towards the HAProxy job, as is the case for a BOSH-Lite Cloud Foundry deployment on the default `bosh-lite.com` domain.
 
-### <a id="aws"></a>Using Elastic Load Balancers on Amazon Web Services
+### <a id="aws"></a>Using Elastic load balancers on AWS
 
 For Amazon Web Services (AWS) deployments, where the infrastructure offers load-balancing as a service through Elastic Load Balancers (ELBs), the deployment operator can provision an ELB to load balance across the Diego SSH proxy instances. This ELB should be configured to listen to TCP traffic on the port given by the `app_ssh.port` property in the Cloud Foundry manifest and to send it to port `2222`.
 
@@ -111,9 +114,9 @@ In the Diego manifest, register the SSH proxies with your ELBs by editing the `c
     network: diego3
   </code></pre>
 
-## <a id="disable-ssh"></a> Disable SSH
+## <a id="disable-ssh"></a> Deactivate SSH
 
-If you want to disable SSH access for a deployment:
+If you want to deactivate SSH access for a deployment:
 
 1. Set the `cc.allow_app_ssh_access` property in your Cloud Foundry manifest to `false`.
 
@@ -145,7 +148,7 @@ Context: admin, from client admin</pre>
 
 ## <a id="troubleshooting"></a>Troubleshooting
 
-If you receive an error message attempting to SSH into an app container, refer to the following list to help troubleshoot the issue.
+If you receive an error message attempting to SSH into an app container, see the following list to help troubleshoot the issue.
 
 <table border="1" class="nice">
   <tr>

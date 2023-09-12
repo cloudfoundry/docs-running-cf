@@ -1,5 +1,5 @@
 ---
-title: Distributed Tracing
+title: Distributed tracing
 owner: Diego
 ---
 
@@ -8,18 +8,16 @@ to be monitored and analyzed across multiple Cloud Foundry components. For each
 transaction initiated in the GoRouter, a new trace context is generated and
 then propagated to all participating systems.
 
-Each participating system adds this unique identifier to logs, allowing
-you to trace logs and debug errors specific to that transaction. Distributed tracing is particularly beneficial when used in conjunction with log
-aggregation tools. For example, Splunk.
+Each participating system adds a unique identifier to logs, allowing
+you to trace logs and debug errors specific to that transaction. Distributed tracing is particularly beneficial when used with log
+aggregation tools like Splunk.
 
 ## <a id='unique-trace-id'></a> Unique trace identification
 
 For every request in Cloud Foundry, GoRouter generates a unique
-`X-Vcap-Request-Id` header. `X-Vcap-Request-Id` is a v4 UUID according to [RFC
-4122](http://www.ietf.org/rfc/rfc4122.txt).
+`X-Vcap-Request-Id` header. `X-Vcap-Request-Id` is a v4 UUID according to [RFC 4122](http://www.ietf.org/rfc/rfc4122.txt).
 
-If Zipkin is enabled, see [Enabling Zipkin tracing in Cloud
-Foundry](/adminguide/zipkin_tracing.html).
+If Zipkin is enabled, see [Enabling Zipkin tracing in Cloud Foundry](/adminguide/zipkin_tracing.html).
 
 GoRouter generates B3 headers
 for each request unless they were provided by the client:
@@ -35,8 +33,7 @@ format: `{TraceId}-{SpanId}`
 
 If W3C is enabled through the `router.tracing.enable_w3c` deployment manifest property,
 GoRouter generates W3C headers for each request unless they were provided
-by the client. W3C headers are generated according to the [W3C headers
-format](https://www.w3.org/TR/trace-context/):
+by the client. W3C headers are generated according to the [W3C headers format](https://www.w3.org/TR/trace-context/):
 
 * `traceparent` - consists of 4 fields in the format:
 `{version-format}-{trace-id}-{parent-id}-{trace-flags}`
@@ -51,33 +48,21 @@ provided, GoRouter generates v4 UUID and use it for B3 headers,
 
 ## <a id='distributed-tracing-example'></a> Using trace identification to analyze a specific Cloud Foundry request
 
-In the following example, a request is made to Cloud Foundry to scale an
-application. This request is handled by several Cloud Foundry components:
+In the following example, a request is made to Cloud Foundry to scale an application. This request is handled by several Cloud Foundry components:
 
-1. The request is initially received by GoRouter. GoRouter generates unique
-trace headers for this request. It then forwards this request with the trace
-headers to the Cloud Controller.
-1. Cloud Controller updates the LRP (Long Running Process) for the application,
-reflecting the new number of instances. It subsequently sends the LRP request
-with the appended trace headers to BBS.
-1. BBS generates a new request with the trace headers to Auctioneer to schedule
-a new application instance.
-1. Auctioneer selects a Diego cell that has enough resources to run the
-application instance. It then sends a request with the trace headers to Rep on
-that Diego Cell, instructing it to run this new application instance.
-1. Finally, Rep generates a request to Garden. This request with the same trace
-information, instructs Garden to create a container where application processes run.
+1. The request is initially received by GoRouter. GoRouter generates unique trace headers for this request. It then forwards this request with the trace headers to the Cloud Controller.
+1. Cloud Controller updates the LRP (Long Running Process) for the application, reflecting the new number of instances. It subsequently sends the LRP request with the appended trace headers to BBS.
+1. BBS generates a new request with the trace headers to Auctioneer to schedule a new application instance.
+1. Auctioneer selects a Diego Cell that has enough resources to run the application instance. It then sends a request with the trace headers to Rep on that Diego Cell, instructing it to run this new application instance.
+1. Finally, Rep generates a request to Garden. This request with the same trace information, instructs Garden to create a container where application processes run.
 
 ![alt-text=""](./images/distributed-tracing-flow.jpg)
 
 Each component in this transaction:
 
-* Retains the original request's `trace-id` and forwards it in all downstream
-requests.
-* Generates a unique span-id for each request, which remains exclusive to
-that particular component.
-* Both the `trace-id` and `span-id` are recorded in logs related to that
-request handling.
+* Retains the original request's `trace-id` and forwards it in all downstream requests.
+* Generates a unique span-id for each request, which remains exclusive to that particular component.
+* Both the `trace-id` and `span-id` are recorded in logs related to that request handling.
 
 This transaction is characterized by a single trace-id that identifies it
 across all hops, while each individual hop is marked by its own unique span-id.
@@ -112,8 +97,7 @@ X-B3-Traceid: 0c2cc9583f004a4167bde5d7dcd81f84
 ...
 ```
 
-It is also possible to tell the GoRouter to use user-provided B3 headers. For example:
-
+You can tell the GoRouter to use user-provided B3 headers. For example:
 
 ```bash
 cf curl -H "X-B3-Traceid: 8c436ec437e545227fe76a3eba99ca21" -H "X-B3-Spanid: 7fe76a3eba99ca21" -d '{"instances" : 3}' /v3/apps/8e0f1501-ba1f-4efe-af90-b61f2e5a1384/processes/web/actions/scale
@@ -121,9 +105,6 @@ cf curl -H "X-B3-Traceid: 8c436ec437e545227fe76a3eba99ca21" -H "X-B3-Spanid: 7fe
 
 You must set both X-B3-Traceid and X-B3-Spanid.
 
-The `X-B3-Traceid` can be used to filter logs in aggregation tools to see
-how this request was handled by the GoRouter, Cloud Controller, BBS, Rep,
-Auctioneer and how a container for a new application instance was
-created in Garden.
+The `X-B3-Traceid` can be used to filter logs in aggregation tools to see how this request was handled by the GoRouter, Cloud Controller, BBS, Rep, Auctioneer and how a container for a new application instance was created in Garden.
 
 ![alt-text=""](./images/distributed-tracing-logs.png)

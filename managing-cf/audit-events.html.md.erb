@@ -10,10 +10,10 @@ Audit events help Cloud Foundry operators monitor actions taken against resource
 
 ### <a id='differences'></a> Differences from Other Types of Events
 
-Despite being similar in name, audit events are different from [Cloud Foundry Usage Events](./usage-events.html).
+Despite being similar in name, audit events are different from [Cloud Foundry usage events](./usage-events.html).
 Unlike usage events, audit events are not suitable for app and service billing.
 
-Another tool to help administrators monitor user actions on Cloud Foundry is [Security Event Logging](../../loggregator/cc-uaa-logging.html).
+Another tool to help administrators monitor user actions on Cloud Foundry is [Security event logging](../../loggregator/cc-uaa-logging.html).
 Unlike Security Event Logs, audit events do not cover all API endpoints, but provide more details about a user's actions.
 
 ### <a id='view-events'></a> View Events
@@ -93,21 +93,23 @@ $ cf curl /v3/audit_events
 
 For documentation about using this endpoint, see the [API documentation](https://v3-apidocs.cloudfoundry.org/index.html#list-audit-events).
 
-<p class="note"><strong>Note:</strong> <code>get-events</code> is a community-contributed
-cf CLI plugin. The plugin provides convenient flags to list events that took place today,
+<p class="note">
+<span class="note__title">Note</span>
+<code>get-events</code> is a community-contributed
+cf CLI plug-in. The plug-in provides convenient flags to list events that took place today,
 from yesterday, or from a particular date. <code>get-events</code> also provides useful output
 formatting options. For more information, see
 <a href="https://plugins.cloudfoundry.org/#get-events">get-events</a> in cf CLI Plugins.</p>
 
-## <a id='using-audit-events'></a> Using Audit Events
+## <a id='using-audit-events'></a> Using audit events
 
 The following describes some of the intended use cases of audit events.
 
-### <a id='resource-history'></a> Resource History
+### <a id='resource-history'></a> Resource history
 
 Audit events allow users, administrators, and operators a view a resource's history. For example, by looking at usage events for an app, an operator can see information such as when it was last updated or if it has crashed recently.
 
-### <a id='querying'></a> Querying For Events
+### <a id='querying'></a> Querying for events
 
 You can query the events endpoint with various filters. For example, you can query for all events of a given type, or all events associated with a resource since a given timestamp.
 
@@ -118,14 +120,14 @@ The following example shows a query with multiple filters. The request gets `aud
 <pre class="terminal">$ cf curl '/v3/audit_events?types=audit.app.unmap-route&created_ats[gt]=2021-11-10T01:08:24Z&created_ats[lt]=2021-11-15T01:08:24Z&order_by=created_at'</pre>
 
 
-### <a id='ext-auditing'></a> External Auditing Warehouse
+### <a id='ext-auditing'></a> External auditing warehouse
 
 For auditing and compliance reasons, some operators may wish to keep a record of all audit events that have occurred. Because audit events expire and may be purged during a deploy, these operators must maintain an external data warehouse. This way they can store and access events across expiration events and conform to their own compliance requirements.
 
 
-## <a id='types'></a> Types of Audit Events
+## <a id='types'></a> Types of audit events
 
-### <a id='app-lifecycle'></a> App Lifecycle (audit.app.*)
+### <a id='app-lifecycle'></a> App lifecycle (audit.app.*)
 
 - audit.app.apply\_manifest
 - audit.app.build.create
@@ -168,25 +170,25 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.app.upload-bits
 
 
-### <a id='org-lifecycle'></a> Organization Lifecycle (audit.organization.*)
+### <a id='org-lifecycle'></a> Organization lifecycle (audit.organization.*)
 
 - audit.organization.create
 - audit.organization.delete-request
 - audit.organization.update
 
-### <a id='route-lifecycle'></a> Route Lifecycle (audit.route.*)
+### <a id='route-lifecycle'></a> Route lifecycle (audit.route.*)
 
 - audit.route.create
 - audit.route.delete-request
 - audit.route.update
 
-### <a id='service-lifecycle'></a> Service Lifecycle (audit.service.*)
+### <a id='service-lifecycle'></a> Service lifecycle (audit.service.*)
 
 - audit.service.create
 - audit.service.delete
 - audit.service.update
 
-### <a id='service-bind-lifecycle'></a> Service Binding Lifecycle (audit.service_binding.*)
+### <a id='service-bind-lifecycle'></a> Service binding lifecycle (audit.service_binding.*)
 
 - audit.service\_binding.create
 - audit.service\_binding.delete
@@ -195,18 +197,18 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.service\_binding.update
 
 
-### <a id='service-broker-lifecycle'></a> Service Broker Lifecycle (audit.service\_broker.*)
+### <a id='service-broker-lifecycle'></a> Service broker lifecycle (audit.service\_broker.*)
 
 - audit.service\_broker.create
 - audit.service\_broker.delete
 - audit.service\_broker.update
 
-### <a id='service-dashboard-lifecycle'></a> Service Dashboard Client Lifecycle (audit.service\_dashboard\_client.*)
+### <a id='service-dashboard-lifecycle'></a> Service dashboard client lifecycle (audit.service\_dashboard\_client.*)
 
 - audit.service\_dashboard\_client.create
 - audit.service\_dashboard\_client.delete
 
-### <a id='service-instance-lifecycle'></a> Service Instance Lifecycle (audit.service\_instance.*)
+### <a id='service-instance-lifecycle'></a> Service instance lifecycle (audit.service\_instance.*)
 
 - audit.service\_instance.bind\_route
 - audit.service\_instance.create
@@ -216,7 +218,7 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.service\_instance.unshare
 - audit.service\_instance.update
 
-### <a id='service-route-lifecycle'></a> Service Route Lifecycle (audit.service\_route\_binding.*)
+### <a id='service-route-lifecycle'></a> Service route lifecycle (audit.service\_route\_binding.*)
 
 - audit.service\_route\_binding.create
 - audit.service\_route\_binding.delete
@@ -224,7 +226,7 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.service\_route\_binding.start\_delete
 - audit.service\_route\_binding.update
 
-### <a id='service-key-lifecycle'></a> Service Key Lifecycle (audit.service\_key.*)
+### <a id='service-key-lifecycle'></a> Service key lifecycle (audit.service\_key.*)
 
 - audit.service\_key.create
 - audit.service\_key.delete
@@ -232,20 +234,20 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.service\_key.start\_delete
 - audit.service\_key.update
 
-### <a id='service-plan-vis-lifecycle'></a> Service Plan Visibility Lifecycle (audit.service\_plan\_visibility.*)
+### <a id='service-plan-vis-lifecycle'></a> Service plan visibility lifecycle (audit.service\_plan\_visibility.*)
 
 - audit.service\_plan.delete
 - audit.service\_plan\_visibility.create
 - audit.service\_plan\_visibility.delete
 - audit.service\_plan\_visibility.update
 
-### <a id='space-lifecycle'></a> Space Lifecycle (audit.space.*)
+### <a id='space-lifecycle'></a> Space lifecycle (audit.space.*)
 
 - audit.space.create
 - audit.space.delete-request
 - audit.space.update
 
-### <a id='user-lifecycle'></a> User Lifecycle (audit.user.*)
+### <a id='user-lifecycle'></a> User lifecycle (audit.user.*)
 
 - audit.user.organization\_auditor\_add
 - audit.user.organization\_auditor\_remove
@@ -262,26 +264,26 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.user.space\_manager\_add
 - audit.user.space\_manager\_remove
 
-### <a id='user-provided-lifecycle'></a> User-Provided Service Instance Lifecycle (audit.user\_provided\_service\_instance.*)
+### <a id='user-provided-lifecycle'></a> User-provided service instance lifecycle (audit.user\_provided\_service\_instance.*)
 
 - audit.user\_provided\_service\_instance.create
 - audit.user\_provided\_service\_instance.delete
 - audit.user\_provided\_service\_instance.update
 
-### <a id=special-events'></a> Special Events
+### <a id=special-events'></a> Special events
 
 - audit.app.crash
 - blob.remove\_orphan
 
 
-## <a id='when-are-events-created'></a> When Are Events Created?
+## <a id='when-are-events-created'></a> When are events created?
 
 Most events are created when a user acts upon a resource.
 For example, a user issuing a `cf stop APP_NAME` command causes an `audit.app.stop` event to be created and associated with that user.
 
 * **Service events** (`audit.service*`) are created after the service broker has approved an interaction.
 
-* **Crash and rescheduling events** (`audit.app.crash`, `audit.app.process.crash|rescheduling`) are created when Diego marks an app instance as crashed or evacuates app instances from cells on Diego cell VM restarts.
+* **Crash and rescheduling events** (`audit.app.crash`, `audit.app.process.crash|rescheduling`) are created when Diego marks an app instance as crashed or evacuates app instances from cells on Diego Cell VM restarts.
 
 * **Blob events** (`blob.remove_orphan`) are created by a daily clean up job and do not represent user action.
 

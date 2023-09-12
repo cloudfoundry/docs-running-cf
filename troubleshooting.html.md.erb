@@ -6,12 +6,13 @@ owner:
 ---
 
 
-_This topic assumes you are using [BOSH CLI v2](https://bosh.io/docs/cli-v2.html)._
-
 This guide provides help with diagnosing and resolving issues encountered when
 installing and running Cloud Foundry.
 
-##<a id="issues-installing"></a>Troubleshoot Cloud Foundry Installation Issues ##
+This topic assumes you are using [BOSH CLI v2](https://bosh.io/docs/cli-v2.html).
+
+
+##<a id="issues-installing"></a>Troubleshoot Cloud Foundry installation issues
 
 An installation or update can fail for reasons that have nothing to do with the
 software that you are installing.
@@ -19,7 +20,7 @@ If an installation or update fails once, start over and try again.
 If it fails a second time, use the following information to troubleshoot the
 issue.
 
-###<a id="bound-timeout"></a>Timeouts in "creating bound missing vms" Phase ###
+###<a id="bound-timeout"></a>Timeouts in "creating bound missing vms" phase
 
 When deploying Cloud Foundry with BOSH, the "creating bound missing vms" phase
 occurs after package compilation.
@@ -39,17 +40,17 @@ Error 450002: Timed out pinging to 1da06ba3de2f after 600 seconds
 Perform the following steps to determine the cause of the time out:
 
 * [Use your IaaS console](#boot-check) to make sure the timed-out virtual machine (VM) is booting correctly
-* [Check the Agent log](#handshake) on the VM that timed out for a "handshake" connection
+* [Check the agent log](#handshake) on the VM that timed out for a handshake connection
 between the BOSH Director and the Agent
 * [Use the Netcat networking utility](#netcat) to test for routing
 issues to the NATS IP and port from the VM that timed out
 
-####<a id="boot-check"></a>Use your IaaS console to make sure the timed-out VM is booting correctly ####
+####<a id="boot-check"></a>Use your IaaS console to make sure the timed-out VM is booting correctly
 
 For details on how to use your IaaS console to make sure the timed out VM is
 booting correctly, see your IaaS documentation.
 
-####<a id="handshake"></a>Check the Agent log on the VM that timed out for a "handshake" connection between the BOSH Director and the Agent ####
+####<a id="handshake"></a>Check the agent log on the VM that timed out for a handshake connection between the BOSH Director and the agent
 
 1. Use your IaaS virtualization console to open a terminal window on the VM that
 timed out and log in as root.
@@ -69,7 +70,7 @@ This connection is represented in the log as a `ping` and a `pong`:
 1. If the handshake does not complete, the Agent cannot communicate with the
 Director.
 
-####<a id="netcat"></a>Use Netcat to test for routing issues to the NATS IP ####
+####<a id="netcat"></a>Use Netcat to test for routing issues to the NATS IP
 
 1. Use your IaaS virtualization console to open a terminal window on the VM that
 timed out and log in as root.
@@ -98,7 +99,7 @@ message bus and this VM.
     Connection to 192.0.2.17 4222 port [tcp/*] succeeded!
     </pre>
 
-###<a id="out-of-space"></a>Out of Disk Space Error ###
+###<a id="out-of-space"></a>Out of Disk Space error
 
 If, during installation, log files fill all available disk space on a computer,
 the operating system reports an "Out of Disk Space" error.
@@ -106,7 +107,7 @@ the operating system reports an "Out of Disk Space" error.
 To resolve this issue, delete these log files from the `tmp` directory of the
 affected computer manually or by rebooting.
 
-##<a id="issues-running"></a>Troubleshoot Cloud Foundry Operation Issues ##
+##<a id="issues-running"></a>Troubleshoot Cloud Foundry operation issues
 
 If you have not done so already, set an alias for the BOSH Director of the environment you are
 troubleshooting. You need this alias to run the BOSH CLI commands in this section.
@@ -126,7 +127,7 @@ For example:
 $ bosh alias-env dev -e 10.0.0.3 --ca-cert /var/workspaces/default/ca_certificate
 </pre>
 
-###<a id="bosh-cli"></a>Use the BOSH CLI for Troubleshooting ###
+###<a id="bosh-cli"></a>Use the BOSH CLI for troubleshooting
 
 1. Run `bosh -e MY-ENV login` and provide your credentials to log in to the BOSH Director.
 Replace `MY-ENV` with the alias you set for your BOSH Director.
@@ -143,7 +144,7 @@ Replace `MY-ENV` with the alias you set for your BOSH Director.
   * [Cloud check](#cloudcheck): Cloud consistency check and interactive repair
   * [SSH](#ssh): Start an interactive session or execute commands with a VM
 
-####<a id="vms"></a>BOSH VMs ####
+####<a id="vms"></a>BOSH VMs
 
 `bosh vms` provides an overview of the virtual machines (VMs) BOSH is managing as part of the current deployment.
 
@@ -168,7 +169,7 @@ swap usage, system disk usage, ephemeral disk usage, and persistent disk usage
 for each VM
 * `--dns`: Overview also includes the DNS A record for each VM
 
-####<a id="cloudcheck"></a>BOSH Cloud Check ####
+####<a id="cloudcheck"></a>BOSH cloud check
 
 `bosh cloud-check` attempts to detect differences between the VM state database
 that the BOSH Director maintains and the actual state of the VMs.
@@ -202,7 +203,7 @@ running on the VM.
 Select this option only if you know this reference is in error.
 Once you delete the VM reference, BOSH can no longer control the VM.
 
-#####Example Scenarios #####
+##### Example scenarios
 
 <strong>Unresponsive Agent</strong>
 <pre class="terminal">
@@ -240,7 +241,7 @@ VM `vm-3e37133c-bc33-450e-98b1-f86d5b63502a' is out of sync: expected `cf-d72934
 - Delete VM (unless it has persistent disk)
 </pre>
 
-####<a id="ssh"></a>BOSH SSH ####
+####<a id="ssh"></a>BOSH SSH
 
 Use `bosh ssh` to open secure shells into the VMs in your deployment.
 
@@ -252,7 +253,7 @@ To use `bosh ssh`:
 1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT ssh VM-NAME/GUID`. For example:
   <pre class="terminal">$ bosh -e dev -d cf-deployment ssh diego-cell/abcd0123-a012-b345-c678-9def01234567</pre>
 
-###<a id="viewing-logs"></a>View BOSH Logs ###
+###<a id="viewing-logs"></a>View BOSH logs
 
 You can access BOSH logs by two methods:
 
@@ -260,7 +261,7 @@ You can access BOSH logs by two methods:
 * Using the `bosh logs` command to output the logs to standard output or to a
 file
 
-####<a id="view-ssh"></a>Using the BOSH SSH Command ####
+####<a id="view-ssh"></a>Using the BOSH SSH command
 
 Use `bosh ssh` to open secure shells into the VMs in your deployment, then
 access the logs on the VM.
@@ -274,7 +275,7 @@ To use `bosh ssh`:
   <pre class="terminal">$ bosh -e dev -d cf-deployment ssh diego-cell/abcd0123-a012-b345-c678-9def01234567</pre>
 1. Review the `/var/vcap/bosh/log/current` log file.
 
-####<a id="view-logs"></a>Using the BOSH Logs Command ####
+####<a id="view-logs"></a>Using the BOSH logs command
 
 Use `bosh logs` to output BOSH logs to standard output or to a file.
 
@@ -284,7 +285,7 @@ To use `bosh logs`:
 1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT logs VM-NAME/GUID` to view the logs from the identified VM. For example:
   <pre class="terminal">$ bosh -e dev -d cf-deployment logs diego-cell/abcd0123-a012-b345-c678-9def01234567</pre>
 
-###<a id="non-responsive"></a>Log in to a Non-Responsive BOSH VM ###
+###<a id="non-responsive"></a>Log in to a non-responsive BOSH VM
 
 A VM under heavy system load can stop responding to some commands but still
 function in a limited way.
@@ -297,7 +298,7 @@ secure shell in a more direct manner:
 non-responsive VM.
     <pre class="terminal">$ ssh -t vcap<span>@</span>192.0.2.53 'sh'</pre>
 
-###<a id="terminate"></a>Terminate a BOSH SSH Session ###
+###<a id="terminate"></a>Terminate a BOSH SSH session
 
 Use `~.`, entered at the beginning of a new line, to terminate a `bosh ssh` or
 `ssh` session.
@@ -307,7 +308,7 @@ use `~~.`, entered at the beginning of a new line.
 The outermost secure shell session consumes the second `~` and passes the
 remaining `~.` command to the inner `ssh` session.
 
-###<a id="failing-job"></a>Debug a Failing Job ###
+###<a id="failing-job"></a>Debug a failing job
 
 1. Run `bosh -e MY-ENV -d MY-DEPLOYMENT vms` to determine which job VMs in your deployment are failing.
 Note the job name and index of the failing VM.
@@ -339,9 +340,9 @@ else
 fi
 </pre>
 
-###<a id="debugging-cc-diagnostics"></a>View Cloud Controller Diagnostics ###
+###<a id="debugging-cc-diagnostics"></a>View Cloud Controller diagnostics
 
-If your BOSH deployment experiences a resource spike, an infinite loop, or another undesirable performance issue, you can refer to the Cloud Controller (CC) diagnostics JSON file for debugging.
+If your BOSH deployment experiences a resource spike, an infinite loop, or another undesirable performance issue, see the Cloud Controller (CC) diagnostics JSON file for debugging.
 The file contains data that are unavailable in the output from [Cloud Foundry logging](./managing-cf/logging.html), including stack traces for running threads.
 
 Follow the instructions below to SSH into the Cloud Controller VM and populate the diagnostics file with updated information.
@@ -350,6 +351,7 @@ Follow the instructions below to SSH into the Cloud Controller VM and populate t
 <pre class="terminal">
 $ ssh-keygen -t rsa
 </pre>
+
 1. Accept the defaults.
 1. Begin an SSH session to the deployment.
 <pre class="terminal">$ bosh -e prod -d cf-deployment ssh diego-cell/abcd0123-a012-b345-c678-9def01234567</pre>
@@ -361,13 +363,13 @@ $ ssh-keygen -t rsa
 $ kill -USR1 CLOUD-CONTROLLER-PID
 </pre>
 1. Navigate to the JSON file in the diagnostics directory to see the record of the `USR1` signal passed to your CC VM.
-Refer to the value of the `cc.directories.diagnostics` property in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` for the location of the diagnostics directory.
+The value of the `cc.directories.diagnostics` property in `/var/vcap/jobs/cloud_controller_ng/config/cloud_controller_ng.yml` contains the location of the diagnostics directory.
 The default location of the diagnostics directory is `/var/vcap/data/cloud_controller_ng/diagnostics`.
 
-###<a id="debugging-cloudcontroller"></a>Use the Interactive Cloud Controller Shell ###
+###<a id="debugging-cloudcontroller"></a>Use the interactive Cloud Controller shell
 
 The Cloud Controller jobs embeds a [pry shell](http://pryrepl.org/). This may allow users to interact with
-cc\_ng classes, such as scripting some operations, or to access the cc\_db using model classes. For examples, the [CF CAPI Tracker](https://www.pivotaltracker.com/story/show/81076206)
+cc\_ng classes, such as scripting some operations, or to access the cc\_db using model classes.
 
 <pre class="terminal">
 $ cd /var/vcap/jobs/cloud_controller_ng
@@ -375,7 +377,7 @@ $ bin/console
 [...]
 </pre>
 
-###<a id="debugging-full-dbs"></a>Troubleshoot Cloud Foundry Databases ###
+###<a id="debugging-full-dbs"></a>Troubleshoot Cloud Foundry databases
 
 The `postgres` BOSH job hosts the different databases used by Cloud Foundry, such as `diego`, `ccng`, and `uaadb`. If the `postgres` job reaches 100% persistent disk usage, it can impact performance. Perform the following steps to diagnose your `postgres` job:
 
@@ -399,7 +401,7 @@ The `postgres` BOSH job hosts the different databases used by Cloud Foundry, suc
 
 1. Using the output from the above query, identify the largest table.
 
-###<a id="force-recreate"></a>Force a VM Recreate ###
+###<a id="force-recreate"></a>Force a VM recreate
 
 If BOSH or an operator identifies a VM as corrupted, BOSH can recreate the VM.
 This recreation function can fail if a drain script on the VM is broken or times
