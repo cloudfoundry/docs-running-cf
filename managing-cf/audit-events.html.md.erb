@@ -181,6 +181,9 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.route.create
 - audit.route.delete-request
 - audit.route.update
+- audit.route.share
+- audit.route.unshare
+- audit.route.transfer-owner
 
 ### <a id='service-lifecycle'></a> Service lifecycle (audit.service.*)
 
@@ -219,6 +222,10 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.service\_instance.unshare
 - audit.service\_instance.update
 - audit.service\_instance.show
+- audit.service\_instance.start\_create
+- audit.service\_instance.start\_update
+- audit.service\_instance.start\_delete
+- audit.service\_instance.purge
 
 ### <a id='service-route-lifecycle'></a> Service route lifecycle (audit.service\_route\_binding.*)
 
@@ -239,6 +246,8 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 
 ### <a id='service-plan-vis-lifecycle'></a> Service plan visibility lifecycle (audit.service\_plan\_visibility.*)
 
+- audit.service\_plan.create
+- audit.service\_plan.update
 - audit.service\_plan.delete
 - audit.service\_plan\_visibility.create
 - audit.service\_plan\_visibility.delete
@@ -262,6 +271,8 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.user.organization\_user\_remove
 - audit.user.space\_auditor\_add
 - audit.user.space\_auditor\_remove
+- audit.user.space\_supporter\_add
+- audit.user.space\_supporter\_remove
 - audit.user.space\_developer\_add
 - audit.user.space\_developer\_remove
 - audit.user.space\_manager\_add
