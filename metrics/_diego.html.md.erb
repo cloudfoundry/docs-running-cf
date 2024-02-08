@@ -7,6 +7,7 @@ Diego metrics have the following origin names:
 + [rep](#rep)
 + [route_emitter](#routeemitter)
 + [ssh_proxy](#sshproxy)<a id="auctioneer"></a>
++ [garden-linux](#garden-linux)<a id="garden-linux"></a>
 
 
 Default Origin Name: auctioneer
@@ -194,5 +195,11 @@ Default Origin Name: ssh_proxy
  memoryStats.numBytesAllocatedHeap                 | Instantaneous count of bytes allocated on the main heap and still in use.
  memoryStats.numBytesAllocatedStack                | Instantaneous count of bytes used by the stack allocator.
  numGoRoutines                                     | Instantaneous number of active goroutines in the process.
+
+Default Origin Name: garden-linux
+
+ Metric Name                                       | Description
+---------------------------------------------------|----------------------------------------------------------------------------------------------
+ UnkillableContainers                              | Total number of containers that could not be killed/cleaned up on a Diego Cell. If this is non-zero, that cell MUST be rebooted before the next BOSH deploy. Typically this is a result of apps losing connection to NFS when using volume services. Diego cell logs can be searched for `failed-deleting-container` to find App IDs responsible.
 
 [Top](#top)
