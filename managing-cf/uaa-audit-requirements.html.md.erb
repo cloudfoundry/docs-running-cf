@@ -70,21 +70,13 @@ UAA includes the following authentication and password events:
     - **Data Recorded:** Email used
 
 * `IdentityProviderAuthenticationSuccess`
-    - **Trigger:** When a user successfully authenticates for the password login
+    - **Trigger:** When a user successfully authenticates
     - **Data Recorded:** User ID and Username
 
 * `IdentityProviderAuthenticationFailure`
-    - **Trigger:** When a user authentication fails for the password login, and user exists
+    - **Trigger:** When a user authentication fails, and user exists
     - **Data Recorded:** User ID
     - **Notes:** Followed by a `UserAuthenticationFailureEvent` and `PrincipalAuthenticationFailure`
-
-* `MfaAuthenticationSuccess`
-    - **Trigger:** When a user successfully authenticates with MFA
-    - **Data Recorded:** User ID, Username and MFA type (e.g. google-authenticator)
-
-* `MfaAuthenticationFailure`
-    - **Trigger:** When a user enters an incorrect code for MFA
-    - **Data Recorded:** User ID, Username and MFA type (e.g. google-authenticator)
 
 ## <a id="scim-admin-events"></a>Scim administration events
 
