@@ -17,6 +17,9 @@ http\_status.5XX                                    | Number of HTTP response st
 job\_queue\_length.cc-\<VM\_NAME\>-\<VM\_INDEX\>    | Number of background jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue that have yet to run for the first time. Emitted every 30 seconds per VM.
 job\_queue\_length.cc-generic                       | Number of background jobs in the cc-generic queue that have yet to run for the first time. Emitted every 30 seconds per VM.
 job\_queue\_length.total                            | Total number of background jobs in the queues that have yet to run for the first time. Emitted every 30 seconds per VM.
+job\_queue\_load.cc-\<VM\_NAME\>-\<VM\_INDEX\>      | Number of background jobs in the \<VM\_NAME\>-\<VM\_INDEX\> queue that are ready to run now. Emitted every 30 seconds per VM.
+job\_queue\_load.cc-generic                         | Number of background jobs in the cc-generic queue that are ready to run now. Emitted every 30 seconds per VM.
+job\_queue\_load.total                              | Total number of background jobs in the queues that are ready to run now. Emitted every 30 seconds per VM.
 log\_count.all                                      | Total number of log messages, sum of messages of all severity levels. The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
 log\_count.debug                                    | Number of log messages of severity "debug." The count resets when the Cloud Controller process is restarted. Emitted every 30 seconds per VM.
 log\_count.debug1                                   | Not used.
