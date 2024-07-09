@@ -3,33 +3,36 @@ title: Scaling Cloud Controller
 owner: CAPI
 ---
 
-
 This topic describes how and when to scale BOSH jobs in CAPI, and includes details about some key metrics, heuristics, and logs. 
-
-<p class="note">
-<span class="note__title"><strong>Note</strong></span>
-Scaling recommendations are only meant for CAPI installations using Thin server and do not apply to Puma.</p>
 
 ## <a id='cloud_controller_ng'></a> cloud\_controller\_ng
 
 The `cloud_controller_ng` Ruby process is the primary job in CAPI. It, along with `nginx_cc`, powers the Cloud Controller API that all users of Cloud Foundry interact with. In addition to serving external clients, `cloud_controller_ng` also provides APIs for internal components within Cloud Foundry, such as Loggregator and Networking subsystems.
 
-<p class="note">
-<span class="note__title"><strong>Note</strong></span>
-Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds to the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
+The `cloud_controller_ng` web server can either be Thin (Default) or Puma (Experimental). The characteristics of these web servers differ significantly. The Thin web server runs on a single process per VM, therefore scaling should be done horizontally by adding more VMs. Puma allows for multiple processes to run per VM, therefore scaling can be both vertical or horizontal.
 
 ### When to Scale
 
-When determining whether to scale `cloud\_controller\_ng`, look for the following:
+When determining whether to scale `cloud_controller_ng`, look for the following:
 
 #### Key Metrics
 
 Cloud Controller emits the following metrics:
 
-* `cc.requests.outstanding.gauge` or `cc.requests.outstanding` (deprecated) is at or consistently near 20.
-* `system.cpu.user` is above 0.85 utilization of a single core on the API VM.
-* `cc.vitals.cpu_load_avg` is 1 or higher.
+* `cc.requests.outstanding.gauge` or `cc.requests.outstanding` (deprecated) 
+  * Thin: is at or consistently near 20.
+  * Puma: is at or consistently near the total number of available Puma threads on the VM. You can calculate this with `Puma Workers x Puma Max Threads`.
+* `system.cpu.user`
+  * Thin: is above 0.85 utilization of a single core on the API VM. This metric is scaled by number of cores. If the VM has more than 1 core, you can determine how much Thin is using of a single core by using the formula `system.cpu.user / (1 / Number of CPU Cores)`.
+  * Puma: is above 0.85 total utilization.
+* `cc.vitals.cpu_load_avg`
+  * Thin: is 1 or higher.
+  * Puma: is at the number of CPU cores or higher.
 * `cc.vitals.uptime` is consistently low, indicating frequent restarts (possibly due to memory pressure).
+
+<p class="note">
+<span class="note__title"><strong>Note</strong></span>
+The above guidelines for Puma assume that the number of Puma workers is configured to be the same as the number of CPU cores on the VM - see `Scaling Puma Web Server` below. If you have configured Puma workers to be different than the number of CPU cores, you should adjust threshold calculations accordingly.</p>
 
 #### Heuristic Failures
 
@@ -38,6 +41,10 @@ The following behaviors may occur:
 * There is a latency in average response.
 * Web UI responsiveness or timeouts are degraded.
 * `bosh is --ps --vitals` has elevated CPU usage for the API instance group's `cloud_controller_ng` job.
+
+<p class="note">
+<span class="note__title"><strong>Note</strong></span>
+Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds to the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> using Thin web server process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
 
 #### Relevant Log Files
 
@@ -52,12 +59,27 @@ Before and after scaling Cloud Controller API VMs, you should verify that the Cl
 
 In CF deployments with internal MySQL clusters, a single MySQL database VM with CPU usage over ~80% can be considered overloaded. When this happens, the MySQL VMs must be scaled up to prevent the added load of additional Cloud Controllers exacerbating the issue.
 
-Cloud Controller API VMs should primarily be scaled horizontally. Scaling up the number of cores on a single VM is not effective. This is because Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
-
 <p class="note">
 <span class="note__title"><strong>Note</strong></span>
 Since Cloud Controller supports both PostgreSQL and MySQL external databases, there is no absolute guidance about what a healthy database looks like. In general, high database CPU utilization is a good indicator of scaling issues, but always defer to the documentation specific to your database.</p>
 
+#### Scaling Thin Web Server
+
+When deployed with the Thin web server, Cloud Controller API VMs should primarily be scaled horizontally. Scaling up the number of cores on a single VM is not effective. This is because Thin operates in a single process and Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
+
+#### Scaling Puma Web Server
+
+When deployed with the Puma web server, Cloud Controller API VMs can be scaled both vertically and horizontally. Puma supports multiple processes per VM and so can scale with the number of CPU cores available.
+
+Puma web server exposes the following configuration options. For more information see [Cloud Controller Configuration](https://github.com/cloudfoundry/capi-release/blob/develop/jobs/cloud_controller_ng/spec):
+* `cc.puma.workers` - Number of workers for Puma webserver.
+* `cc.puma_max_threads` - Maximum number of threads per Puma webserver worker.
+* `cc.puma.max_db_connections_per_process` - Maximum database connections for Puma per process (main + Puma workers), if not set the ccng value is used (default).
+
+The following are loose recommendations for setting these parameters:
+* The number of workers should equal the number of CPU cores on the VM.
+* The max number of threads should be between 5 and 20.
+* The max number of DB Connections per process should be at least equal to the max number of threads. This ensures a thread always has a DB connection available. However, when choosing the max number of DB connections be aware that this is per Puma worker. You may estimate the total number of connections by `Number of VMs x Number of Workers x Max DB Connections Per Process`. For example, if you had 2 VMs with 4 workers and 10 max DB connections per process, you may have up to 80 DB connections. Be careful this does not exeed any Database limit.
 
 ## <a id='cloud_controller_worker_local'></a> cloud\_controller\_worker\_local
 
