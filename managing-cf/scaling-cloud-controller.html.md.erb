@@ -72,14 +72,18 @@ When deployed with the Thin web server, Cloud Controller API VMs should primaril
 When deployed with the Puma web server, Cloud Controller API VMs can be scaled both vertically and horizontally. Puma supports multiple processes per VM and so can scale with the number of CPU cores available.
 
 Puma web server exposes the following configuration options. For more information see [Cloud Controller Configuration](https://github.com/cloudfoundry/capi-release/blob/develop/jobs/cloud_controller_ng/spec):
+
 * `cc.puma.workers` - Number of workers for Puma webserver.
 * `cc.puma_max_threads` - Maximum number of threads per Puma webserver worker.
 * `cc.puma.max_db_connections_per_process` - Maximum database connections for Puma per process (main + Puma workers), if not set the ccng value is used (default).
 
 The following are loose recommendations for setting these parameters:
+
 * The number of workers should equal the number of CPU cores on the VM.
 * The max number of threads should be between 5 and 20.
 * The max number of DB Connections per process should be at least equal to the max number of threads. This ensures a thread always has a DB connection available. However, when choosing the max number of DB connections be aware that this is per Puma worker. You may estimate the total number of connections by `Number of VMs x Number of Workers x Max DB Connections Per Process`. For example, if you had 2 VMs with 4 workers and 10 max DB connections per process, you may have up to 80 DB connections. Be careful this does not exeed any Database limit.
+
+If when switching to Puma you reduce the number of overall Cloud Controller API VMs, you may need to increase the number of Cloud Controller Local workers per VM to handle the increased load on the remaining API VMs. For more information, see [cloud_controller_worker_local](#cloud_controller_worker_local).
 
 ## <a id='cloud_controller_worker_local'></a> cloud\_controller\_worker\_local
 
