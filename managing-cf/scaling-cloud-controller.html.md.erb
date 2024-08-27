@@ -32,7 +32,7 @@ Cloud Controller emits the following metrics:
 
 <p class="note">
 <span class="note__title"><strong>Note</strong></span>
-The above guidelines for Puma assume that the number of Puma workers is configured to be the same as the number of CPU cores on the VM - see `Scaling Puma Web Server` below. If you have configured Puma workers to be different than the number of CPU cores, you should adjust threshold calculations accordingly.</p>
+The above guidelines for Puma assume that the number of Puma workers is configured to be the same as the number of CPU cores on the VM - see <a href="#scale-puma">Scaling Puma Web Server</a> below. If you have configured Puma workers to be different than the number of CPU cores, you should adjust threshold calculations accordingly.</p>
 
 #### Heuristic Failures
 
@@ -67,7 +67,7 @@ Since Cloud Controller supports both PostgreSQL and MySQL external databases, th
 
 When deployed with the Thin web server, Cloud Controller API VMs should primarily be scaled horizontally. Scaling up the number of cores on a single VM is not effective. This is because Thin operates in a single process and Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
 
-#### Scaling Puma Web Server
+#### <a id='cloud_controller_ng'></a> Scaling Puma Web Server
 
 When deployed with the Puma web server, Cloud Controller API VMs can be scaled both vertically and horizontally. Puma supports multiple processes per VM and so can scale with the number of CPU cores available.
 
@@ -91,7 +91,7 @@ Colloquially known as "local workers," this job is primarily responsible for han
 
 ### When to scale
 
-When determining whether to scale `cloud\_controller\_worker\_local`, look for the following:
+When determining whether to scale `cloud_controller_worker_local`, look for the following:
 
 #### Key metrics
 
@@ -124,7 +124,7 @@ Colloquially known as "generic workers" or just "workers", this job and VM are r
 
 ### When to scale
 
-When determining whether to scale `cloud\_controller\_worker`, look for the following:
+When determining whether to scale `cloud_controller_worker`, look for the following:
 
 #### Key metrics
 
