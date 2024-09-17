@@ -29,6 +29,8 @@ Cloud Controller emits the following metrics:
   * Thin: is 1 or higher.
   * Puma: is at the number of CPU cores or higher.
 * `cc.vitals.uptime` is consistently low, indicating frequent restarts (possibly due to memory pressure).
+* `cc_db_connection_pool_timeouts_total` indicates that the DB connection pool is too small which caused threads to wait and finally fail a request because no connection could be acquired within the timeout.
+* `cc_db_connection_wait_duration_seconds` indicates that threads have to wait for free DB connections.
 
 <p class="note">
 <span class="note__title"><strong>Note</strong></span>
@@ -84,6 +86,15 @@ The following are loose recommendations for setting these parameters:
 * The max number of DB Connections per process should be at least equal to the max number of threads. This ensures a thread always has a DB connection available. However, when choosing the max number of DB connections be aware that this is per Puma worker. You may estimate the total number of connections by `Number of VMs x Number of Workers x Max DB Connections Per Process`. For example, if you had 2 VMs with 4 workers and 10 max DB connections per process, you may have up to 80 DB connections. Be careful this does not exeed any Database limit.
 
 If when switching to Puma you reduce the number of overall Cloud Controller API VMs, you may need to increase the number of Cloud Controller Local workers per VM to handle the increased load on the remaining API VMs. For more information, see [cloud_controller_worker_local](#cloud_controller_worker_local).
+
+#### Adjusting DB connection pool
+
+If there are any threads which had to wait for a free DB connection (indicated by `cc_db_connection_wait_duration_seconds`) it might be worth to increase the DB connection pool if possible.
+Threads waiting on free DB connections will cause delays in the web server's responses.
+* Thin: Connection pool size can be configured with: `ccdb.max_connections`
+* Puma: Connection pool size per process (main + workers) can be configured with: `cc.puma.max_db_connections_per_process`
+
+In case threads failed to acquire a free DB connection within the configured timeout, `cc_db_connection_pool_timeouts_total` will be > 0. Then either the connection pool size or the number of API VMs should be increased.
 
 ## <a id='cloud_controller_worker_local'></a> cloud\_controller\_worker\_local
 
