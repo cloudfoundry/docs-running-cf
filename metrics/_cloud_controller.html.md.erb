@@ -9,6 +9,11 @@ NA                                                         | cc\_puma\_worker\_s
 NA                                                         | cc\_puma\_worker\_thread\_count                      | Worker thread count<br /> **Puma-Only Metric**
 NA                                                         | cc\_puma\_worker\_backlog                            | Worker backlog<br /> **Puma-Only Metric**
 deployments.deploying                                      | cc\_deployments\_in\_progress\_total                 | Number of deployments in the DEPLOYING state. Emitted every 30 seconds.                                                                              
+NA                                                         | cc\_acquired\_db\_connections\_total                 | Number of acquired DB connections (blocked by threads).
+NA                                                         | cc\_open\_db\_connections\_total                     | Number of open DB connections (acquired + available).
+NA                                                         | cc\_db\_connection\_hold\_duration\_seconds          | Durations of connections held by threads.
+NA                                                         | cc\_db\_connection\_wait\_duration\_seconds          | Durations of threads which waited for an available DB connection.
+NA                                                         | cc\_db\_connection\_pool\_timeouts\_total            | Number of threads which failed to acquire a free DB connection from the pool within the timeout.
 deployments.update.duration                                | NA                                                   | Time in milliseconds that it took to complete an update of app deployments. Emitted every 5 seconds.
 diego_sync.invalid_desired_lrps                            | NA                                                   | Number of invalid DesiredLRPs found during Cloud Foundry apps and Diego DesiredLRPs periodic synchronization. Emitted every 30 seconds.               
 diego\_sync.duration                                       | NA                                                   | Time in milliseconds that it took to synchronize Cloud Foundry apps and Diego DesiredLRPs. Emitted every 30 seconds.                                   
