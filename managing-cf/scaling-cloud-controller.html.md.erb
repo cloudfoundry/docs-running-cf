@@ -96,7 +96,7 @@ Threads waiting on free DB connections will cause delays in the web server's res
 
 In case threads failed to acquire a free DB connection within the configured timeout, `cc_db_connection_pool_timeouts_total` will be > 0. Then either the connection pool size or the number of API VMs should be increased.
 
-See [Migrating Cloud Controller to Multi-Process Mode (Puma)](./multi-process-cloud-controller.html) for more information on the differences between using Thin and Puma.
+See [Cloud Controller Multi-Process Mode (Puma)](./multi-process-cloud-controller.html) for more information on the differences between using Thin and Puma.
 
 ## <a id='cloud_controller_worker_local'></a> cloud\_controller\_worker\_local
 
