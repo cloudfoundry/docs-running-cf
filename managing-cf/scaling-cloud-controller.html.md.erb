@@ -5,15 +5,24 @@ owner: CAPI
 
 This topic describes how and when to scale BOSH jobs in CAPI, and includes details about some key metrics, heuristics, and logs. 
 
-## <a id='cloud_controller_ng'></a> cloud\_controller\_ng
+To inform some scaling decisions, check current CPU values by running `bosh instances --vitals`.
+The **CPU User** value corresponds with the `system.cpu.user` metric and is scaled by the number of CPUs.
+For example, on a 4-core `api` VM, a `cloud_controller_ng` process that is using 100% of a core is listed as using 25% in the `system.cpu.user` metric.</p>
+
+## <a id='cloud_controller_ng'></a> cloud_controller_ng
 
 The `cloud_controller_ng` Ruby process is the primary job in CAPI. It, along with `nginx_cc`, powers the Cloud Controller API that all users of Cloud Foundry interact with. In addition to serving external clients, `cloud_controller_ng` also provides APIs for internal components within Cloud Foundry, such as Loggregator and Networking subsystems.
 
+The `cloud_controller_ng` Ruby process is the primary job in CAPI.
+It, along with `nginx_cc`, powers the Cloud Controller API that all users of <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>) interact with.
+In addition to serving external clients, `cloud_controller_ng` also provides APIs for internal components within <%= vars.app_runtime_abbr %>, such as Loggregator and Networking subsystems.
+
 The `cloud_controller_ng` web server can either be Thin (Default) or Puma (Experimental). The characteristics of these web servers differ significantly. The Thin web server runs on a single process per VM, therefore scaling should be done horizontally by adding more VMs. Puma allows for multiple processes to run per VM, therefore scaling can be both vertical or horizontal.
+
 
 ### When to Scale
 
-When determining whether to scale `cloud_controller_ng`, look for the following:
+When you are determining whether to scale `cloud_controller_ng`, look for the following:
 
 #### Key Metrics
 
@@ -42,11 +51,7 @@ The following behaviors may occur:
 
 * There is a latency in average response.
 * Web UI responsiveness or timeouts are degraded.
-* `bosh is --ps --vitals` has elevated CPU usage for the API instance group's `cloud_controller_ng` job.
-
-<p class="note">
-<span class="note__title"><strong>Note</strong></span>
-Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds to the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> using Thin web server process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
+* `bosh is --ps --vitals` has elevated CPU usage for the `cloud_controller_ng` job in the API instance group.
 
 #### Relevant Log Files
 
@@ -55,25 +60,32 @@ You can find the above heuristic failures in the following log files:
 * `/var/vcap/sys/log/cloud_controller_ng/cloud_controller_ng.log`
 * `/var/vcap/sys/log/cloud_controller_ng/nginx-access.log`
 
-### How to Scale
+### <a id='scale'></a> How to Scale
 
-Before and after scaling Cloud Controller API VMs, you should verify that the Cloud Controller database is not overloaded. All Cloud Controller processes are backed by the same database, so heavy load on the database impacts API performance regardless of the number of Cloud Controllers deployed. Cloud Controller supports both PostgreSQL and MySQL, so there is no specific scaling guidance for the database.
+Before and after you scale Cloud Controller API VMs, verify that the Cloud Controller database is not overloaded.
+All Cloud Controller processes are backed by the same database, so heavy load on the database impacts API performance regardless of the number of Cloud Controllers deployed.
+Cloud Controller supports both PostgreSQL and MySQL, so there is no specific scaling guidance for the database.
 
-In CF deployments with internal MySQL clusters, a single MySQL database VM with CPU usage over ~80% can be considered overloaded. When this happens, the MySQL VMs must be scaled up to prevent the added load of additional Cloud Controllers exacerbating the issue.
+In <%= vars.app_runtime_abbr %> deployments with internal MySQL clusters, a single MySQL database VM with CPU usage over 80% can be considered overloaded.
+When this happens, the MySQL VMs must be scaled up to prevent the added load of
+additional Cloud Controllers exacerbating the issue.
 
 <p class="note">
 <span class="note__title"><strong>Note</strong></span>
 Since Cloud Controller supports both PostgreSQL and MySQL external databases, there is no absolute guidance about what a healthy database looks like. In general, high database CPU utilization is a good indicator of scaling issues, but always defer to the documentation specific to your database.</p>
 
-#### Scaling Thin Web Server
+#### <a id='scale-thin'></a> Scaling Thin Web Server
 
-When deployed with the Thin web server, Cloud Controller API VMs should primarily be scaled horizontally. Scaling up the number of cores on a single VM is not effective. This is because Thin operates in a single process and Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
+When deployed with the Thin web server, Cloud Controller API VMs should primarily be scaled horizontally.
+Scaling up the number of cores on a single VM is not effective.
+This is because Thin operates in a single process and Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
 
-#### <a id='cloud_controller_ng'></a> Scaling Puma Web Server
+#### <a id='scale-puma'></a> Scaling Puma Web Server
 
 When deployed with the Puma web server, Cloud Controller API VMs can be scaled both vertically and horizontally. Puma supports multiple processes per VM and so can scale with the number of CPU cores available.
 
-Puma web server exposes the following configuration options. For more information see [Cloud Controller Configuration](https://github.com/cloudfoundry/capi-release/blob/develop/jobs/cloud_controller_ng/spec):
+Puma web server exposes the following configuration options.
+For more information see [Cloud Controller Configuration](https://github.com/cloudfoundry/capi-release/blob/develop/jobs/cloud_controller_ng/spec):
 
 * `cc.puma.workers` - Number of workers for Puma webserver.
 * `cc.puma_max_threads` - Maximum number of threads per Puma webserver worker.
@@ -98,9 +110,9 @@ In case threads failed to acquire a free DB connection within the configured tim
 
 See [Cloud Controller Multi-Process Mode (Puma)](./multi-process-cloud-controller.html) for more information on the differences between using Thin and Puma.
 
-## <a id='cloud_controller_worker_local'></a> cloud\_controller\_worker\_local
+## <a id='cloud_controller_worker_local'></a> cloud_controller_worker_local
 
-Colloquially known as "local workers," this job is primarily responsible for handling files uploaded to the API VMs during `cf push`, such as `packages`, `droplets`, and resource matching.
+This job, also called "local workers", is primarily responsible for handling files uploaded to the API VMs during `cf push`, such as `packages`, `droplets`, and resource matching.
 
 ### When to scale
 
@@ -122,7 +134,7 @@ The following behaviors may occur:
 
 #### Relevant log files
 
-You can find the above heuristic failures in the following log files:
+You can find the heuristic failures in the following log files:
 
 * `/var/vcap/sys/log/cloud_controller_ng/cloud_controller_ng.log`
 
@@ -131,7 +143,7 @@ You can find the above heuristic failures in the following log files:
 Because local workers are located with the Cloud Controller API job, they are scaled horizontally along with the API.
 
 
-## <a id='cloud_controller_worker'></a> cloud\_controller\_worker
+## <a id='cloud_controller_worker'></a> cloud_controller_worker
 
 Colloquially known as "generic workers" or just "workers", this job and VM are responsible for handling asynchronous work, batch deletes, and other periodic tasks scheduled by the `cloud_controller_clock`.
 
@@ -150,7 +162,7 @@ Cloud Controller emits the following metrics:
 
 The following behaviors may occur:
 
-* `cf delete-org ORG_NAME` appears to leave its contained resources around for a long time.
+* `cf delete-org ORG_NAME` appears to leave its contained resources around for a long time. Also, the command fails if the `-org ORG_NAME` contains shared private domains.
 * Users report slow deletes for other resources.
 * cf-acceptance-tests succeed generally, but fail during cleanup.
 
@@ -162,16 +174,16 @@ You can find the above heuristic failures in the following log files:
 
 ### How to scale
 
-The cc-worker VM can safely scale horizontally in all deployments, but if your worker VMs have CPU/memory headroom, you can also use the `cc.jobs.generic.number_of_workers` BOSH property to increase the number of worker processes on each VM.
+The cc-worker VM can safely scale horizontally in all deployments, but if your worker VMs have CPU/memory headroom,
+you can also use the `cc.jobs.generic.number_of_workers` BOSH property to increase the number of worker processes on each VM.
 
 
-## <a id='clock_and_updater'></a> cloud\_controller\_clock and cc\_deployment\_updater
+## <a id='clock_and_updater'></a> cloud_controller_clock and cc_deployment_updater
 
-The `cloud_controller_clock` job runs Diego sync process and schedules periodic background jobs. The `cc_deployment_updater` job is responsible for handling v3 rolling app deployments.
-
-<p class="note">
-<span class="note__title"><strong>Note</strong></span>
-Running <code>bosh instances --vitals</code> returns CPU values. The CPU User value corresponds to the <code>system.cpu.user</code> metric and is scaled by the number of CPUs. For example, on a 4-core <code>api</code> VM, a <code>cloud_controller_ng</code> process that is using 100% of a core is listed as using 25% in the <code>system.cpu.user</code> metric.</p>
+The `cloud_controller_clock` job runs Diego sync process and schedules periodic background jobs.
+The `cc_deployment_updater` job is responsible for handling v3 rolling app deployments.
+For more information, see
+[Rolling App Deployments](../../devguide/deploy-apps/rolling-deploy.html).
 
 ### When to scale
 
@@ -201,12 +213,16 @@ You can find the above heuristic failures in the following log files:
 
 ### How to scale
 
-Both of these jobs are singletons, so extra instances are for failover HA rather than scalability. Performance issues are likely due to database overloading or greedy neighbors on the scheduler VM.
+Both of these jobs are singletons, so extra instances are for failover HA rather than scalability.
+Performance issues are likely due to database overloading or greedy neighbors on the scheduler VM.
 
 
-## <a id='blobstore_nginx'></a> blobstore\_nginx
+## <a id='blobstore_nginx'></a> blobstore_nginx
 
-The internal WebDAV blobstore that comes included with Cloud Foundry by default. It is used by the platform to store `packages`, staged `droplets`, `buildpacks`, and cached app resources. Files are typically uploaded to the internal blobstore through the Cloud Controller local workers and downloaded by Diego when app instances are started.
+This is the internal WebDAV blobstore that comes included with <%= vars.app_runtime_abbr %> by default.
+It stores `packages`, staged `droplets`, `buildpacks`, and cached app resources.
+Files are typically uploaded to the internal blobstore through the Cloud Controller local workers and downloaded by Diego when app instances are started.
+
 
 ### When to scale
 
@@ -235,8 +251,13 @@ You can find the above heuristic failures in the following log files:
 
 ### How to scale
 
-The internal WebDAV blobstore cannot be scaled horizontally, not even for availability purposes, because of its reliance on the `singleton-blobstore` VM's persistent disk for file storage. For this reason, it is not recommended for environments that require high availability. For these environments, you should use an external blobstore. For more information, see [Cloud Controller blobstore configuration](https://docs.cloudfoundry.org/deploying/common/cc-blobstore-config.html) and the [Blob storage](https://docs.cloudfoundry.org/concepts/high-availability.html#blobstore) section of the _High Availability in Cloud Foundry_ topic.
+The internal WebDAV blobstore cannot be scaled horizontally, not even for availability purposes, because of its reliance on the `singleton-blobstore` VM's persistent disk for file storage.
+For this reason, it is not recommended for environments that require high availability.
+For these environments, you should use an external blobstore. For more information, see [Cloud Controller blobstore configuration](https://docs.cloudfoundry.org/deploying/common/cc-blobstore-config.html) and the [Blob storage](https://docs.cloudfoundry.org/concepts/high-availability.html#blobstore) section of the _High Availability in Cloud Foundry_ topic.
 
 The internal WebDAV blobstore can be scaled vertically, so scaling up the number of CPUs or adding faster disk storage can improve the performance of the internal WebDAV blobstore if it is under high load.
 
-High numbers of concurrent app container starts on Diego can cause stress on the blobstore. This typically happens during upgrades in environments with a large number of apps and Diego Cells. If vertically scaling the blobstore or improving its disk performance is not an option, limiting the max number of concurrent app container starts can mitigate the issue. For more information, see the [starting_container_count_maximum](https://bosh.io/jobs/auctioneer?source=github.com/cloudfoundry/diego-release&version=2.29.0#p%3ddiego.auctioneer.starting_container_count_maximum) section in the _auctioneer job from diego/2.29.0_ topic in the BOSH documentation.
+High numbers of concurrent app container starts on Diego can cause stress on the blobstore.
+This typically happens during upgrades in environments with a large number of apps and Diego Cells.
+If vertically scaling the blobstore or improving its disk performance is not an option, limiting the max number of concurrent app container starts can mitigate the issue.
+For more information, see the [starting_container_count_maximum](https://bosh.io/jobs/auctioneer?source=github.com/cloudfoundry/diego-release&version=2.29.0#p%3ddiego.auctioneer.starting_container_count_maximum) section in the _auctioneer job from diego/2.29.0_ topic in the BOSH documentation.
