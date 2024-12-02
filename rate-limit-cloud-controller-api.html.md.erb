@@ -65,12 +65,12 @@ Operators can configure CAPI to exempt users and clients with the UAA scope clou
 
 Operators can limit the number of concurrent requests per user, for each Cloud Controller instance, for operations related to service brokers that can be made to CAPI endpoints for the following resource types:
 
-* [`v3/service_instances`](https://v3-apidocs.cloudfoundry.org/index.html#service-instances)
-* [`v3/service_credential_bindings`](https://v3-apidocs.cloudfoundry.org/index.html#service-credential-binding)
-* [`v3/service_route_binding`](https://v3-apidocs.cloudfoundry.org/index.html#service-route-binding)
-* [`v2/service_instances`](https://v2-apidocs.cloudfoundry.org/#service-instances)
-* [`v2/service_bindings`](https://v2-apidocs.cloudfoundry.org/#service-bindings)
-* [`v2/service_keys`](https://v2-apidocs.cloudfoundry.org/#service-keys)
+* [`GET v3/service_instances/:guid/parameters`](https://v3-apidocs.cloudfoundry.org/version/index.html#get-parameters-for-a-managed-service-instance)
+* [`GET v3/service_credential_bindings/:guid/parameters`](https://v3-apidocs.cloudfoundry.org/version/index.html#get-parameters-for-a-service-credential-binding)
+* [`GET v3/service_route_binding/:guid/parameters`](https://v3-apidocs.cloudfoundry.org/index.html#get-parameters-for-a-route-binding)
+* [`PUT|POST|DELETE v2/service_instances`](https://v2-apidocs.cloudfoundry.org/#service-instances)
+* [`PUT|POST|DELETE v2/service_bindings`](https://v2-apidocs.cloudfoundry.org/#service-bindings)
+* [`PUT|POST|DELETE v2/service_keys`](https://v2-apidocs.cloudfoundry.org/#service-keys)
 
 <p class="note">
 <span class="note__title">Important</span>
