@@ -42,7 +42,6 @@ Cloud Controller emits the following metrics:
 * `cc_db_connection_wait_duration_seconds` indicates that threads have to wait for free DB connections.
 
 <p class="note">
-<span class="note__title"><strong>Note</strong></span>
 The above guidelines for Puma assume that the number of Puma workers is configured to be the same as the number of CPU cores on the VM - see <a href="#scale-puma">Scaling Puma Web Server</a> below. If you have configured Puma workers to be different than the number of CPU cores, you should adjust threshold calculations accordingly.</p>
 
 #### Heuristic Failures
@@ -71,7 +70,6 @@ When this happens, the MySQL VMs must be scaled up to prevent the added load of
 additional Cloud Controllers exacerbating the issue.
 
 <p class="note">
-<span class="note__title"><strong>Note</strong></span>
 Since Cloud Controller supports both PostgreSQL and MySQL external databases, there is no absolute guidance about what a healthy database looks like. In general, high database CPU utilization is a good indicator of scaling issues, but always defer to the documentation specific to your database.</p>
 
 #### <a id='scale-puma'></a> Scaling Puma Web Server
