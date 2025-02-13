@@ -1,3 +1,8 @@
+Cloud Controller metrics have the following origin names:
+
++ [cc](#cc)
++ [cc_worker](#cc_worker)
+
 Default Origin Name: cc
 
 Statsd/Prometheus metrics for Cloud Controller API Server
@@ -62,5 +67,17 @@ vitals.mem\_free\_bytes                                    | cc\_vitals\_mem\_fr
 vitals.mem\_used\_bytes                                    | cc\_vitals\_mem\_used\_bytes                          | Total memory used (active + wired) according to the OS. Emitted every 30 seconds per VM.
 vitals.num\_cores                                          | cc\_vitals\_num\_cores                                | The number of CPUs of a host machine. Emitted every 30 seconds per VM.
 vitals.uptime                                              | NA                                                    | The uptime of the Cloud Controller process in seconds. Emitted every 30 seconds per VM.
+
+Default Origin Name: cc_worker
+
+Statsd/Prometheus metrics for Cloud Controller Workers
+
+Prometheus Metric Name                               | Description
+-----------------------------------------------------|---------------------------------------------------------------------------------------------------------
+cc\_acquired\_db\_connections\_total                 | Number of acquired DB connections (blocked by threads).
+cc\_open\_db\_connections\_total                     | Number of open DB connections (acquired + available).
+cc\_db\_connection\_hold\_duration\_seconds          | Durations of connections held by threads.
+cc\_db\_connection\_wait\_duration\_seconds          | Durations of threads which waited for an available DB connection.
+cc\_db\_connection\_pool\_timeouts\_total            | Number of threads which failed to acquire a free DB connection from the pool within the timeout.
 
 [Top](#top)
