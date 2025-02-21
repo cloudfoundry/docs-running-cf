@@ -85,3 +85,10 @@ The header gives an absolute time suggesting when the client should attempt to m
 This is the current time plus a random number of seconds between 0.5x and 1.5x of the configured value for `cc.broker_client_timeout_seconds`.
 
 If this property is not set, it defaults to 60 seconds, and the header suggests a random retry time between 30 and 90 seconds in the future.
+
+## <a id="uaa"></a> Rate limit responses: UAA
+
+The UAA can be configured with rate limits. If UAA runs into the rate limit, the Cloud Controller will return this information transparently to the user.
+Cloud Controller will return `429 Too Many Requests` reponse with the body `CF-UaaRateLimited (20008)` and a Retry-After header. The client should not retry the request before the time stated in the header passed.
+
+This error can occur in many authenticated endpoints, if not all, and depends on the rate limit configuration in UAA.
