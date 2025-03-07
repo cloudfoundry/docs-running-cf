@@ -85,11 +85,6 @@ Here are a few possible configurations that would result in similar number of th
 
 **Profile 4 (Puma):** This profile only has 7 API workers for 8 CPU cores. This can be helpful, but not strictly necessary, to ensure colocated processes have enough CPU resources to run. This profile can be scaled by increasing the number of workers to 8 as well as number of cores, total instances, or threads. This profile will be the most demanding in terms of memory footprint.
 
-<% if vars.platform_code != 'CF' %>
-<%= partial "/pcf/core/cloud-controller-multi-process" %>
-<% else %>
-<% end %>
-
 ### <a id='fine-tuning'></a> Post-Migration Fine-Tuning
 
 After upgrading, watch the following metrics to see if you can reduce or need to scale up your provisioned resources:
