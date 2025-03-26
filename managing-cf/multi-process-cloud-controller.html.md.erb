@@ -36,7 +36,6 @@ More workers on an individual instance results in a higher memory utilization.
 <%= partial "/pcf/core/cloud-controller-multi-process-mode" %>
 <% end %>
 <p class="note">
-<span class="note__title"><strong>Note</strong></span> 
 A single Puma worker with 20 threads is generally not as performant as a single Thin instance. However, a cluster of Puma workers is more performant than a group of individual Thin instances, because if one Puma worker is stalled or crashes, queued requests can be routed to the other workers.</p>
 
 You should configure each API instance to have twice as many local job workers as there are API workers. This can vary depending on foundation load. See [Scaling Local Workers](./scaling-cloud-controller.html#cloud_controller_worker_local) for more details.
