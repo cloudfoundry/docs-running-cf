@@ -22,7 +22,7 @@ By default, Cloud Controller in Single-Process mode is configured to use 20 thre
 Once a foundation’s API group is at its limit, the only way to support more HTTP requests is to add more API VMs.
 
 Each Single-Process API instance has 2 colocated job queue workers (called ‘local workers’) to handle package and droplet uploads to the blobstore. It’s generally sufficient for both the API process and the 2 local workers to run on a single core.
-
+<% if vars.platform_code == 'CF' %>
 ### <a id='multi-process-mode'></a> Scaling in Multi-Process Mode
 
 Using Multi-Process mode (powered by Puma), Cloud Controller can utilize multiple processes (called ‘workers’) to serve traffic on the same port.
@@ -32,10 +32,11 @@ Cloud Controller only benefits from multiple workers if there is a CPU core avai
 By default each worker is configured to use 10 threads, meaning each worker can process up to 10 concurrent requests. We don’t recommend configuring more than 20 threads per worker.
 
 More workers on an individual instance results in a higher memory utilization.
-
+<% else %>
+<%= partial "/pcf/core/cloud-controller-multi-process-mode" %>
+<% end %>
 <p class="note">
-<span class="note__title"><strong>Note</strong></span> 
-A single Puma worker with 20 threads is generally not as resilient as a single Thin instance. However, a cluster of Puma workers is more resilient than a group of individual Thin instances, because if one Puma worker is stalled or crashes, queued requests can be routed to the other workers.</p>
+A single Puma worker with 20 threads is generally not as performant as a single Thin instance. However, a cluster of Puma workers is more performant than a group of individual Thin instances, because if one Puma worker is stalled or crashes, queued requests can be routed to the other workers.</p>
 
 You should configure each API instance to have twice as many local job workers as there are API workers. This can vary depending on foundation load. See [Scaling Local Workers](./scaling-cloud-controller.html#cloud_controller_worker_local) for more details.
 
