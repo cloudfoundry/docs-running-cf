@@ -5,13 +5,11 @@ owner: CAPI
 
 This topic describes how and when to scale BOSH jobs in CAPI, and includes details about some key metrics, heuristics, and logs. 
 
-To inform some scaling decisions, check current CPU values by running `bosh instances --vitals`.
+To inform some scaling decisions, check current CPU values by running `bosh instances --ps --vitals`.
 The **CPU User** value corresponds with the `system.cpu.user` metric and is scaled by the number of CPUs.
 For example, on a 4-core `api` VM, a `cloud_controller_ng` process that is using 100% of a core is listed as using 25% in the `system.cpu.user` metric.</p>
 
 ## <a id='cloud_controller_ng'></a> cloud_controller_ng
-
-The `cloud_controller_ng` Ruby process is the primary job in CAPI. It, along with `nginx_cc`, powers the Cloud Controller API that all users of Cloud Foundry interact with. In addition to serving external clients, `cloud_controller_ng` also provides APIs for internal components within Cloud Foundry, such as Loggregator and Networking subsystems.
 
 The `cloud_controller_ng` Ruby process is the primary job in CAPI.
 It, along with `nginx_cc`, powers the Cloud Controller API that all users of <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>) interact with.
