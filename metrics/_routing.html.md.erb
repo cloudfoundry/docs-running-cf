@@ -21,6 +21,7 @@ Routing Release metrics have following origin names:
  backend\_exhausted\_conns          | Lifetime number of requests that have been rejected due to the limit on number of connections per back end having been reached for all back ends tried. Emitted every 5 seconds.
  bad\_gateways                      | Lifetime number of bad gateways at the Gorouter. Emitted every 5 seconds.
  latency                            | Total round trip time, in milliseconds, for requests through the Gorouter. This includes time spent by back end app to process requests. Emitted per router request.
+ gorouter_time                      | Total time, in seconds, that the Gorouter spent processing and forwarding the HTTP request. Emitted per router request.
  latency.{component}                | Time in milliseconds that the Gorouter took to handle requests from each component to its endpoints. Emitted per router request.
  route\_registration\_latency         | Time in milliseconds between when an actual LRP is started and when the app is routable via Gorouter. Emitted per route-register message of new LRPs. This metric might be a negative value up to ~30 ms due to clock skew between the machines this metric is derived from.
  registry\_message.{component}      | Lifetime number of route register messages received for each component. Emitted per route-register message.
