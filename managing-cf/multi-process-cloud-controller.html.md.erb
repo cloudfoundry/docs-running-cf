@@ -52,21 +52,21 @@ For example, you might follow any or all of the following strategies:
 
 Here are a few possible configurations that would result in similar number of threads:
 
-|                                         | Profile 1 (Thin) | Profile 2 (Puma) | Profile 3 (Puma) | Profile 4 (Puma) |
-| --------------------------------------- | ---------------- | ---------------- | ---------------- | ---------------- |
-| **VM type**                             | 1 CPU            | 2 CPU            | 4 CPU            | 8 CPU            |
-| **# instances**                         | 20               | 10               | 8                | 4                |
-| **# API workers**                       | 1 (Thin)         | 2                | 4                | 7                |
-| **# threads/worker**                    | 20               | 20               | 13               | 15               |
-| **Total concurrent requests supported** | 400              | 400              | 416              | 420              |
+|                                         | Single-Process | Profile 1 | Profile 2 | Profile 3 |
+| --------------------------------------- | -------------- | --------- | --------- | --------- |
+| **VM type**                             | 1 CPU          | 2 CPU     | 4 CPU     | 8 CPU     |
+| **# instances**                         | 20             | 10        | 8         | 4         |
+| **# API workers**                       | 1 (Thin)       | 2         | 4         | 7         |
+| **# threads/worker**                    | 20             | 20        | 13        | 15        |
+| **Total concurrent requests supported** | 400            | 400       | 416       | 420       |
 
-**Profile 1 (Thin):** A typical API instance group for Single-Process mode. The only recommended way to increase the maximum number of concurrent requests is to scale the number of instances.
+**Single-Process mode (deprecated)**: A typical API instance group for Single-Process mode with Thin webserver, used in prior versions of <%= vars.app_runtime_abbr %>.
 
-**Profile 2 (Puma):** With only 2 cores, this profile is not taking full advantage of Multi-Process support. Since each worker is already configured to use 20 threads, this profile can only be scaled by increasing the number of machine cores or total instances. 
+**Profile 1**: With only 2 cores, this profile is not taking full advantage of Multi-Process support. Since each worker is already configured to use 20 threads, this profile can only be scaled by increasing the number of machine cores or total instances.
 
-**Profile 3 (Puma):** This profile can be scaled by increasing the number of cores, total instances, or threads.
+**Profile 2**: This profile can be scaled by increasing the number of cores, total instances, or threads.
 
-**Profile 4 (Puma):** This profile only has 7 API workers for 8 CPU cores. This can be helpful, but not strictly necessary, to ensure colocated processes have enough CPU resources to run. This profile can be scaled by increasing the number of workers to 8 as well as number of cores, total instances, or threads. This profile will be the most demanding in terms of memory footprint.
+**Profile 3**: This profile only has 7 API workers for 8 CPU cores. This can be helpful, but not strictly necessary, to ensure colocated processes have enough CPU resources to run. This profile can be scaled by increasing the number of workers to 8 as well as number of cores, total instances, or threads. This profile will be the most demanding in terms of memory footprint.
 
 <% if vars.platform_code != 'CF' %>
 <%= partial "/pcf/core/cloud-controller-multi-process" %>
