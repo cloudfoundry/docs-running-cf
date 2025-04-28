@@ -3,25 +3,13 @@ title: Cloud Controller Multi-Process Mode (Puma)
 owner: CAPI
 ---
 
-This page explains how the Cloud Controller API handles traffic in Single-Process vs. Multi-Process modes, how to migrate it from the older Single-Process mode to newer Multi-Process mode, and how running the Cloud Controller in Multi-Process mode affects how to scale it.
+This page explains how the Cloud Controller API's Puma webserver handles traffic, and how to scale the Cloud Controller.
 
 ## <a id='modes'></a> How Cloud Controller Scaling Works
 
-In Single-Process Mode, the CF API has been limited to scaling horizontally. The web server technology that Cloud Controller is built on top of, Thin, can only serve traffic using a single process.
+Im current versions of <%= vars.app_runtime_abbr %>, the Cloud Controller API is published by a Puma webserver, which supports multiple concurrent processes.
+This maximizes the efficiency of the VM instances configured to run the Cloud Controller API, which ran in single-process mode in prior <%= vars.app_runtime_abbr %> versions.
 
-With the introduction of Multi-Process support for Cloud Controller, operators can configure their foundations to use fewer VM instances to handle the same amount of traffic to the Cloud Controller API.
-
-### <a id='single-process-mode'></a> Scaling in Single-Process Mode
-
-Using Single-Process mode (powered by Thin), Cloud Controller cannot utilize more than a single process per VM. This is because Thin cannot use multiple processes to serve traffic on the same port at the same time. 
-
-In Single-Process mode, Cloud Controller sees little benefit by being deployed to a multiple-core machine, as Cloud Controller can only utilize a single core. 
-
-By default, Cloud Controller in Single-Process mode is configured to use 20 threads, meaning a single Cloud Controller process can comfortably handle 20 concurrent API requests before response time is slowed due to requests being stuck in the queue.
-
-Once a foundation’s API group is at its limit, the only way to support more HTTP requests is to add more API VMs.
-
-Each Single-Process API instance has 2 colocated job queue workers (called ‘local workers’) to handle package and droplet uploads to the blobstore. It’s generally sufficient for both the API process and the 2 local workers to run on a single core.
 <% if vars.platform_code == 'CF' %>
 ### <a id='multi-process-mode'></a> Scaling in Multi-Process Mode
 
@@ -35,26 +23,20 @@ More workers on an individual instance results in a higher memory utilization.
 <% else %>
 <%= partial "/pcf/core/cloud-controller-multi-process-mode" %>
 <% end %>
-<p class="note">
-A single Puma worker with 20 threads is generally not as performant as a single Thin instance. However, a cluster of Puma workers is more performant than a group of individual Thin instances, because if one Puma worker is stalled or crashes, queued requests can be routed to the other workers.</p>
 
 You should configure each API instance to have twice as many local job workers as there are API workers. This can vary depending on foundation load. See [Scaling Local Workers](./scaling-cloud-controller.html#cloud_controller_worker_local) for more details.
 
-## <a id='enable'></a> Enable Multi-Process Mode
+## <a id='disable'></a> Disable Multi-Process Mode
 
-Enable Multi-Process mode with the following settings, and see [Migrating from Single-Process to Multi-Process Mode](#migrating) below for how to adjust VM type, instance count, workers, and threads/worker to account for and take advantage of the migration.
+To disable Multi-Process mode and instead use a This webserver, set the `cc.temporary_enable_deprecated_thin_webserver` property to `true`. It defaults to `false`.
 
-1. To enable Multi-Process mode, set the [cc.experimental.puma property](https://github.com/cloudfoundry/capi-release/blob/develop/jobs/cloud_controller_ng/spec#L1249) to `true`.
+  - Thin webserver support for the Cloud Controller API is deprecated and will be removed in a future release.
+  - <%= vars.recommended_by %> does not recommend using Thin, because it reduces resource utilization efficiency and performance.
+  - Setting `cc.experimental.use_puma_webserver` to `true` overrides setting `cc.temporary_enable_deprecated_thin_webserver` property to `true`.
 
-2. Set the [cc.puma.workers](https://github.com/cloudfoundry/capi-release/blob/develop/jobs/cloud_controller_ng/spec#L1256C3-L1256C18) to the number of CPU cores your machines have.
+## <a id='migrating'></a> Upgrade Automatically Migrates from Single-Process to Multi-Process Mode
 
-3. Set [cc.puma.max\_threads](https://github.com/cloudfoundry/capi-release/blob/develop/jobs/cloud_controller_ng/spec#L1260C3-L1260C22) to the desired number of threads. We recommend at least 10.
-
-4. Set [cc.puma.max\_db\_connections\_per\_process](https://github.com/cloudfoundry/capi-release/blob/develop/jobs/cloud_controller_ng/spec#L1264C3-L1264C41) to at least the same number of values as `cc.puma.threads`.
-
-## <a id='migrating'></a> Migrating from Single-Process to Multi-Process Mode
-
-When upgrading your Cloud Controller API server from Single-Process to Multi-Process mode, ensure the API instance group can support the same number of concurrent requests.
+With <%= vars.app_runtime_abbr %> versions prior to <%= vars.current_major_version %> that have their Cloud Controller API running in Single-Process mode, upgrading to a newer <%= vars.app_runtime_abbr %> version migrates the Cloud Controller API server to Multi-Process mode.
 
 Typically a Single-Process API instance will support 20 threads.
 To ensure parity when migrating to Multi-Process API instances, ensure that the total number of workers multiplied by the number of threads per worker is equal to (or greater than) the number of Single-Process instances multiplied by the number of threads (usually 20).

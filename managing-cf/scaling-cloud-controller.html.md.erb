@@ -15,7 +15,7 @@ The `cloud_controller_ng` Ruby process is the primary job in CAPI.
 It, along with `nginx_cc`, powers the Cloud Controller API that all users of <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>) interact with.
 In addition to serving external clients, `cloud_controller_ng` also provides APIs for internal components within <%= vars.app_runtime_abbr %>, such as Loggregator and Networking subsystems.
 
-The `cloud_controller_ng` web server can either be Puma (Default) or Thin (Deprecated). The characteristics of these web servers differ significantly. The Thin web server runs on a single process per VM, therefore scaling should be done horizontally by adding more VMs. Puma allows for multiple processes to run per VM, therefore scaling can be both vertical or horizontal.
+The `cloud_controller_ng` web server is based on Puma, which supports multiple processes per VM. This means you can scale the Cloud Controller vertically or horizontally.
 
 
 ### When to Scale
@@ -26,16 +26,10 @@ When you are determining whether to scale `cloud_controller_ng`, look for the fo
 
 Cloud Controller emits the following metrics:
 
-* `cc.requests.outstanding.gauge` or `cc.requests.outstanding` (deprecated) 
-  * Thin: is at or consistently near 20.
-  * Puma: is at or consistently near the total number of available Puma threads on the VM. You can calculate this with `Puma Workers x Puma Max Threads`.
-* `system.cpu.user`
-  * Thin: is above 0.85 utilization of a single core on the API VM. This metric is scaled by number of cores. If the VM has more than 1 core, you can determine how much Thin is using of a single core by using the formula `system.cpu.user / (1 / Number of CPU Cores)`.
-  * Puma: is above 0.85 total utilization.
-* `cc.vitals.cpu_load_avg`
-  * Thin: is 1 or higher.
-  * Puma: is at the number of CPU cores or higher.
-* `cc.vitals.uptime` is consistently low, indicating frequent restarts (possibly due to memory pressure).
+* `cc.requests.outstanding.gauge` or `cc.requests.outstanding` (deprecated): should be consistently near the total number of available Puma threads on the VM. You can calculate this with `Puma Workers x Puma Max Threads`.
+* `system.cpu.user`: should be above 0.85 total utilization.
+* `cc.vitals.cpu_load_avg`: should be the number of CPU cores or higher.
+* `cc.vitals.uptime` if this is consistently low, it indicates frequent restarts (possibly due to memory pressure).
 * `cc_db_connection_pool_timeouts_total` indicates that the DB connection pool is too small which caused threads to wait and finally fail a request because no connection could be acquired within the timeout.
 * `cc_db_connection_wait_duration_seconds` indicates that threads have to wait for free DB connections.
 
@@ -89,22 +83,15 @@ The following are loose recommendations for setting these parameters:
 
 If when switching to Puma you reduce the number of overall Cloud Controller API VMs, you may need to increase the number of Cloud Controller Local workers per VM to handle the increased load on the remaining API VMs. For more information, see [cloud_controller_worker_local](#cloud_controller_worker_local).
 
-#### <a id='scale-thin'></a> Scaling Thin Web Server
-
-When deployed with the Thin web server, Cloud Controller API VMs should primarily be scaled horizontally.
-Scaling up the number of cores on a single VM is not effective.
-This is because Thin operates in a single process and Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
-
 #### Adjusting DB connection pool
 
 If there are any threads which had to wait for a free DB connection (indicated by `cc_db_connection_wait_duration_seconds`) it might be worth to increase the DB connection pool if possible.
 Threads waiting on free DB connections will cause delays in the web server's responses.
-* Thin: Connection pool size can be configured with: `ccdb.max_connections`
-* Puma: Connection pool size per process (main + workers) can be configured with: `cc.puma.max_db_connections_per_process`
+* Connection pool size per process (main + workers) can be configured with: `cc.puma.max_db_connections_per_process`
 
 In case threads failed to acquire a free DB connection within the configured timeout, `cc_db_connection_pool_timeouts_total` will be > 0. Then either the connection pool size or the number of API VMs should be increased.
 
-See [Cloud Controller Multi-Process Mode (Puma)](./multi-process-cloud-controller.html) for more information on the differences between using Thin and Puma.
+See [Cloud Controller Multi-Process Mode (Puma)](./multi-process-cloud-controller.html) for more information.
 
 ## <a id='cloud_controller_worker_local'></a> cloud_controller_worker_local
 
