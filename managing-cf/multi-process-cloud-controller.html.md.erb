@@ -26,13 +26,6 @@ More workers on an individual instance results in a higher memory utilization.
 
 You should configure each API instance to have twice as many local job workers as there are API workers. This can vary depending on foundation load. See [Scaling Local Workers](./scaling-cloud-controller.html#cloud_controller_worker_local) for more details.
 
-## <a id='disable'></a> Disable Multi-Process Mode
-
-To disable Multi-Process mode and instead use a This webserver, set the `cc.temporary_enable_deprecated_thin_webserver` property to `true`. It defaults to `false`.
-
-  - Thin webserver support for the Cloud Controller API is deprecated and will be removed in a future release.
-  - <%= vars.recommended_by %> does not recommend using Thin, because it reduces resource utilization efficiency and performance.
-  - Setting `cc.experimental.use_puma_webserver` to `true` overrides setting `cc.temporary_enable_deprecated_thin_webserver` property to `true`.
 
 ## <a id='migrating'></a> Upgrade Automatically Migrates from Single-Process to Multi-Process Mode
 
