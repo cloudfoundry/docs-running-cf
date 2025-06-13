@@ -79,5 +79,7 @@ cc\_open\_db\_connections\_total                     | Number of open DB connect
 cc\_db\_connection\_hold\_duration\_seconds          | Durations of connections held by threads.
 cc\_db\_connection\_wait\_duration\_seconds          | Durations of threads which waited for an available DB connection.
 cc\_db\_connection\_pool\_timeouts\_total            | Number of threads which failed to acquire a free DB connection from the pool within the timeout.
+cc\_job\_pickup\_delay\_seconds                      | Time between scheduled run time (`run_at`) and actual start (`locked_at`). Labeled by queue and worker.
+cc\_job\_duration\_seconds                           | Time between actual start (`locked_at`) and end of execution. Labeled by queue and worker.
 
 [Top](#top)
