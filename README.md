@@ -17,6 +17,7 @@ This branch of the repository is published through the [docs-book-application-se
 
 ## Branch map
 
-| Branch  | TPCF version     | Doc Link      |
-|---------|------------------|---------------|
-| tcf-102 | TPCF 10.2        | [TPCF v10.2 staging](https://author-techdocs2-prod.adobecqms.net/content/broadcom/techdocs/us/en/vmware-tanzu/platform/tanzu-platform-for-cloud-foundry/10-2/tpcf/concepts-overview.html) |
+| Branch  | TPCF version  | Doc Link      |
+|---------|---------------|---------------|
+| tcf-103 | TPCF 10.3     | [TPCF v10.3 staging](https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/vmware-tanzu/platform/tanzu-platform-for-cloud-foundry/10-3/tpcf/concepts-overview.html) |
+| tcf-102 | TPCF 10.2     | [TPCF v10.2](https://author-techdocs2-prod.adobecqms.net/content/broadcom/techdocs/us/en/vmware-tanzu/platform/tanzu-platform-for-cloud-foundry/10-2/tpcf/concepts-overview.html) |
