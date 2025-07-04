@@ -13,7 +13,7 @@ To perform the procedures in this topic, you must authenticate to your Cloud Con
 
 * Run `curl` commands that include the Cloud Controller endpoint and pass in your authorization token each time with the `-H` flag.
 
-* Run `cf curl` commands without including the endpoint or token. To do this, you must first use the Cloud Controller Command-Line Interface (cf CLI) to target the endpoint of your Cloud Controller and log in, as follows:
+* Run `cf curl` commands without including the endpoint or token. To do this, you must first use the Tanzu cf CLI to target the endpoint of your Cloud Controller and log in, as follows:
     1. Target the endpoint of your Cloud Controller:
   <pre class='terminal'>$ cf api api.YOUR-SYSTEM-DOMAIN</pre>
     1. Log in as admin or as an Org Manager or Org Auditor for the org you want to obtain information about.
@@ -27,12 +27,12 @@ To perform the procedures in this topic, you must authenticate to your Cloud Con
   ...
   Targeted org  YOUR-ORG
   Targeted space  development
-  API endpoint:    http<span>s:</span>//api.YOUR-SYSTEM-DOMAIN (API version:  2.52.0)
+  API endpoint:    http<span>s:</span>//api.YOUR-SYSTEM-DOMAIN (API version: 2.52.0)
   User:            user<span>@</span>example.com
   Org:             YOUR-ORG
   Space:           development
   </pre>
-    If you do not have the cf CLI installed, see the [Installing the cf CLI](../../operating/cf-cli/install-cf-cli.html) topic
+    If you do not have the Tanzu cf CLI installed, see the [Installing the Tanzu cf CLI](../../operating/cf-cli/install-cf-cli.html) topic
 
 ## <a id='obtain_apps'></a> Obtain app information
 
