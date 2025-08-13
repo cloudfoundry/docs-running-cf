@@ -27,7 +27,7 @@ Use this table to understand the rate limit header.
 </tr></thead>
  <tr>
  	<td>X-RateLimit-Limit</td>
- 	<td>The maximum number of attempts per <a href="../concepts/architecture/uaa.html">User Account and Authentication (UAA)</a> user, if a user is authenticated. The maximum number of attempts per IP address, if no user is authenticated.</td>
+ 	<td>The maximum number of attempts per <a href="../concepts/architecture/uaa.html">Tanzu User Account and Authentication (Tanzu UAA)</a> user, if a user is authenticated. The maximum number of attempts per IP address, if no user is authenticated.</td>
  </tr>
  <tr>
  	<td>X-RateLimit-Remaining</td>
@@ -59,7 +59,7 @@ X-Ratelimit-Reset-V2-Api: 1643767322
 The way V2 API requests are counted is the same as for the general rate limiter, and headers contain the same information. See the table for more details.
 When the maximum rate limit value is exceeded, CAPI returns `429 Too Many Requests` with the body `CF-RateLimitV2APIExceeded`.
 
-Operators can configure CAPI to exempt users and clients with the UAA scope cloud_controller.v2_api_rate_limit_exempt from the V2 API rate limit.
+Operators can configure CAPI to exempt users and clients with the Tanzu UAA scope cloud_controller.v2_api_rate_limit_exempt from the V2 API rate limit.
 
 ## <a id="service-brokers"></a> Rate limit responses: Service Brokers
 
@@ -86,9 +86,9 @@ This is the current time plus a random number of seconds between 0.5x and 1.5x o
 
 If this property is not set, it defaults to 60 seconds, and the header suggests a random retry time between 30 and 90 seconds in the future.
 
-## <a id="uaa"></a> Rate limit responses: UAA
+## <a id="uaa"></a> Rate limit responses: Tanzu UAA
 
-The UAA can be configured with rate limits. If UAA runs into the rate limit, the Cloud Controller will return this information transparently to the user.
+The Tanzu UAA can be configured with rate limits. If Tanzu UAA runs into the rate limit, the Cloud Controller will return this information transparently to the user.
 Cloud Controller will return `429 Too Many Requests` reponse with the body `CF-UaaRateLimited (20008)` and a Retry-After header. The client should not retry the request before the time stated in the header passed.
 
-This error can occur in many authenticated endpoints, if not all, and depends on the rate limit configuration in UAA.
+This error can occur in many authenticated endpoints, if not all, and depends on the rate limit configuration in Tanzu UAA.

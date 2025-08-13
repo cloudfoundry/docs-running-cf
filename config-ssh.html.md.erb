@@ -1,12 +1,12 @@
 ---
-title: Configuring SSH access for Cloud Foundry
+title: Configuring SSH access for Tanzu Platform for Cloud Foundry
 owner: Diego
 ---
 
 
-This topic describes how to configure your Cloud Foundry deployment to allow SSH access to application instances, and includes details about load balancing SSH sessions.
+This topic describes how to configure your <%= vars.app_runtime_first %> deployment to allow SSH access to application instances, and includes details about load balancing SSH sessions.
 
-## <a id='architecture-configuration'></a> Cloud Foundry configuration
+## <a id='architecture-configuration'></a> <%= vars.app_runtime_full %> configuration
 
 To enable SSH access to apps running on Diego, you must configure the properties in your deployment manifests by following the steps below.
 
@@ -60,7 +60,7 @@ Your manifest for Cloud Foundry should include the following properties:
 
 1. Replace `SSH-ACCESS-FOR-NEW-APPS` with `true` to enable SSH access for new apps by default in spaces that allow SSH. If you set this property to `false`, developers can still enable SSH after pushing their apps by running `cf enable-ssh APP-NAME`. If an app is already deployed and running, the developer must restart the app before being able to SSH into it.
 
-1. For `SSH-PROXY-SECRET`, provide a client secret that Diego will use to register the `ssh-proxy` client with your User Account and Authentication (UAA) server.
+1. For `SSH-PROXY-SECRET`, provide a client secret that Diego will use to register the `ssh-proxy` client with your Tanzu User Account and Authentication (Tanzu UAA) server.
 
 ### <a id='diego-manifest'></a> Configure your Diego manifest
 
@@ -131,10 +131,10 @@ If you want to reset your deployment to remove all SSH proxy configuration:
 
 1. Redeploy Cloud Foundry.
 
-1. Install the UAA Command Line Interface (UAAC).
+1. Install the Tanzu UAA Command Line Interface (UAAC).
 <pre class="terminal">$ gem install cf-uaac</pre>
 
-1. Target your UAA server.
+1. Target your Tanzu UAA server.
 <pre class="terminal">$ uaac target uaa.YOUR-SYSTEM-DOMAIN</pre>
 
 1. Authenticate and retrieve your admin client token. When prompted with `Client secret`, enter your admin credentials.
@@ -158,11 +158,11 @@ If you receive an error message attempting to SSH into an app container, see the
   </tr></thead>
   <tr>
     <td><code>Error getting one time auth code</code></td>
-    <td>Check that you have the <code>ssh-proxy</code> client registered with your UAA server.</td>
+    <td>Check that you have the <code>ssh-proxy</code> client registered with your Tanzu UAA server.</td>
   </tr>
   <tr>
     <td><code>Error getting one time auth code</code></td>
-    <td>Review the <code>uaa_secret</code> field in your Diego manifest and ensure that it matches the <code>Client secret</code> for the <code>ssh-proxy</code> client registered with your UAA server.</td>
+    <td>Review the <code>uaa_secret</code> field in your Diego manifest and ensure that it matches the <code>Client secret</code> for the <code>ssh-proxy</code> client registered with your Tanzu UAA server.</td>
   </tr>
   <tr>
     <td><code>Error opening SSH connection</code></td>
@@ -174,6 +174,6 @@ If you receive an error message attempting to SSH into an app container, see the
   </tr>
   <tr>
     <td><code>Server error, status code: 404</code></td>
-    <td>Ensure that the <code>oath_client_id</code> in your Cloud Foundry manifest matches the client ID of the SSH proxy client you registered with your UAA server. The default client ID is <code>ssh-proxy</code>.</td>
+    <td>Ensure that the <code>oath_client_id</code> in your Cloud Foundry manifest matches the client ID of the SSH proxy client you registered with your Tanzu UAA server. The default client ID is <code>ssh-proxy</code>.</td>
   </tr>
 </table>
