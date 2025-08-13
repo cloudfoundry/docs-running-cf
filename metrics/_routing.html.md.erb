@@ -62,12 +62,12 @@ Routing Release metrics have following origin names:
  memoryStats.numMallocs             | Lifetime number of memory allocations. Emitted every 10 seconds.
  numCPUS                            | Number of CPUs on the machine. Emitted every 10 seconds.
  numGoRoutines                      | Instantaneous number of active goroutines in the routing_api process. Emitted every 10 seconds.
- key\_refresh\_events               | Total number of events when fresh token was fetched from UAA. Emitted every 30 seconds.
+ key\_refresh\_events               | Total number of events when fresh token was fetched from Tanzu UAA. Emitted every 30 seconds.
  total\_http\_routes                | Number of HTTP routes in the routing table. Emitted every 30 seconds, or when there is a new HTTP route added. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
  total\_http\_subscriptions         | Number of HTTP routes subscriptions. Emitted every 30 seconds. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
  total\_tcp\_routes                 | Number of TCP routes in the routing table. Emitted every 30 seconds, or when there is a new TCP route added. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
  total\_tcp\_subscriptions          | Number of TCP routes subscriptions. Emitted every 30 seconds. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
- total\_token\_errors               | Total number of UAA token errors. Emitted every 30 seconds. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
+ total\_token\_errors               | Total number of Tanzu UAA token errors. Emitted every 30 seconds. Interval for emitting this metric can be configured with manifest property `metrics_reporting_interval`.
 
 <a id="tcp_emitter"></a>Default Origin Name: tcp_emitter
 

@@ -3,9 +3,9 @@ title: UAA audit requirements
 owner: UAA
 ---
 
-This topic describes audit requirements for the User Account and Authentication Service (UAA).
+This topic describes audit requirements for the Tanzu User Account and Authentication Service (Tanzu UAA).
 
-UAA does the following:
+Tanzu UAA does the following:
 
 * Handles authentication for users and client apps
 * Manages user accounts
@@ -21,7 +21,7 @@ Each audit event contains the following:
 
 ## <a id="auth-passwd-events"></a>Authentication and password events
 
-UAA includes the following authentication and password events:
+Tanzu UAA includes the following authentication and password events:
 
 * `UserAuthenticationSuccess`
     - **Trigger:** When a user is successfully authenticated
@@ -80,7 +80,7 @@ UAA includes the following authentication and password events:
 
 ## <a id="scim-admin-events"></a>Scim administration events
 
-UAA includes the following Scim administration events:
+Tanzu UAA includes the following Scim administration events:
 
 * `UserCreatedEvent`
     - **Trigger:** When a user is created
@@ -124,7 +124,7 @@ UAA includes the following Scim administration events:
 
 ## <a id="token-events"></a>Token events
 
-UAA includes the following token event:
+Tanzu UAA includes the following token event:
 
 * `TokenIssuedEvent`
     - **Trigger:** When a token is created
