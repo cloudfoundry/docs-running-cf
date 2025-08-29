@@ -3,7 +3,7 @@ title: Scaling Cloud Controller
 owner: CAPI
 ---
 
-This topic describes how and when to scale BOSH jobs in CAPI, and includes details about some key metrics, heuristics, and logs. 
+This topic describes how and when to scale BOSH jobs in CAPI, and includes details about some key metrics, heuristics, and logs.
 
 To inform some scaling decisions, check current CPU values by running `bosh instances --ps --vitals`.
 The **CPU User** value corresponds with the `system.cpu.user` metric and is scaled by the number of CPUs.
@@ -87,6 +87,7 @@ If when switching to Puma you reduce the number of overall Cloud Controller API 
 
 If there are any threads which had to wait for a free DB connection (indicated by `cc_db_connection_wait_duration_seconds`) it might be worth to increase the DB connection pool if possible.
 Threads waiting on free DB connections will cause delays in the web server's responses.
+
 * Connection pool size per process (main + workers) can be configured with: `cc.puma.max_db_connections_per_process`
 
 In case threads failed to acquire a free DB connection within the configured timeout, `cc_db_connection_pool_timeouts_total` will be > 0. Then either the connection pool size or the number of API VMs should be increased.
