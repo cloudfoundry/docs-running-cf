@@ -43,7 +43,6 @@ Before and after scaling Cloud Controller API pods, you should verify that the C
 Cloud Controller API pods should primarily be scaled horizontally. Scaling up the number of compute resources requested past one CPU is not effective. This is because Ruby's Global Interpreter Lock (GIL) limits the `cloud_controller_ng` process so that it can only effectively use a single CPU core on a multi-core machine.
 
 <p class="note">
-<span class="note__title"><strong>Note</strong></span>
 Since Cloud Controller supports both PostgreSQL and MySQL external databases, there is no absolute guidance about what a healthy database looks like. In general, high database CPU utilization is a good indicator of scaling issues, but always give precedence to the documentation specific to your database.</p>
 
 ## <a id='cf-api-local-worker'></a> cf-api-local-worker
