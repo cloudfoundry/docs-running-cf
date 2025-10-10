@@ -281,7 +281,7 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 
 ### <a id=special-events'></a> Special events
 
-- audit.app.crash
+- app.crash
 - blob.remove\_orphan
 
 
@@ -292,7 +292,7 @@ For example, a user issuing a `cf stop APP_NAME` command causes an `audit.app.st
 
 * **Service events** (`audit.service*`) are created after the service broker has approved an interaction.
 
-* **Crash and rescheduling events** (`audit.app.crash`, `audit.app.process.crash|rescheduling`) are created when Diego marks an app instance as crashed or evacuates app instances from cells on Diego Cell VM restarts.
+* **Crash and rescheduling events** (`app.crash`, `audit.app.process.crash|rescheduling`) are created when Diego marks an app instance as crashed or evacuates app instances from cells on Diego Cell VM restarts.
 
 * **Blob events** (`blob.remove_orphan`) are created by a daily clean up job and do not represent user action.
 
