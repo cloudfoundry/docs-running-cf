@@ -70,6 +70,6 @@ Here are a few possible configurations that would result in similar number of th
 
 After upgrading, watch the following metrics to see if you can reduce or need to scale up your provisioned resources:
 
-  - `cc.requests.outstanding.gauge`: If this value is at or consistently near the total number of available Puma threads on the VM, you may need to scale your instance group.
+  - `cc_requests_outstanding_total`: If this value is at or consistently near the total number of available Puma threads on the VM, you may need to scale your instance group.
   - `system.cpu.user`: This value should stay below 0.85 total utilization.
-  - `cc.vitals.cpu_load_avg`: This value should stay below the total number of CPU cores.
+  - `cc_vitals_cpu_load_avg`: This value should stay below the total number of CPU cores.
