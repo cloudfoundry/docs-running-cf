@@ -13,14 +13,16 @@ See the [docs-book-cloudfoundry](http://github.com/cloudfoundry/docs-book-cloudf
 repo for the complete list of open source documentation repositories, as well as
 information about the publishing process.
 
-This branch of the repository is published through the [docs-book-application-service](https://github.gwd.broadcom.net/TNZ/docs-book-application-service) repository, release 10.2.
-
 ## Branch map
 
-| Branch  | TPCF version     | Doc Link      |
-|---------|------------------|---------------|
-| tcf-104 | TPCF 10.4        | [TPCF v10.4 staging](https://author-techdocs2-prod.adobecqms.net/content/broadcom/techdocs/us/en/vmware-tanzu/platform/tanzu-platform-for-cloud-foundry/10-4/tpcf/concepts-overview.html) |
-| tcf-103 | TPCF 10.3        | [TPCF v10.3 staging](https://author-techdocs2-prod.adobecqms.net/content/broadcom/techdocs/us/en/vmware-tanzu/platform/tanzu-platform-for-cloud-foundry/10-3/tpcf/concepts-overview.html) |
-| tcf-102 | TPCF 10.2        | [TPCF v10.2](https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/vmware-tanzu/platform/tanzu-platform-for-cloud-foundry/10-2/tpcf/concepts-overview.html) |
-| master  | TPCF 10.0        | [TPCF v10.0](https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/vmware-tanzu/platform/tanzu-platform-for-cloud-foundry/10-0/tpcf/concepts-overview.html) |
-| master  | TAS 6.0          | [TPCF v6.0](https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/vmware-tanzu/platform/tanzu-platform-for-cloud-foundry/6-0/tpcf/concepts-overview.html) |
+This branch is published through the [docs-book-application-service](https://github.gwd.broadcom.net/TNZ/docs-book-application-service) repository.
+
+| Branch  | EART version  | Doc Link      |
+|---------|---------------|---------------|
+| tcf-104 | EART 10.4     | [EART v10.4 staging](https://author-techdocs2-prod.adobecqms.net/us/en/vmware-tanzu/platform/elastic-application-runtime/10-4/eart/runtime-rn.html)
+| tcf-103 | EART 10.3     | [EART v10.3](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/elastic-application-runtime/10-3/eart/concepts-overview.html) |
+| tcf-102 | TPCF 10.2     | [TPCF v10.2](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/elastic-application-runtime/10-2/eart/concepts-overview.html) |
+| master  | TPCF 10.0     | archived PDF |
+| master  | TAS 6.0       | [TAS v6.0](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/elastic-application-runtime/6-0/eart/concepts-overview.html) |
+| master  | TAS 5.0       | archived PDF  |
+| master  | TAS 4.0       | archived PDF  |
