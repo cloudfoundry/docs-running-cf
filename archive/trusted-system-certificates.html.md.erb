@@ -4,6 +4,21 @@ title: Configuring trusted system certificates for applications
 
 The following mechanisms exist to provide trusted certificates to applications running on Cloud Foundry:
 
+- For the `cflinuxfs4` stack, you can install trusted certificates into the system trust store at `/etc/ssl/certs`. In the deployment manifest, set the `cflinuxfs4-rootfs.trusted_certs` property of the stack release's `cflinuxfs4-rootfs-setup` job to the concatenated PEM-encoded CA certificates.
+<br><br>
+For example:
+  <pre>
+    properties:
+      cflinuxfs4-rootfs:
+        trusted_certs: |
+          -----BEGIN CERTIFICATE-----
+          (contents of certificate #1)
+          -----END CERTIFICATE-----
+          -----BEGIN CERTIFICATE-----
+          (contents of certificate #2)
+          -----END CERTIFICATE-----
+  </pre>
+
 - For the `cflinuxfs3` stack, you can install the trusted certificates
 directly into the system trust store at `/etc/ssl/certs`. In the deployment manifest, set
 the `cflinuxfs3-rootfs.trusted_certs` property of the stack release's
