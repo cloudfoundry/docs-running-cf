@@ -26,9 +26,10 @@ When you are determining whether to scale `cloud_controller_ng`, look for the fo
 
 Cloud Controller emits the following metrics:
 
-* `cc.requests.outstanding.gauge` or `cc.requests.outstanding` (deprecated)
+* `cc.requests.outstanding.gauge` or `cc_requests_outstanding_total`
   * Thin: is at or consistently near 20.
-  * Puma: is at or consistently near the total number of available Puma threads on the VM. You can calculate this with `Puma Workers x Puma Max Threads`.
+  * Puma: is at or consistently near the total number of available Puma threads on the VM. You can calculate this with `Puma Workers x Puma Max Threads`. 
+    * Note: `cc.requests.outstanding.gauge` does not work correctly with Puma. Use `cc_requests_outstanding_total`.
 * `system.cpu.user`
   * Thin: is above 0.85 utilization of a single core on the API VM. This metric is scaled by number of cores. If the VM has more than 1 core, you can determine how much Thin is using of a single core by using the formula `system.cpu.user / (1 / Number of CPU Cores)`.
   * Puma: is above 0.85 total utilization.
