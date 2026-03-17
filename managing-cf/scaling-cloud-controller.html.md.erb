@@ -26,7 +26,8 @@ When you are determining whether to scale `cloud_controller_ng`, look for the fo
 
 Cloud Controller emits the following metrics:
 
-* `cc.requests.outstanding.gauge` or `cc.requests.outstanding` (deprecated): should be consistently near the total number of available Puma threads on the VM. You can calculate this with `Puma Workers x Puma Max Threads`.
+* `cc.requests.outstanding.gauge` or `cc_requests_outstanding_total`: should be consistently near the total number of available Puma threads on the VM. You can calculate this with `Puma Workers x Puma Max Threads`.
+    * Note: `cc.requests.outstanding.gauge` does not work correctly with Puma. Use `cc_requests_outstanding_total`.
 * `system.cpu.user`: should be above 0.85 total utilization.
 * `cc.vitals.cpu_load_avg`: should be the number of CPU cores or higher.
 * `cc.vitals.uptime` if this is consistently low, it indicates frequent restarts (possibly due to memory pressure).
