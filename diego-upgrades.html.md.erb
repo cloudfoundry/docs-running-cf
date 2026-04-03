@@ -6,7 +6,7 @@ owner: Diego
 Cloud Foundry supports rolling upgrades in high availability environments. A rolling upgrade means that you can continue to operate an existing Cloud Foundry deployment and its running app instances while upgrading the platform.
 
 <p class="note important">
-<span class="note__title"><strong>Important</strong></span>
+
 Rolling upgrade is available in your deployment only if you have configured your deployment to be highly available. See <a href="../concepts/high-availability.html">High availability in Cloud Foundry</a>.
 </p>
 
@@ -55,3 +55,4 @@ For example, the following Diego manifest excerpt shows the `diego.auctioneer.st
 diego.auctioneer.starting_container_count_maximum:
     description: "Maximum number of inflight container starts allowed globally. Value of 0 or less indicates no limit."
     default: 100
+```
