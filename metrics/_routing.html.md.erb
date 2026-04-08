@@ -49,6 +49,7 @@ Routing Release metrics have following origin names:
  backend\_invalid\_tls_cert           | Lifetime number of requests that were rejected because the back end presents a certificate that is not trusted by the Gorouter. Corresponds to HTTP 526 error response from Gorouter. Emitted every 5 seconds.
  buffered_messages                  | Current number of messages in the Gorouter's NATS client's buffer. Emitted every 5 seconds.
  total\_dropped_messages             | Lifetime number of messages that have been dropped by the Gorouter's NATS client due to a full buffer. Emitted every 5 seconds.
+ endpoints\_per\_pool                 | Current number of endpoints in a route pool using hash-based load balancing. Prometheus gauge with labels `route` and `lb_algorithm`. Only present for routes configured with hash-based routing. The gauge is updated on endpoint registration, unregistration, and pruning of stale endpoints.
 
 <a id="routing_api"></a>Default Origin Name: routing_api
 
