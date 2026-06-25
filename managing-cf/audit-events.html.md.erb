@@ -123,6 +123,8 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 
 - audit.app.apply\_manifest
 - audit.app.build.create
+- audit.app.build.failed
+- audit.app.build.staged
 - audit.app.copy-bits
 - audit.app.create
 - audit.app.delete-request
@@ -163,12 +165,25 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.app.update
 - audit.app.upload-bits
 
+### <a id='buildpack-lifecycle'></a> Buildpack lifecycle (audit.buildpack.*)
+
+- audit.buildpack.create
+- audit.buildpack.delete
+- audit.buildpack.update
+- audit.buildpack.upload
 
 ### <a id='org-lifecycle'></a> Organization lifecycle (audit.organization.*)
 
 - audit.organization.create
 - audit.organization.delete-request
 - audit.organization.update
+
+### <a id='org-quota-lifecycle'></a> Organization quota lifecycle (audit.organization_quota.*)
+
+- audit.organization\_quota.apply
+- audit.organization\_quota.create
+- audit.organization\_quota.delete
+- audit.organization\_quota.update
 
 ### <a id='route-lifecycle'></a> Route lifecycle (audit.route.*)
 
@@ -252,6 +267,20 @@ For auditing and compliance reasons, some operators may wish to keep a record of
 - audit.space.create
 - audit.space.delete-request
 - audit.space.update
+
+### <a id='space-quota-lifecycle'></a> Space quota lifecycle (audit.space_quota.*)
+
+- audit.space\_quota.apply
+- audit.space\_quota.create
+- audit.space\_quota.delete
+- audit.space\_quota.remove
+- audit.space\_quota.update
+
+### <a id='stack-lifecycle'></a> Stack lifecycle (audit.stack.*)
+
+- audit.stack.create
+- audit.stack.delete
+- audit.stack.update
 
 ### <a id='user-lifecycle'></a> User lifecycle (audit.user.*)
 
