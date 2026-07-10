@@ -72,6 +72,7 @@ Operators can limit the number of concurrent requests per user, for each Cloud C
 * [`PUT|POST|DELETE v2/service_keys`](https://v2-apidocs.cloudfoundry.org/#service-keys)
 
 <p class="note">
+<span class="note__title"><strong>Note</strong></span>
 Unlike the CAPI rate limit, which caps the requests a user can make across the whole Cloud Foundry platform, service broker rate limits apply per CAPI instance. For example, if the limit is 3 and there are 2 instances, the maximum number of concurrent requests a user can make is 6.
 </p>
 
