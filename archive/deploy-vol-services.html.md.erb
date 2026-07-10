@@ -134,7 +134,7 @@ To enable LDAP support, do the following:
 1. [Configure your LDAP server](#ldap-config)
 1. [Configure your Cloud Foundry deployment](#cf-ldap-config)
 
-#### <a name="ldap-config"></a>Configure your LDAP server
+#### <a id="ldap-config"></a>Configure your LDAP server
 
 If you want to integrate LDAP, your LDAP server must be configured to connect to a Cloud Foundry deployment.
 
@@ -152,7 +152,7 @@ To integrate LDAP with your Cloud Foundry deployment, do the following:
     - Be reachable through the network from the Diego Cell VMs
     on the port you use to connect to your deployment. This port is usually `389` or `636`.
 
-#### <a name="cf-ldap-config"></a>Configure your Cloud Foundry deployment
+#### <a id="cf-ldap-config"></a>Configure your Cloud Foundry deployment
 
 If you want to integrate LDAP, your Cloud Foundry deployment must redeployed with the `enable-nfs-ldap.yml` ops file
 and your LDAP server information.
@@ -229,7 +229,7 @@ The NFS volume service includes the following test servers:
 + A LDAP test server that provides sample UID resolution when the LDAP feature is enabled.
 See [Deploy LDAP test server](#ldap-test) below.
 
-#### <a name="nfs-test"></a> Deploy the NFS test server
+#### <a id="nfs-test"></a> Deploy the NFS test server
 
 If you want to experiment with volume mounts, you can deploy a NFS test server using the `enable-nfs-test-server.yml` ops file. This file creates a separate VM with NFS exports. To view the NFS test server ops file, see
 [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/main/operations/test/enable-nfs-test-server.yml)
@@ -264,7 +264,7 @@ To redeploy your Cloud Foundry deployment with a NFS test server, do the followi
     where <code> YOUR-SUBNET</code> is the subnet you are deploying Cloud Foundry to.
     </p>
 
-#### <a name="ldap-test"></a>Deploy LDAP test server
+#### <a id="ldap-test"></a>Deploy LDAP test server
 
 If you want to experiment with using LDAP with an NFS server, you can deploy a LDAP test server using the `enable-nfs-test-ldapserver.yml` ops file. This file installs an LDAP server
 onto the VM created for the NFS test server. To view the LDAP test server ops file, see
