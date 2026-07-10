@@ -12,7 +12,7 @@ For example, on a 4-core `api` VM, a `cloud_controller_ng` process that is using
 ## <a id='cloud_controller_ng'></a> cloud_controller_ng
 
 The `cloud_controller_ng` Ruby process is the primary job in CAPI.
-It, along with `nginx_cc`, powers the Cloud Controller API that all users of <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>) interact with.
+It, along with `nginx_cc`, powers the Cloud Controller API that all users of <%= vars.app_runtime_full %> interact with.
 In addition to serving external clients, `cloud_controller_ng` also provides APIs for internal components within <%= vars.app_runtime_abbr %>, such as Loggregator and Networking subsystems.
 
 The `cloud_controller_ng` web server is based on Puma, which supports multiple processes per VM. This means you can scale the Cloud Controller vertically or horizontally.
