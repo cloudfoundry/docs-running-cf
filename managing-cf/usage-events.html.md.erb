@@ -168,7 +168,7 @@ Using the `after_guid` query parameter can result in lost events. Usage events a
 
 If you always use the last event GUID for `after_guid`, you may miss events that occurred before that event, but that were still processing at the time of your query.
 
-<%= vars.recommended_by %> recommends that you select yourr `after_guid` from an event far enough back in time to ensure that all hanging transactions finish. The exact buffer period depends on the expected transaction time of a particular Cloud Foundry installation, but 1 minute is typically sufficient to prevent data loss.
+<%= vars.recommended_by %> recommends that you select your `after_guid` from an event far enough back in time to ensure that all hanging transactions finish. The exact buffer period depends on the expected transaction time of a particular Cloud Foundry installation, but 1 minute is typically sufficient to prevent data loss.
 
 ### <a id='ext-warehouse'></a> External warehouse
 
