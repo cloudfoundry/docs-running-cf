@@ -13,8 +13,8 @@ CAPI includes rate limit information in the HTTP header. Each header includes:
 
 ```
 X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 56
 X-RateLimit-Reset: 1372700873
+X-RateLimit-Remaining: 56
 ```
 
 Use this table to understand the rate limit header.
@@ -24,25 +24,42 @@ Use this table to understand the rate limit header.
 	<th>Field Value</th>
 	<th>Description</th>
 </tr></thead>
- <tr>
- 	<td>X-RateLimit-Limit</td>
- 	<td>The maximum number of attempts per <a href="../concepts/architecture/uaa.html">User Account and Authentication (UAA)</a> user, if a user is authenticated. The maximum number of attempts per IP address, if no user is authenticated.</td>
- </tr>
- <tr>
- 	<td>X-RateLimit-Remaining</td>
+<tr>
+	<td>X-RateLimit-Limit</td>
+	<td>The maximum number of attempts per <a href="../concepts/architecture/uaa.html">User Account and Authentication (UAA)</a> user, if a user is authenticated. The maximum number of attempts per IP address, if no user is authenticated.</td>
+</tr>
+<tr>
+	<td>X-RateLimit-Reset</td>
+	<td>The time when the rate limit counter resets, in UTC <a href="https://en.wikipedia.org/wiki/Unix_time">epoch seconds</a>.</td>
+</tr>
+<tr>
+	<td>X-RateLimit-Remaining</td>
 	<td>The estimated number of attempts remaining.</td>
- </tr>
- <tr>
- 	<td>X-RateLimit-Reset</td>
- 	<td>The time when the rate limit counter resets, in UTC <a href="https://en.wikipedia.org/wiki/Unix_time">epoch seconds</a>.</td>
- </tr>
+</tr>
 </table>
 
 Requests are counted separately in each Cloud Controller instance and each produces an estimate for the total number of remaining requests.
 The estimate is based on the fraction remaining on the Cloud Controller instance, rounded down to the nearest 10%, multiplied by the global maximum number of attempts.
 This might result in inconsistent values for the `X-RateLimit-Remaining` header when running multiple instances of CAPI, such as some requests still being allowed when the header value is `0`.
 
-When requests exceed the maximum rate limit value, CAPI returns a `429: Too Many Requests` error code.
+When requests exceed the maximum rate limit value, CAPI returns a `429 Too Many Requests` error code with the body `CF-RateLimitExceeded` for authenticated requests, or `CF-IPBasedRateLimitExceeded` for unauthenticated requests.
+
+
+## <a id="concurrent"></a> Rate limit responses: Concurrent requests
+
+Operators can limit the number of concurrent, in-flight requests per user, for each Cloud Controller instance. Requests are counted per authenticated UAA user or, if no user is authenticated, per IP address. The count is incremented when a request starts and decremented when CAPI sends its response, so this limiter caps requests that are in progress at the same time rather than the number of requests made over a time interval.
+
+<p class="note">
+<span class="note__title"><strong>Note</strong></span>
+This limit applies per CAPI instance rather than across the whole Cloud Foundry platform. For example, if the limit is 10 and there are 2 instances, a user can have up to 20 concurrent requests in progress. For a limiter scoped to service broker operations, see <a href="#service-brokers">Rate limit responses: Service Brokers</a>.
+</p>
+
+The limiter supports two modes:
+
+* **Blocking:** Requests that would exceed the limit are rejected.
+* **Logging only:** Requests are never rejected. Instead, CAPI logs a warning whenever the number of concurrent requests exceeds the limit. This lets operators observe real concurrency before enforcing a blocking limit.
+
+When a request exceeds the blocking limit, CAPI returns `429 Too Many Requests` with a `Retry-After` header suggesting a random retry time between 1 and 5 seconds in the future. The response body is `CF-ConcurrentRequestLimitExceeded` for authenticated requests, or `CF-IPBasedConcurrentRequestLimitExceeded` for unauthenticated requests.
 
 
 ## <a id="v2-api"></a> Rate limit responses: V2 API
@@ -50,9 +67,9 @@ When requests exceed the maximum rate limit value, CAPI returns a `429: Too Many
 Operators can limit the number of V2 API requests. This includes all `v2/*` requests except `v2/info`. Each HTTP header includes the following information:
 
 ```
-X-Ratelimit-Limit-V2-Api: 60
-X-Ratelimit-Remaining-V2-Api: 56
-X-Ratelimit-Reset-V2-Api: 1643767322
+X-RateLimit-Limit-V2-API: 60
+X-RateLimit-Reset-V2-API: 1643767322
+X-RateLimit-Remaining-V2-API: 56
 ```
 
 The way V2 API requests are counted is the same as for the general rate limiter, and headers contain the same information. See the table for more details.
@@ -66,14 +83,14 @@ Operators can limit the number of concurrent requests per user, for each Cloud C
 
 * [`GET v3/service_instances/:guid/parameters`](https://v3-apidocs.cloudfoundry.org/version/index.html#get-parameters-for-a-managed-service-instance)
 * [`GET v3/service_credential_bindings/:guid/parameters`](https://v3-apidocs.cloudfoundry.org/version/index.html#get-parameters-for-a-service-credential-binding)
-* [`GET v3/service_route_binding/:guid/parameters`](https://v3-apidocs.cloudfoundry.org/index.html#get-parameters-for-a-route-binding)
+* [`GET v3/service_route_bindings/:guid/parameters`](https://v3-apidocs.cloudfoundry.org/version/index.html#get-parameters-for-a-route-binding)
 * [`PUT|POST|DELETE v2/service_instances`](https://v2-apidocs.cloudfoundry.org/#service-instances)
 * [`PUT|POST|DELETE v2/service_bindings`](https://v2-apidocs.cloudfoundry.org/#service-bindings)
 * [`PUT|POST|DELETE v2/service_keys`](https://v2-apidocs.cloudfoundry.org/#service-keys)
 
 <p class="note">
 <span class="note__title"><strong>Note</strong></span>
-Unlike the CAPI rate limit, which caps the requests a user can make across the whole Cloud Foundry platform, service broker rate limits apply per CAPI instance. For example, if the limit is 3 and there are 2 instances, the maximum number of concurrent requests a user can make is 6.
+This limit applies per CAPI instance rather than across the whole Cloud Foundry platform. For example, if the limit is 3 and there are 2 instances, the maximum number of concurrent requests a user can make is 6. For a limiter that caps concurrent requests across all endpoints, see <a href="#concurrent">Rate limit responses: Concurrent requests</a>.
 </p>
 
 A request finishes when CAPI sends a response. This occurs even if that response is `202 Accepted`, indicating that an asynchronous operation is to be performed, such as a service broker creating a service instance.
@@ -81,10 +98,7 @@ For more information, see [Asynchronous Operations](https://v3-apidocs.cloudfoun
 This rate limit does not cap the number of asynchronous operations that can be in progress at any one time for any of the above service-related endpoints.
 
 Any requests that breach the concurrency are rate limited, and receive a `429 Too Many Requests` response with the body `CF-ServiceBrokerRateLimitExceeded (10016)` and a Retry-After header.
-The header gives an absolute time suggesting when the client should attempt to make their request again.
-This is the current time plus a random number of seconds between 0.5x and 1.5x of the configured value for `cc.broker_client_timeout_seconds`.
-
-If this property is not set, it defaults to 60 seconds, and the header suggests a random retry time between 30 and 90 seconds in the future.
+The header gives an absolute time suggesting when the client should attempt to make their request again, typically a random time between 30 and 90 seconds in the future.
 
 ## <a id="uaa"></a> Rate limit responses: UAA
 
